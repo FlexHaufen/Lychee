@@ -8,9 +8,10 @@
  * @copyright Copyright (c) 2022
  * 
  */
-
-
 #pragma once
+
+// *** EXTERNAL FILES ***
+#include <Windows.h>
 
 #include <iostream>
 #include <memory>
@@ -26,4 +27,5 @@
 #include <unordered_map>
 #include <unordered_set>
 
+// *** LOCAL FILES ***
 #include "Lychee/Core/Log.h"

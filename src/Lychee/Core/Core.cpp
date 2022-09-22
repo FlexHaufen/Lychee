@@ -10,6 +10,7 @@
  */
 
 // *** INCLUDES ***
+#include "Lychee/lypch.h"
 #include "Lychee/Core/Core.h"
 
 // *** DEFINE ***
