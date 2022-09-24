@@ -48,17 +48,17 @@ namespace Hazel {
 
 		virtual ~Window() = default;
 
-		void OnUpdate() = 0;
+		void OnUpdate();
 
-		u32 GetWidth() const = 0;
-		u32 GetHeight() const = 0;
+		u32 GetWidth() const;
+		u32 GetHeight() const;
 
 		// Window attributes
-		void SetEventCallback(const EventCallbackFn& callback) = 0;
-		void SetVSync(bool enabled) = 0;
-		bool IsVSync() const = 0;
+		void SetEventCallback(const EventCallbackFn& callback);
+		void SetVSync(bool enabled);
+		bool IsVSync() const;
 
-		void* GetNativeWindow() const = 0;
+		void* GetNativeWindow() const;
 
 		static Scope<Window> Create(const WindowProps& props = WindowProps());
 	};

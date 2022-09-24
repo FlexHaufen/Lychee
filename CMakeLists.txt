@@ -21,8 +21,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "/O3 /g0")
 
 ### INCLUDES & SOURCE ###
 # Header fildes
-file(GLOB_RECURSE HEADER_FILES ${CMAKE_SOURCE_DIR}/include/*.h
-	                           ${CMAKE_SOURCE_DIR}/include/*.hpp)
+file(GLOB_RECURSE HEADER_FILES ${CMAKE_SOURCE_DIR}/src/*.h
+	                           ${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 # Source files
 file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*c
@@ -45,10 +45,9 @@ set(LIBS ${CMAKE_SOURCE_DIR}/lib/glfw/libglfw3dll.a)
 # Define the include DIRs
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
-	"${CMAKE_SOURCE_DIR}/include"
 
 	"${CMAKE_SOURCE_DIR}/lib/spdlog/include"
-	"${CMAKE_SOURCE_DIR}/lib/glfw/include"
+	"${CMAKE_SOURCE_DIR}/lib/glfw"
 )
 
 
@@ -57,6 +56,6 @@ include_directories(
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 ### PCH ###
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include/Lychee/lypch.h)
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/src/Lychee/lypch.h)
 
 	

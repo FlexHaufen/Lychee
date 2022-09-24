@@ -69,7 +69,7 @@ namespace Lychee {
     protected:
 
         //** Members **
-        bool m_isHandled = false      // Ture if event is handeld
+        bool m_isHandled = false;      // Ture if event is handeld
 	};
 
     /**
