@@ -39,9 +39,8 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
 #			${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c)
 
 #Put all libraries into a variable
-#set(LIBS	GLAD 
-#			${CMAKE_SOURCE_DIR}/lib/GLFW/libglfw3dll.a
-#			)
+set(LIBS ${CMAKE_SOURCE_DIR}/lib/glfw/libglfw3dll.a)
+			#glad
 
 # Define the include DIRs
 include_directories(
@@ -49,12 +48,13 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/include"
 
 	"${CMAKE_SOURCE_DIR}/lib/spdlog/include"
+	"${CMAKE_SOURCE_DIR}/lib/glfw/include"
 )
 
 
 
 # Link libraries
-#target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 ### PCH ###
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include/Lychee/lypch.h)
