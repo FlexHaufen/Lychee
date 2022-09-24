@@ -47,7 +47,7 @@ set(LIBS ${CMAKE_SOURCE_DIR}/lib/glfw/libglfw3dll.a)
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
 
-	"${CMAKE_SOURCE_DIR}/lib/spdlog/include"
+	"${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include"
 	"${CMAKE_SOURCE_DIR}/lib/glfw"
 )
 
