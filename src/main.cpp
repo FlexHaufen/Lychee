@@ -15,7 +15,7 @@
 
 //*** MAIN ***
 int main(int argc, char **argv) {
-	Lychee::Application* ly_app = new Lychee::Application();
+	Lychee::Core* ly_app = new Lychee::Core();
 	
 	ly_app->Run();
 
