@@ -27,6 +27,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
+// *** LOCAL LIBS ***
+#include <glfw/glfw3.h>
+#include <glfw/glfw3native.h>
+
+
 // *** LOCAL FILES ***
 #include "Lychee/Core/Log.h"
 
