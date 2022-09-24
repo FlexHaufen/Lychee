@@ -30,4 +30,4 @@
 // *** LOCAL FILES ***
 #include "Lychee/Core/Log.h"
 
-#include "Helper/Types.h"
+#include "Lychee/Helper/Types.h"

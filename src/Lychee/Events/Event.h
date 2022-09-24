@@ -44,9 +44,9 @@ namespace Lychee {
 	};
 
     // ** DEFINES **
-    #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
-                                    virtual eEventType GetEventType() const override { return GetStaticType(); }\
-                                    virtual const char* GetName() const override { return #type; }
+    #define EVENT_CLASS_TYPE(type) static eEventType GetStaticType() { return eEventType::type; } \
+                                   virtual eEventType GetEventType() const override { return GetStaticType(); }\
+                                   virtual const char* GetName() const override { return #type; }
 
     #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
@@ -63,6 +63,12 @@ namespace Lychee {
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
+		/**
+		 * @brief Check if Event is in Catecory eEventCategory
+		 * 
+		 * @param category 
+		 * @return true if event is in category
+		 */
 		bool IsInCategory(eEventCategory category) {
 			return GetCategoryFlags() & category;
 		}

@@ -12,7 +12,10 @@
 
 // *** INCLUDES ***
 
+// ** Events **
+#include "Lychee/Events/KeyEvent.h"
 
+// ** Window **
 //*** DEFINES ***
 
 
@@ -39,10 +42,15 @@ namespace Lychee {
              */
             ~Core();
 
+            /**
+             * @brief Running loop
+             * 
+             */
+            void Run();
 
         private:
 
         // *** MEMBERS ***
-        
+        //Scope<Window> m_Window;
     };
 }

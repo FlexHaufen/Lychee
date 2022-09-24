@@ -11,7 +11,6 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/Core/Core.h"
 
 
 // This ignores all warnings raised inside External headers
