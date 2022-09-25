@@ -23,6 +23,9 @@ typedef float           f32;
 typedef double          f64;
 typedef long double     f128;
 
+
+#define LY_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
 namespace Lychee {
 
 	template<typename T>

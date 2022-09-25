@@ -72,7 +72,6 @@ namespace Lychee {
 		bool IsInCategory(eEventCategory category) {
 			return GetCategoryFlags() & category;
 		}
-    protected:
 
         //** Members **
         bool m_isHandled = false;      // Ture if event is handeld
@@ -92,7 +91,7 @@ namespace Lychee {
 		template<typename T, typename F>
 		bool Dispatch(const F& func) {
 			if (m_Event.GetEventType() == T::GetStaticType()) {
-				m_Event.Handled |= func(static_cast<T&>(m_Event));
+				m_Event.m_isHandled |= func(static_cast<T&>(m_Event));
 				return true;
 			}
 			return false;
