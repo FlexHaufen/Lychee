@@ -13,8 +13,10 @@
 // *** INCLUDES ***
 
 // ** Events **
-#include "Lychee/Events/KeyEvent.h"
 #include "Lychee/Window/Window.h"
+
+#include "Lychee/Events/KeyEvent.h"
+#include "Lychee/Events/ApplicationEvent.h"
 
 // ** Window **
 //*** DEFINES ***
@@ -57,6 +59,9 @@ namespace Lychee {
             void OnEvent(Event& e);
 
         private:
+
+    		bool OnWindowClose(WindowCloseEvent& e);
+
 
         // *** MEMBERS ***
         bool m_isRunning = true;    // True when app is running

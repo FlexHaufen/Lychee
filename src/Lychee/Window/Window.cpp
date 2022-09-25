@@ -67,6 +67,88 @@ static uint8_t s_GLFWWindowCount = 0;
 
         LY_CORE_TRACE("Setting vsync to true");
 		SetVSync(true);
+
+		//** Callbacks **
+		//* Window Resize *
+		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, i32 width, i32 height) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+			data.width = width;
+			data.height = height;
+			WindowResizeEvent event(width, height);
+			data.eventCallback(event);
+		});
+
+		//* Window Close *
+		glfwSetWindowCloseCallback(m_glfwWindow, [](GLFWwindow* window) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+			WindowCloseEvent event;
+			data.eventCallback(event);
+		});
+
+		//* Keys *
+		glfwSetKeyCallback(m_glfwWindow, [](GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+
+			switch (action) {
+				case GLFW_PRESS: {
+					KeyPressedEvent event(key, 0);
+					data.eventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:{
+					KeyReleasedEvent event(key);
+					data.eventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT: {
+					KeyPressedEvent event(key, true);
+					data.eventCallback(event);
+					break;
+				}
+			}
+		});
+
+		//* Char *
+		glfwSetCharCallback(m_glfwWindow, [](GLFWwindow* window, u32 keycode) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(keycode);
+			data.eventCallback(event);
+		});
+
+		//* Mouse Button *
+		glfwSetMouseButtonCallback(m_glfwWindow, [](GLFWwindow* window, i32 button, i32 action, i32 mods) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+
+			switch (action) {
+				case GLFW_PRESS: {
+					MouseButtonPressedEvent event(button);
+					data.eventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE: {
+					MouseButtonReleasedEvent event(button);
+					data.eventCallback(event);
+					break;
+				}
+			}
+		});
+
+		//* Mouse Scroll *
+		glfwSetScrollCallback(m_glfwWindow, [](GLFWwindow* window, f64 xOffset, f64 yOffset) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+
+			MouseScrolledEvent event((float)xOffset, (float)yOffset);
+			data.eventCallback(event);
+		});
+
+		//* Mous Pos *
+		glfwSetCursorPosCallback(m_glfwWindow, [](GLFWwindow* window, f64 xPos, f64 yPos) {
+			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
+
+			MouseMovedEvent event((float)xPos, (float)yPos);
+			data.eventCallback(event);
+		});
+
 	}
 
 	void Window::Shutdown() {
@@ -88,4 +170,5 @@ static uint8_t s_GLFWWindowCount = 0;
 	bool Window::IsVSync() const {
 		return m_sWindowData.isVSyncOn;
 	}
+
 }

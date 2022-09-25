@@ -17,6 +17,7 @@
 
 // *** NAMESPACE ***
 namespace Lychee {
+
     Core::Core() {
         Lychee::Log::Init();
         LY_CORE_INFO("Init Core");
@@ -31,21 +32,29 @@ namespace Lychee {
 
     void Core::Run() {
         while (m_isRunning) {
-            // TODO: "gl" not working at the moment
-            
             glClearColor(1,0,1,1);
             glClear(GL_COLOR_BUFFER_BIT);
-            
             m_Window->OnUpdate();
-        }   
+        }
+        LY_CORE_INFO("Core stopped running");
     }
 
 
     void Core::OnEvent(Event& e) {
-        LY_CORE_INFO(e);
+
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
+
+        LY_CORE_TRACE(e);
     }
 
     Core::~Core() {
         LY_CORE_INFO("Quitting Core");
+    }
+
+    // ** EVENTS **
+    bool Core::OnWindowClose(WindowCloseEvent& e) {
+        m_isRunning = false;
+        return true;
     }
 }

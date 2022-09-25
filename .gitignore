@@ -2,3 +2,4 @@ build/
 .vscode/
 .obsidian/
 *.log
+Lychee.log
