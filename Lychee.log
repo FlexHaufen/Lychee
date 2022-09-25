@@ -1,5 +1,6 @@
-[13:35:58] [info] LYCHEE: Init Core
-[13:35:58] [info] LYCHEE: Running [DEBUG]
-[13:35:58] [info] LYCHEE: Creating window Lychee (400, 500)
-[13:35:58] [info] LYCHEE: glfwInit
-[13:35:58] [info] LYCHEE: glfwCreateWindow
+[14:24:47] [info] LYCHEE: Init Core
+[14:24:47] [info] LYCHEE: Running in DEBUG mode
+[14:24:47] [info] LYCHEE: Creating window Lychee (400, 500)
+[14:24:47] [info] LYCHEE: Init glfw
+[14:24:48] [info] LYCHEE: Create glfw Window
+[14:24:48] [trace] LYCHEE: Setting vsync to true

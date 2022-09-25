@@ -31,8 +31,6 @@ static uint8_t s_GLFWWindowCount = 0;
 		m_sWindowData.title = title;
 		m_sWindowData.width = width;
 		m_sWindowData.height = height;
-        m_sWindowData.isVSyncOn = false;    // By default false
-
         Init();
 	}
 
@@ -44,27 +42,35 @@ static uint8_t s_GLFWWindowCount = 0;
 	
 		LY_CORE_INFO("Creating window {0} ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
 
-        LY_CORE_INFO("glfwInit");
+        LY_CORE_INFO("Init glfw");
         if(!glfwInit()){
-            LY_CORE_ERROR("Could not initialize GLFW!");
+            LY_CORE_ERROR("Failed to initialize GLFW!");
         }
         glfwSetErrorCallback(GLFWErrorCallback);
 
 		
-		LY_CORE_INFO("glfwCreateWindow");
-		#if defined(LY_DEBUG)
-			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
-				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-		#endif
-
-		m_glfwWindow = glfwCreateWindow((int)m_sWindowData.width, (int)m_sWindowData.height, m_sWindowData.title.c_str(), nullptr, nullptr);
+		LY_CORE_INFO("Create glfw Window");
+		m_glfwWindow = glfwCreateWindow((int)m_sWindowData.width, 
+                                        (int)m_sWindowData.height, 
+                                        m_sWindowData.title.c_str(), 
+                                        nullptr, 
+                                        nullptr);
 		
 		glfwMakeContextCurrent(m_glfwWindow);
+
+        // glad: load all OpenGL function pointers
+	    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		    LY_CORE_ERROR("Failed to initalize GLAD");
+		    return;
+	    }
 		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
+
+        LY_CORE_TRACE("Setting vsync to true");
 		SetVSync(true);
 	}
 
 	void Window::Shutdown() {
+        LY_CORE_INFO("Shutting down window");
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}

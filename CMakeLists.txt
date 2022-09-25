@@ -42,22 +42,21 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
 #----------------------------------------------------
 ### GLFW ###
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-#set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 #set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORE)
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/glfw)
 
 
-# GLAD
-#add_library(glad 
-#			${CMAKE_SOURCE_DIR}/lib/glad/include/glad.h
-#			${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c)
+### GLAD ###
+add_library(glad 
+			${CMAKE_SOURCE_DIR}/lib/glad/include/glad/glad.h
+			${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c)
 
 
 #Put all libraries into a variable
-set(LIBS glfw)
-
-
+set(LIBS glfw
+		 glad)
 
 
 #----------------------------------------------------
@@ -68,6 +67,7 @@ include_directories(
 
 	"${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include"
 	"${CMAKE_SOURCE_DIR}/lib/vendor/glfw"
+	"${CMAKE_SOURCE_DIR}/lib/glad/include/"
 )
 
 

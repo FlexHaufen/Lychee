@@ -22,9 +22,7 @@ namespace Lychee {
         LY_CORE_INFO("Init Core");
 
         #ifdef _DEBUG
-            LY_CORE_INFO("Running [DEBUG]");
-        #else
-            LY_CORE_INFO("Running [RELEASE]");
+            LY_CORE_INFO("Running in DEBUG mode");
         #endif
 
         m_Window = new Window("Lychee", 400, 500);
@@ -34,10 +32,10 @@ namespace Lychee {
     void Core::Run() {
         while (m_isRunning) {
             // TODO: "gl" not working at the moment
-            /**
+            
             glClearColor(1,0,1,1);
             glClear(GL_COLOR_BUFFER_BIT);
-            **/
+            
             m_Window->OnUpdate();
         }   
     }
