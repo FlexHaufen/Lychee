@@ -14,7 +14,6 @@
 #include "Lychee/Core/Core.h"
 
 // *** DEFINE ***
-#define LY_RUNNING true
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -27,12 +26,25 @@ namespace Lychee {
         #else
             LY_CORE_INFO("Running [RELEASE]");
         #endif
+
+        m_Window = new Window("Lychee", 400, 500);
+		m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
     }
 
     void Core::Run() {
-        while (LY_RUNNING) {
-          
+        while (m_isRunning) {
+            // TODO: "gl" not working at the moment
+            /**
+            glClearColor(1,0,1,1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            **/
+            m_Window->OnUpdate();
         }   
+    }
+
+
+    void Core::OnEvent(Event& e) {
+        LY_CORE_INFO(e);
     }
 
     Core::~Core() {
