@@ -1,10 +1,15 @@
-[14:58:03] [info] LYCHEE: Init Core
-[14:58:03] [info] LYCHEE: Running in DEBUG mode
-[14:58:03] [info] LYCHEE: Creating window Lychee (400, 500)
-[14:58:03] [info] LYCHEE: Init glfw
-[14:58:04] [info] LYCHEE: Create glfw Window
-[14:58:04] [trace] LYCHEE: Setting vsync to true
-[14:58:04] [trace] LYCHEE: MouseMovedEvent: 395, 1
-[14:58:05] [trace] LYCHEE: WindowClose
-[14:58:05] [info] LYCHEE: Core stopped running
-[14:58:05] [info] LYCHEE: Quitting Core
+[17:41:39] [info] LYCHEE: Init Core
+[17:41:39] [info] LYCHEE: Running in DEBUG mode
+[17:41:39] [info] LYCHEE: Creating window Lychee - DEBUG (1000, 800)
+[17:41:39] [info] LYCHEE: Init glfw
+[17:41:39] [info] LYCHEE: Create glfw Window
+[17:41:40] [trace] LYCHEE: Setting vsync to true
+[17:41:40] [trace] LYCHEE: MouseMovedEvent: 554, 728
+[17:41:42] [trace] LYCHEE: MouseMovedEvent: 439, 147
+[17:41:43] [trace] LYCHEE: MouseMovedEvent: 699, 57
+[17:41:45] [trace] LYCHEE: MouseMovedEvent: 966, 98
+[17:41:45] [trace] LYCHEE: MouseMovedEvent: 973, 69
+[17:41:45] [trace] LYCHEE: MouseMovedEvent: 972, 22
+[17:41:46] [trace] LYCHEE: WindowClose
+[17:41:46] [info] LYCHEE: Core stopped running
+[17:41:46] [info] LYCHEE: Quitting Core

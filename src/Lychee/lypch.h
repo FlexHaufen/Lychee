@@ -30,10 +30,15 @@
 // *** LOCAL LIBS ***
 #include <glad/glad.h>
 
-#include <glfw/glfw3.h>
-#include <glfw/glfw3native.h>
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 
-
+// InGui
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+#include <imgui.h>
+#include <imconfig.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 // *** LOCAL FILES ***
 #include "Lychee/Core/Log.h"
 

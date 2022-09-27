@@ -14,47 +14,104 @@
 #include "Lychee/Core/Core.h"
 
 // *** DEFINE ***
+#define LY_LOG_EVENTS
 
 // *** NAMESPACE ***
 namespace Lychee {
+    Core* Core::s_Instance = nullptr;
 
     Core::Core() {
+        s_Instance = this;
+
+        // TODO: Set working dir here
+
         Lychee::Log::Init();
         LY_CORE_INFO("Init Core");
 
         #ifdef _DEBUG
             LY_CORE_INFO("Running in DEBUG mode");
-        #endif
+            m_Window = new Window("Lychee - DEBUG", 1000, 800);
+        #else
+            m_Window = new Window("Lychee", 1000, 800);
+		#endif
+        m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
-        m_Window = new Window("Lychee", 400, 500);
-		m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
-    }
-
-    void Core::Run() {
-        while (m_isRunning) {
-            glClearColor(1,0,1,1);
-            glClear(GL_COLOR_BUFFER_BIT);
-            m_Window->OnUpdate();
-        }
-        LY_CORE_INFO("Core stopped running");
-    }
-
-
-    void Core::OnEvent(Event& e) {
-
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
-
-        LY_CORE_TRACE(e);
+        m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
     }
 
     Core::~Core() {
         LY_CORE_INFO("Quitting Core");
     }
 
+    void Core::Run() {
+        while (m_isRunning) {
+            glClearColor(1,1,0,1);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            if (!m_isMinimized) {
+
+                for (Layer* layer : m_LayerStack) {
+					layer->OnUpdate();
+                }
+               
+                m_ImGuiLayer->Begin();
+                
+                for (Layer* layer : m_LayerStack) {
+                    layer->OnImGuiRender();
+                }
+            
+                m_ImGuiLayer->End();
+            }
+            m_Window->OnUpdate();
+        }
+        LY_CORE_INFO("Core stopped running");
+    }
+
+    void Core::Close() {
+		m_isRunning = false;
+	}
+
+    // ** LAYERS **
+    void Core::PushLayer(Layer* layer) {
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Core::PushOverlay(Layer* layer){
+		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
+	}
+
     // ** EVENTS **
+    void Core::OnEvent(Event& e) {
+
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
+
+
+        for (auto i = m_LayerStack.rbegin(); i != m_LayerStack.rend(); ++i) {
+			if (e.m_isHandled) 
+				break;
+			(*i)->OnEvent(e);
+		}
+        #ifdef LY_LOG_EVENTS
+            LY_CORE_TRACE(e);
+        #endif
+    }
+
     bool Core::OnWindowClose(WindowCloseEvent& e) {
         m_isRunning = false;
         return true;
     }
+
+	bool Core::OnWindowResize(WindowResizeEvent& e) {
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+			m_isMinimized = true;
+			return false;
+		}
+		m_isMinimized = false;
+		return false;
+	}
 }

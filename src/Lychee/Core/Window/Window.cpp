@@ -8,10 +8,9 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#pragma once
 
 //*** INCLUDES ***
-#include "Lychee/Window/Window.h"
+#include "Lychee/Core/Window/Window.h"
 
 //*** DEFINES ***
 #include "Lychee/Events/KeyEvent.h"

@@ -31,17 +31,40 @@ namespace Lychee {
      */
 	class Window {
 	public:
-        /**
-         * @brief Construct a new Windows Window object
-         * 
-         * @param props Window properties
-         */
+        
+		/**
+		 * @brief Construct a new Window object
+		 * 
+		 * @param title Window title
+		 * @param with 	Window width (px)
+		 * @param height Window height (px)
+		 */
 		Window(std::string title, u32 with, u32 height);
+
+		/**
+		 * @brief Destroy the Window object
+		 * 
+		 */
 		virtual ~Window();
 
+		/**
+		 * @brief Window update funnction
+		 * 
+		 */
 		void OnUpdate();
 
+		/**
+		 * @brief Get the Width
+		 * 
+		 * @return u32 width
+		 */
 		u32 GetWidth() const { return m_sWindowData.width; }
+
+		/**
+		 * @brief Get the Height
+		 * 
+		 * @return u32 height
+		 */
 		u32 GetHeight() const { return m_sWindowData.height; }
 
 		// Window attributes
@@ -49,10 +72,19 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		void* GetNtiveWindow() const { return m_glfwWindow; }
-
+		void* GetNativeWindow() const { return m_glfwWindow; }
 	private:
+
+		/**
+		 * @brief Init window
+		 * 
+		 */
 		void Init();
+
+		/**
+		 * @brief Shutdown window
+		 * 
+		 */
 		void Shutdown();
 	private:
 
@@ -72,7 +104,6 @@ namespace Lychee {
 		};
 
 		sWindowData m_sWindowData;	  // Window data
-
 
         // TODO: Implement later
         //Scope<GraphicsContext> m_Context;
