@@ -19,7 +19,7 @@
 
 //*** DEFINES ***
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
-//#define LY_IMGUI_SHOW_DEMO
+#define LY_IMGUI_SHOW_DEMO
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -44,9 +44,9 @@ namespace Lychee {
 		// TODO: Write this shit in json conf - or something like that
 		f32 fontSize = 18.0f; // *2.0f;
 
-		// TODO: Add define here
-		//io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		//io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+		// TODO: Add define here	
+		//io.Fonts->AddFontFromFileTTF("./resource/fonts/Ruda-Bold.ttf", fontSize);
+		//io.FontDefault = io.Fonts->AddFontFromFileTTF("./resource/fonts/Ruda-Regular.ttf", fontSize);
 
 		// Setup Dear ImGui style
 		SetStyle();

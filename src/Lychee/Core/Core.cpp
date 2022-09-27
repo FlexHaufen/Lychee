@@ -14,7 +14,7 @@
 #include "Lychee/Core/Core.h"
 
 // *** DEFINE ***
-#define LY_LOG_EVENTS
+//#define LY_LOG_EVENTS
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -23,10 +23,12 @@ namespace Lychee {
     Core::Core() {
         s_Instance = this;
 
-        // TODO: Set working dir here
-
         Lychee::Log::Init();
         LY_CORE_INFO("Init Core");
+
+        // TODO: Add define
+        std::filesystem::current_path("./");
+        LY_CORE_INFO("Current Path: {0}",std::filesystem::current_path());
 
         #ifdef _DEBUG
             LY_CORE_INFO("Running in DEBUG mode");
