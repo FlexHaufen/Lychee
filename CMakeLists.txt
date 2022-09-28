@@ -101,7 +101,8 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/lib/vendor/GLFW/include"
 	# glad
 	"${CMAKE_SOURCE_DIR}/lib/glad/include"
-	
+	# stb_image
+	"${CMAKE_SOURCE_DIR}/lib/vendor/stb_image"	
 )
 
 

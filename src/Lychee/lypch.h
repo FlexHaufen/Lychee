@@ -34,7 +34,7 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
-// InGui
+// ImGui
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include <imgui.h>
 #include <imconfig.h>
