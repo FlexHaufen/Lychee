@@ -21,6 +21,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/release)
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
 #set(CMAKE_CXX_FLAGS_RELEASE "/O3 /g0")
 
+
+#----------------------------------------------------
+#				       RESOURCE
+#----------------------------------------------------
+set(LYCHEE_APP_ICO "${CMAKE_SOURCE_DIR}/resource/images/Lychee.rc")
+
+
 #----------------------------------------------------
 #				  SOURCE & INCLUDE
 #----------------------------------------------------
@@ -33,7 +40,9 @@ file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*c
                             ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 ### APP ###
-add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
+add_executable(${PROJECT_NAME} ${SRC_FILES} 
+							   ${HEADER_FILES}
+							   ${LYCHEE_APP_ICO})
 
 
 
