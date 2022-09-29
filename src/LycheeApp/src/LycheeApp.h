@@ -1,5 +1,5 @@
 #include <Lychee/Lychee.h>
-//#include "EditorLayer.h"
+#include "EditorLayer.h"
 
 namespace Lychee {
 
@@ -8,7 +8,7 @@ namespace Lychee {
 		LycheeApp()
 			: Core() {
             
-			//PushLayer(new EditorLayer());
+			PushLayer(new EditorLayer());
 		}   
 	};
 

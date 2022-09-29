@@ -19,7 +19,7 @@
 
 //*** DEFINES ***
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
-#define LY_IMGUI_SHOW_DEMO
+//#define LY_IMGUI_SHOW_DEMO
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -87,7 +87,6 @@ namespace Lychee {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		// TODO: Add "ImGuizmo" here
 		#ifdef LY_IMGUI_SHOW_DEMO
 			ImGui::ShowDemoWindow();
 		#endif

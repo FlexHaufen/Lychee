@@ -32,9 +32,9 @@ namespace Lychee {
 
         #ifdef _DEBUG
             LY_CORE_INFO("Running in DEBUG mode");
-            m_Window = new Window("Lychee - DEBUG", 1000, 800);
+            m_Window = new Window("Lychee - DEBUG", 1500, 1000);
         #else
-            m_Window = new Window("Lychee", 1000, 800);
+            m_Window = new Window("Lychee", 1500, 1000);
 		#endif
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
