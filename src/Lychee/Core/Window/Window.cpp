@@ -73,7 +73,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		glfwWindowIco[0].pixels = stbi_load("./resource/images/Lychee.png", &glfwWindowIco[0].width, &glfwWindowIco[0].height, nullptr, 4);
 		glfwSetWindowIcon(m_glfwWindow, 1, glfwWindowIco) ;
 
-        LY_CORE_TRACE("Setting vsync to true");
+        LY_CORE_INFO("Setting vsync to true");
 		SetVSync(true);
 
 		//** Callbacks **

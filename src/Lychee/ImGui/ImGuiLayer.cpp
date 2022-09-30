@@ -26,12 +26,16 @@ namespace Lychee {
 
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer") {
+		LY_CORE_INFO("Creating ImGuiLayer");
 	}
 
 	void ImGuiLayer::OnAttach()	{
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
+
+		LY_CORE_INFO("Running ImGui on version: {0}", ImGui::GetVersion());
+
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
@@ -70,6 +74,7 @@ namespace Lychee {
 	}
 
 	void ImGuiLayer::OnDetach() {
+		LY_CORE_INFO("Quitting ImGui");
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();

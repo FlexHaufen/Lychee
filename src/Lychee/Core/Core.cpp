@@ -31,7 +31,7 @@ namespace Lychee {
         LY_CORE_INFO("Current Path: {0}",std::filesystem::current_path());
 
         #ifdef _DEBUG
-            LY_CORE_INFO("Running in DEBUG mode");
+            LY_CORE_WARN("Running in DEBUG mode");
             m_Window = new Window("Lychee - DEBUG", 1500, 1000);
         #else
             m_Window = new Window("Lychee", 1500, 1000);
@@ -67,7 +67,7 @@ namespace Lychee {
             }
             m_Window->OnUpdate();
         }
-        LY_CORE_INFO("Core stopped running");
+        LY_CORE_WARN("Core stopped running");
     }
 
     void Core::Close() {
