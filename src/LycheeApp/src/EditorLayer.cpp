@@ -85,6 +85,28 @@ namespace Lychee {
 			ImGui::ShowDemoWindow();
 		#endif
 
+		// Render menubar
+		OnMenuBarRender();
+
+		if(m_Calculator.p_open)
+		m_Calculator.OnImGuiRender(&m_Calculator.p_open);
+
+
+		ImGui::End();
+	}
+
+
+	
+	void EditorLayer::OnEvent(Event& e)	{
+
+		EventDispatcher dispatcher(e);
+		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+	}
+
+
+	void EditorLayer::OnMenuBarRender() {
+
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
 				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
@@ -101,21 +123,35 @@ namespace Lychee {
 				if (ImGui::MenuItem("Exit")) Core::Get().Close();
 				ImGui::EndMenu();
 			}
+			if (ImGui::BeginMenu("Edit")) {
+				//
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("View")) {
+				ImGui::MenuItem("Calculator", NULL, &m_Calculator.p_open);
+				if (ImGui::MenuItem("V1.1")) {}
+				if (ImGui::MenuItem("v1.2")) {}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("V2.0")) {}
+				if (ImGui::MenuItem("V2.1")) {}
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Tools")) {
+				//
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Help")) {
+    			if (ImGui::MenuItem("Ask Google - you jerk")) {}				
+				
+				ImGui::Separator();
+				
+				//ImGui::ShowAboutWindow(&show_app_about);
+
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenuBar();
 		}
-
-		m_Calculator.OnImGuiRender();
-
-		ImGui::End();
 	}
-
-
-	
-	void EditorLayer::OnEvent(Event& e)	{
-
-		EventDispatcher dispatcher(e);
-		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
-		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
-	}
-
 }

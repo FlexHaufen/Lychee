@@ -21,9 +21,12 @@ namespace Lychee {
 	public:
 		CalculatorPanel(void);
 
-		void OnImGuiRender(void);
+		void OnImGuiRender(bool *p_open);
+
+	public:
+		bool p_open;
+
 	private:
-		
 	};
 
 }

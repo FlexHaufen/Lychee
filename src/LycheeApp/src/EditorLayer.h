@@ -29,8 +29,11 @@ namespace Lychee {
 		virtual void OnImGuiRender() override;
 		void OnEvent(Event& e) override;
 	private:
-	
+
+		void OnMenuBarRender();
+
 		CalculatorPanel m_Calculator;
+
 
 		enum class SceneState {
 			Edit = 0, Play = 1, Simulate = 2
