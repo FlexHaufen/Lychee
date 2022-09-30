@@ -8,15 +8,18 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#pragma once
 
 //*** INCLUDES ***
-#include "Lychee/Window/Window.h"
+#include "Lychee/Core/Window/Window.h"
 
 //*** DEFINES ***
 #include "Lychee/Events/KeyEvent.h"
 #include "Lychee/Events/MouseEvent.h"
 #include "Lychee/Events/ApplicationEvent.h"
+
+// STB Image
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -64,6 +67,11 @@ static uint8_t s_GLFWWindowCount = 0;
 		    return;
 	    }
 		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
+
+		// Set window ico
+		GLFWimage glfwWindowIco[1];
+		glfwWindowIco[0].pixels = stbi_load("./resource/images/Lychee.png", &glfwWindowIco[0].width, &glfwWindowIco[0].height, nullptr, 4);
+		glfwSetWindowIcon(m_glfwWindow, 1, glfwWindowIco) ;
 
         LY_CORE_TRACE("Setting vsync to true");
 		SetVSync(true);

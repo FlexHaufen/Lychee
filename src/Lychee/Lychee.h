@@ -11,7 +11,7 @@
 #pragma once
 
 //*** INCLUDES ***
-#include "Lychee/Core/Core.h"            // Main App
+#include "Lychee/Core/Core.h"        // Main App
 #include "Lychee/Core/Log.h"         // Logger
 
 //*** DEFINES ***

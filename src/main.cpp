@@ -10,16 +10,15 @@
  */
 
 //*** INCLUDES ***
-#include "Lychee/Lychee.h"
+#include "LycheeApp/src/LycheeApp.h"
 
 
 //*** MAIN ***
 int main(int argc, char **argv) {
-	Lychee::Core* ly_app = new Lychee::Core();
-	
+
+	Lychee::LycheeApp* ly_app = new Lychee::LycheeApp();
 	ly_app->Run();
-
 	delete ly_app;
-
+	
 	return 0;
 }
