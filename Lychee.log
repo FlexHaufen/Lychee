@@ -1,15 +1,15 @@
-[19:43:10] [info] LYCHEE: Logger Initialized
-[19:43:10] [info] LYCHEE: Init Core
-[19:43:10] [info] LYCHEE: Current Path: "C:\\Users\\janin\\Documents\\01_Projects\\Lychee"
-[19:43:10] [warning] LYCHEE: Running in DEBUG mode
-[19:43:10] [info] LYCHEE: Creating window Lychee - DEBUG (1500, 1000)
-[19:43:10] [info] LYCHEE: Init glfw
-[19:43:10] [info] LYCHEE: Create glfw Window
-[19:43:11] [info] LYCHEE: Setting vsync to true
-[19:43:11] [info] LYCHEE: Creating ImGuiLayer
-[19:43:11] [info] LYCHEE: Running ImGui on version: 1.89 WIP
-[19:43:11] [info] APP: Starting App
-[19:43:11] [info] APP: Starting Editor
-[19:43:15] [warning] LYCHEE: Core stopped running
-[19:43:15] [info] LYCHEE: Quitting Core
-[19:43:15] [info] LYCHEE: Quitting ImGui
+[14:16:58] [info] LYCHEE: Logger Initialized
+[14:16:58] [info] LYCHEE: Init Core
+[14:16:58] [info] LYCHEE: Current Path: "C:\\Users\\janin\\Documents\\01_Projects\\Lychee"
+[14:16:58] [warning] LYCHEE: Running in DEBUG mode
+[14:16:58] [info] LYCHEE: Creating window Lychee - DEBUG (1500, 1000)
+[14:16:58] [info] LYCHEE: Init glfw
+[14:16:58] [info] LYCHEE: Create glfw Window
+[14:16:59] [info] LYCHEE: Setting vsync to true
+[14:16:59] [info] LYCHEE: Creating ImGuiLayer
+[14:16:59] [info] LYCHEE: Running ImGui on version: 1.89 WIP
+[14:16:59] [info] APP: Starting App
+[14:16:59] [info] APP: Starting Editor
+[14:17:01] [warning] LYCHEE: Core stopped running
+[14:17:01] [info] LYCHEE: Quitting Core
+[14:17:01] [info] LYCHEE: Quitting ImGui
