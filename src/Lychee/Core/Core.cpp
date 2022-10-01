@@ -14,7 +14,6 @@
 #include "Lychee/Core/Core.h"
 
 // *** DEFINE ***
-//#define LY_LOG_EVENTS
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -27,14 +26,18 @@ namespace Lychee {
         LY_CORE_INFO("Init Core");
 
         // TODO: Add define
-        std::filesystem::current_path("./");
+        std::filesystem::current_path(LY_DEFAULT_PATH);
         LY_CORE_INFO("Current Path: {0}",std::filesystem::current_path());
 
         #ifdef _DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
-            m_Window = new Window("Lychee - DEBUG", 1500, 1000);
+            m_Window = new Window(LY_WINDOW_NAME_DEBUG,
+                                  LY_WINDOW_SIZE_X,
+                                  LY_WINDOW_SIZE_Y);
         #else
-            m_Window = new Window("Lychee", 1500, 1000);
+            m_Window = new Window(LY_WINDOW_NAME,
+                                  LY_WINDOW_SIZE_X,
+                                  LY_WINDOW_SIZE_Y);
 		#endif
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
@@ -43,6 +46,8 @@ namespace Lychee {
     }
 
     Core::~Core() {
+        // delet m_Window -> doesn't matter becose aplication will
+        // terminate anyway
         LY_CORE_INFO("Quitting Core");
     }
 

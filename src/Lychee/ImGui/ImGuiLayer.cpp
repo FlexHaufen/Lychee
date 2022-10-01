@@ -15,11 +15,9 @@
 #include "Lychee/ImGui/ImGuiLayer.h"
 #include "Lychee/Core/Core.h"
 
-//#include "ImGuizmo.h"
 
 //*** DEFINES ***
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
-//#define LY_IMGUI_SHOW_DEMO
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -52,10 +50,9 @@ namespace Lychee {
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplGlfw_InitForOpenGL(window, LY_IMGUI_INSTALL_CALLBACKS);
 
-		// TODO: Add define here
-		ImGui_ImplOpenGL3_Init("#version 410");
+		ImGui_ImplOpenGL3_Init(LY_OPENGL_VERSION);
 	}
 
 	void ImGuiLayer::OnDetach() {
@@ -77,9 +74,6 @@ namespace Lychee {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		#ifdef LY_IMGUI_SHOW_DEMO
-			ImGui::ShowDemoWindow();
-		#endif
 	}
 
 	void ImGuiLayer::End() {
@@ -101,10 +95,8 @@ namespace Lychee {
 
 	void ImGuiLayer::SetStyle() {
 		ImGuiIO &io = ImGui::GetIO();
-		static f32 fontSize = 15.0f; // *2.0f;
-
-		io.Fonts->AddFontFromFileTTF("./resource/fonts/Rilu-Regular.ttf", fontSize);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("./resource/fonts/Rilu-Regular.ttf", fontSize);
+		
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(LY_FONT_REGULAR, LY_FONT_SIZE);
 		
 		
 		ImGuiStyle * style = &ImGui::GetStyle();

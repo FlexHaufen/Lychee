@@ -10,7 +10,8 @@
  */
 #pragma once
 
-// *** EXTERNAL FILES ***
+// *** INCLUDES ***
+// ** EXTERNAL FILES **
 #include <Windows.h>
 
 #include <iostream>
@@ -28,7 +29,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-// *** LOCAL LIBS ***
+// ** LOCAL LIBS **
 #include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
@@ -40,7 +41,34 @@
 #include <imconfig.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
-// *** LOCAL FILES ***
+// ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
 
 #include "Lychee/Helper/Types.h"
+
+
+// *** DEFINES ***
+// ** DEBUG **
+// #define LY_LOG_EVENTS
+#define LY_IMGUI_SHOW_DEMO
+
+// ** CONFIG **
+// * General *
+#define LY_PROJECT_NAME             "Lychee"
+#define LY_VERSION
+
+// * Rescources *
+#define LY_DEFAULT_PATH             "./"
+#define LY_ICON_PNG                 "./resource/images/Lychee.png"
+#define LY_FONT_SIZE                15.0f
+#define LY_FONT_REGULAR             "./resource/fonts/Rilu-Regular.ttf"
+
+// * Window *
+#define LY_WINDOW_SIZE_X            1500
+#define LY_WINDOW_SIZE_Y            1000
+#define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
+#define LY_WINDOW_NAME              "Lychee"
+#define LY_VSYNC_DEFAULT            true
+
+#define LY_OPENGL_VERSION           "#version 410"
+#define LY_IMGUI_INSTALL_CALLBACKS  true
