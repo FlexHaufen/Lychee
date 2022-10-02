@@ -96,7 +96,7 @@ namespace Lychee {
 	void ImGuiLayer::SetStyle() {
 		ImGuiIO &io = ImGui::GetIO();
 		
-		io.FontDefault = io.Fonts->AddFontFromFileTTF(LY_FONT_REGULAR, LY_FONT_SIZE);
+	//	io.FontDefault = io.Fonts->AddFontFromFileTTF(LY_FONT_REGULAR, LY_FONT_SIZE);
 		
 		
 		ImGuiStyle * style = &ImGui::GetStyle();
