@@ -23,6 +23,7 @@ namespace Lychee {
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer") {
+		LY_INFO("Starting Editor");
 	}
 
 	void EditorLayer::OnAttach() {
@@ -95,8 +96,6 @@ namespace Lychee {
 		ImGui::End();
 	}
 
-
-	
 	void EditorLayer::OnEvent(Event& e)	{
 
 		EventDispatcher dispatcher(e);
@@ -128,7 +127,6 @@ namespace Lychee {
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("View")) {
-				ImGui::MenuItem("Calculator", NULL, &m_Calculator.p_open);
 				if (ImGui::MenuItem("V1.1")) {}
 				if (ImGui::MenuItem("v1.2")) {}
 
@@ -139,7 +137,7 @@ namespace Lychee {
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Tools")) {
-				//
+				ImGui::MenuItem("Calculator", NULL, &m_Calculator.p_open);
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Help")) {

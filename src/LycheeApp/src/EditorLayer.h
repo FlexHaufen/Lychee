@@ -12,7 +12,7 @@
 
 //*** INCLUDES ***
 #include <Lychee/Lychee.h>
-#include "Panels/CalculatorPanel/CalculatorPanel.h"
+#include "Panels/Tools/CalculatorPanel/CalculatorPanel.h"
 //*** DEFINES ***
 
 //*** NAMESPACE ***

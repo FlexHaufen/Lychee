@@ -1,9 +1,0 @@
-[19:11:24] [info] LYCHEE: Init Core
-[19:11:24] [info] LYCHEE: Current Path: "C:\\Users\\janin\\Documents\\01_Projects\\Lychee"
-[19:11:24] [info] LYCHEE: Running in DEBUG mode
-[19:11:24] [info] LYCHEE: Creating window Lychee - DEBUG (1500, 1000)
-[19:11:24] [info] LYCHEE: Init glfw
-[19:11:25] [info] LYCHEE: Create glfw Window
-[19:11:25] [trace] LYCHEE: Setting vsync to true
-[19:11:50] [info] LYCHEE: Core stopped running
-[19:11:50] [info] LYCHEE: Quitting Core

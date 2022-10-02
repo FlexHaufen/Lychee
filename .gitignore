@@ -1,5 +1,10 @@
+# Default
 build/
 .vscode/
+
+# Doc
 .obsidian/
+
+# Log files
 *.log
-./Lychee.log
+*.ini
