@@ -90,7 +90,9 @@ namespace Lychee {
 		OnMenuBarRender();
 
 		if(m_Calculator.p_open)
-		m_Calculator.OnImGuiRender(&m_Calculator.p_open);
+			m_Calculator.OnImGuiRender(&m_Calculator.p_open);
+		if(m_Settings.p_open)
+			m_Settings.OnImGuiRender(&m_Settings.p_open);
 
 
 		ImGui::End();
@@ -123,7 +125,8 @@ namespace Lychee {
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Edit")) {
-				//
+				ImGui::Separator();
+				ImGui::MenuItem("Settings", NULL, &m_Settings.p_open);
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("View")) {

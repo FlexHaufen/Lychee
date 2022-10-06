@@ -13,6 +13,8 @@
 //*** INCLUDES ***
 #include <Lychee/Lychee.h>
 #include "Panels/Tools/CalculatorPanel/CalculatorPanel.h"
+#include "Panels/Settings/SettingsPanel.h"
+
 //*** DEFINES ***
 
 //*** NAMESPACE ***
@@ -33,6 +35,7 @@ namespace Lychee {
 		void OnMenuBarRender();
 
 		CalculatorPanel m_Calculator;
+		SettingsPanel	m_Settings;
 
 
 		enum class SceneState {
