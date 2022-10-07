@@ -15,7 +15,7 @@
 
 
 //*** DEFINES ***
-
+#define LY_SETTINGS_PANEL_TAB_SIZE  ImVec2(75, 25)
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -29,6 +29,31 @@ namespace Lychee {
             if (!ImGui::Begin("Settings", p_open, ImGuiWindowFlags_AlwaysAutoResize)) {
                 ImGui::End();
                 return;
+            }
+
+            static u8 currentTab;
+            
+
+            // Settings Tabs
+            // TODO: render tabs inside of "if"?
+            {            
+                ImGui::SameLine();
+                if (ImGui::Button("General", LY_SETTINGS_PANEL_TAB_SIZE)) {
+                    currentTab = 0;
+                }
+                ImGui::SameLine();
+
+                if (ImGui::Button("View", LY_SETTINGS_PANEL_TAB_SIZE)) {
+                    currentTab = 1;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Simulation", LY_SETTINGS_PANEL_TAB_SIZE)) {
+                    currentTab = 2;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Misc", LY_SETTINGS_PANEL_TAB_SIZE)) {
+                    currentTab = 3;
+                }
             }
 
             // NOTE: Just some demo to see if it's working
