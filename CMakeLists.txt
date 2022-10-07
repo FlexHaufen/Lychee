@@ -99,6 +99,8 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include"
 	# glfw
 	"${CMAKE_SOURCE_DIR}/lib/vendor/GLFW/include"
+	#glm
+	"${CMAKE_SOURCE_DIR}/lib/vendor/glm"
 	# glad
 	"${CMAKE_SOURCE_DIR}/lib/glad/include"
 	# stb_image
