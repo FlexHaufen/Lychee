@@ -52,10 +52,7 @@ namespace Lychee {
     }
 
     void Core::Run() {
-        while (m_isRunning) {
-            glClearColor(1,1,0,1);
-            glClear(GL_COLOR_BUFFER_BIT);
-
+        while (m_isRunning) {      
             if (!m_isMinimized) {
 
                 for (Layer* layer : m_LayerStack) {
