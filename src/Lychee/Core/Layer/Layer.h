@@ -13,6 +13,7 @@
 //*** INCLUDES ***
 #include "Lychee/lypch.h"
 #include "Lychee/Events/Event.h"
+#include "Lychee/Core/Time/Deltatime.h"
 
 //*** DEFINES ***
 
@@ -26,7 +27,7 @@ namespace Lychee {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(DeltaTime dt) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

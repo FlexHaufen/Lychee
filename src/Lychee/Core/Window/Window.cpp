@@ -166,7 +166,25 @@ static uint8_t s_GLFWWindowCount = 0;
         glfwTerminate();
 	}
 
-	void Window::OnUpdate() {
+	void Window::OnUpdate(DeltaTime dt) {
+
+		// NOTE: This function may use unnecessary resources.
+		//		 It will not be compiled in releas builds.
+		#ifdef LY_SHOW_WINDOWTITLE_FPS
+			static u8 i = 0; 
+			static const u8 p = 10000;
+
+			if (i > p) {
+				i = 0;
+				u8 fps = 1 / dt.GetSeconds();
+				std::string title =  m_sWindowData.title + " FPS:  " + std::to_string(fps);
+				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
+			} 
+			else {
+				i++;
+			}
+		#endif
+
 		glfwPollEvents();
         glfwSwapBuffers(m_glfwWindow);
 	}

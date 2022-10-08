@@ -53,11 +53,15 @@ namespace Lychee {
     }
 
     void Core::Run() {
-        while (m_isRunning) {      
-            if (!m_isMinimized) {
+        while (m_isRunning) {
 
+                float time = (f32)glfwGetTime();
+                DeltaTime deltaTime = time - m_lastFrameTime;
+                m_lastFrameTime = time;
+
+            if (!m_isMinimized) {
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate();
+					layer->OnUpdate(deltaTime);
                 }
                
                 m_ImGuiLayer->Begin();
@@ -68,7 +72,7 @@ namespace Lychee {
             
                 m_ImGuiLayer->End();
             }
-            m_Window->OnUpdate();
+            m_Window->OnUpdate(deltaTime);
         }
         LY_CORE_WARN("Core stopped running");
     }

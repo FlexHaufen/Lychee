@@ -14,9 +14,7 @@
 #include <imgui.h>
 
 //*** DEFINES ***
-#define LY_RENDER_IMGUI 		//! dont change this
-#define LY_IMGUI_SHOW_DEMO
-#define LY_IMPLOT_SHOW_DEMO
+
 //#define LY_LOG_KEY_EVENT
 
 //*** NAMESPACE ***
@@ -34,7 +32,6 @@ namespace Lychee {
 
 	void EditorLayer::OnDetach() {
 	}
-	
 	void EditorLayer::OnImGuiRender() {
 	#ifdef LY_RENDER_IMGUI
 		// Note: Switch this to true to enable dockspace
@@ -120,7 +117,6 @@ namespace Lychee {
 		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
-
 
 	void EditorLayer::OnMenuBarRender() {
 

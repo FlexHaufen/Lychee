@@ -15,6 +15,8 @@
 //** Events **
 #include "Lychee/Events/Event.h"
 
+//** Time **
+#include "Lychee/Core/Time/Deltatime.h"
 
 
 //*** DEFIENS ***
@@ -51,7 +53,7 @@ namespace Lychee {
 		 * @brief Window update funnction
 		 * 
 		 */
-		void OnUpdate();
+		void OnUpdate(DeltaTime dt);
 
 		/**
 		 * @brief Get the Width
