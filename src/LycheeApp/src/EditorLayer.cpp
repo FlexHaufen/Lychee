@@ -26,7 +26,7 @@ namespace Lychee {
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer") {
-		LY_INFO("Starting Editor");
+		LY_INFO("Initializing Editor");
 	}
 
 	void EditorLayer::OnAttach() {

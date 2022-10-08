@@ -23,11 +23,12 @@ namespace Lychee {
         s_Instance = this;
 
         Lychee::Log::Init();
-        LY_CORE_INFO("Init Core");
+        LY_CORE_INFO("Lychee {0}", LY_VERSION_STR);
+        LY_CORE_INFO("--------------------------");
+        LY_CORE_INFO("Initializing Core");
 
-        // TODO: Add define
         std::filesystem::current_path(LY_DEFAULT_PATH);
-        LY_CORE_INFO("Current Path: {0}",std::filesystem::current_path());
+        LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
 
         #ifdef _DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
@@ -48,7 +49,7 @@ namespace Lychee {
     Core::~Core() {
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
-        LY_CORE_INFO("Quitting Core");
+        LY_CORE_INFO("Terminating Core");
     }
 
     void Core::Run() {

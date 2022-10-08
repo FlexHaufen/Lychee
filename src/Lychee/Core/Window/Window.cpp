@@ -38,21 +38,21 @@ static uint8_t s_GLFWWindowCount = 0;
 	}
 
 	Window::~Window() {
-		Shutdown();
+		Terminate();
 	}
 
 	void Window::Init() {
 	
-		LY_CORE_INFO("Creating window {0} ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
+		LY_CORE_INFO("Initializing window: {0} ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
 
-        LY_CORE_INFO("Init glfw");
+        LY_CORE_INFO("Initializing glfw");
         if(!glfwInit()){
             LY_CORE_ERROR("Failed to initialize GLFW!");
         }
         glfwSetErrorCallback(GLFWErrorCallback);
 
 		
-		LY_CORE_INFO("Create glfw Window");
+		LY_CORE_INFO("Initializing glfw Window");
 		m_glfwWindow = glfwCreateWindow((int)m_sWindowData.width, 
                                         (int)m_sWindowData.height, 
                                         m_sWindowData.title.c_str(), 
@@ -62,8 +62,9 @@ static uint8_t s_GLFWWindowCount = 0;
 		glfwMakeContextCurrent(m_glfwWindow);
 
         // glad: load all OpenGL function pointers
+		LY_CORE_INFO("Initializing glad");
 	    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		    LY_CORE_ERROR("Failed to initalize GLAD");
+		    LY_CORE_ERROR("Failed to initalize GLAD!");
 		    return;
 	    }
 		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
@@ -159,8 +160,8 @@ static uint8_t s_GLFWWindowCount = 0;
 
 	}
 
-	void Window::Shutdown() {
-        LY_CORE_INFO("Shutting down window");
+	void Window::Terminate() {
+        LY_CORE_INFO("Terminating window");
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}

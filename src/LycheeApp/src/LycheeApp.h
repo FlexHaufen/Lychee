@@ -8,13 +8,13 @@ namespace Lychee {
 		LycheeApp()
 			: Core() {
             
-			LY_INFO("Starting App");
+			LY_INFO("Starting Lychee App");
 			PushLayer(new EditorLayer());
 		}   
 	};
 
 	Core* CreateApplication() {
-		LY_INFO("Create Application");
+		LY_INFO("Initializing Lychee Application");
 		return new LycheeApp();
 	}
 

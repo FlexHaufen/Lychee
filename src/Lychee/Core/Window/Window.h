@@ -82,10 +82,10 @@ namespace Lychee {
 		void Init();
 
 		/**
-		 * @brief Shutdown window
+		 * @brief Terminate window
 		 * 
 		 */
-		void Shutdown();
+		void Terminate();
 	private:
 
         //** Members **

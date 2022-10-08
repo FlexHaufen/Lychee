@@ -62,7 +62,8 @@
 // ** CONFIG **
 // * General *
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION
+#define LY_VERSION_STR              "v0.1.4b"
+#define LY_VERSION_INT              000104      // format: 00.00.00
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
