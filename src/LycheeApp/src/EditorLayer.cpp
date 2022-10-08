@@ -14,7 +14,10 @@
 #include <imgui.h>
 
 //*** DEFINES ***
+#define LY_RENDER_IMGUI 		//! dont change this
 #define LY_IMGUI_SHOW_DEMO
+#define LY_IMPLOT_SHOW_DEMO
+//#define LY_LOG_KEY_EVENT
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -31,9 +34,9 @@ namespace Lychee {
 
 	void EditorLayer::OnDetach() {
 	}
-
+	
 	void EditorLayer::OnImGuiRender() {
-
+	#ifdef LY_RENDER_IMGUI
 		// Note: Switch this to true to enable dockspace
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen_persistant = true;
@@ -86,19 +89,34 @@ namespace Lychee {
 			ImGui::ShowDemoWindow();
 		#endif
 
+		#ifdef LY_IMPLOT_SHOW_DEMO
+			ImPlot::ShowDemoWindow();
+		#endif
 		// Render menubar
 		OnMenuBarRender();
 
 		if(m_Calculator.p_open)
-		m_Calculator.OnImGuiRender(&m_Calculator.p_open);
+			m_Calculator.OnImGuiRender(&m_Calculator.p_open);
+		if(m_Settings.p_open)
+			m_Settings.OnImGuiRender(&m_Settings.p_open);
 
 
 		ImGui::End();
+	#endif
 	}
 
 	void EditorLayer::OnEvent(Event& e)	{
 
 		EventDispatcher dispatcher(e);
+
+		#ifdef LY_LOG_KEY_EVENT
+			if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
+				Lychee::KeyPressedEvent& eKey = (Lychee::KeyPressedEvent&)e;
+				LY_TRACE("KEY PRESSED: {0}", (c8)eKey.GetKeyCode());
+			}	
+		#endif
+
+
 		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
@@ -123,7 +141,8 @@ namespace Lychee {
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Edit")) {
-				//
+				ImGui::Separator();
+				ImGui::MenuItem("Settings", NULL, &m_Settings.p_open);
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("View")) {

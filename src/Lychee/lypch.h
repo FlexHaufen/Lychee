@@ -35,17 +35,24 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
+#include <glm/glm.hpp>
+
 // ImGui
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include <imgui.h>
 #include <imconfig.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+
+// ImPlot
+#include <implot.h>
+
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
 
 #include "Lychee/Helper/Types.h"
 
+//TODO: Maby move to another file
 
 // *** DEFINES ***
 // ** DEBUG **

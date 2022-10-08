@@ -14,4 +14,8 @@
 #include "Lychee/Core/Core.h"        // Main App
 #include "Lychee/Core/Log.h"         // Logger
 
+#include "Lychee/Core/Input/Input.h"
+#include "Lychee/Helper/KeyCodes.h"
+#include "Lychee/Helper/MouseCodes.h"
+
 //*** DEFINES ***
