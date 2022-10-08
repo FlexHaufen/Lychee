@@ -43,6 +43,10 @@
 #include <imconfig.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+
+// ImPlot
+#include <implot.h>
+
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
 

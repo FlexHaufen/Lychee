@@ -16,6 +16,7 @@
 //*** DEFINES ***
 #define LY_RENDER_IMGUI 		//! dont change this
 #define LY_IMGUI_SHOW_DEMO
+#define LY_IMPLOT_SHOW_DEMO
 //#define LY_LOG_KEY_EVENT
 
 //*** NAMESPACE ***
@@ -88,6 +89,9 @@ namespace Lychee {
 			ImGui::ShowDemoWindow();
 		#endif
 
+		#ifdef LY_IMPLOT_SHOW_DEMO
+			ImPlot::ShowDemoWindow();
+		#endif
 		// Render menubar
 		OnMenuBarRender();
 

@@ -62,7 +62,8 @@ add_library(glad
 			${CMAKE_SOURCE_DIR}/lib/glad/include/glad/glad.h
 			${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c)
 
-### IMGUI ###
+
+### IMGUI ##
 set(IMGUI_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/imgui)
 add_library(imgui 
 			${IMGUI_PATH}/imconfig.h
@@ -83,6 +84,16 @@ add_library(imgui
 			${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp) 
 
 
+### IMPLOT ###
+set(IMPLOT_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/implot)
+add_library(implot 
+			${IMPLOT_PATH}/implot.h
+			${IMPLOT_PATH}/implot_internal.h
+			${IMPLOT_PATH}/implot.cpp
+			${IMPLOT_PATH}/implot_items.cpp
+			${IMPLOT_PATH}/implot_demo.cpp)
+
+
 #----------------------------------------------------
 #				      INCLUDE DIRS
 #----------------------------------------------------
@@ -94,7 +105,8 @@ include_directories(
 	#       so you can include like <imgui/imgui.h>
 	# imgui
 	"${CMAKE_SOURCE_DIR}/lib/vendor/imgui"
-
+	# implot
+	"${CMAKE_SOURCE_DIR}/lib/vendor/implot"
 	# spdlog
 	"${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include"
 	# glfw
@@ -116,7 +128,8 @@ include_directories(
 #Put all libraries into a variable
 set(LIBS glfw
 	glad
-	imgui)
+	imgui
+	implot)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 

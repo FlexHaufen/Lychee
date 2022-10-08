@@ -35,6 +35,8 @@ namespace Lychee {
 		LY_CORE_INFO("Running ImGui on version: {0}", ImGui::GetVersion());
 
 		ImGui::CreateContext();
+		ImPlot::CreateContext();
+
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -57,6 +59,7 @@ namespace Lychee {
 
 	void ImGuiLayer::OnDetach() {
 		LY_CORE_INFO("Quitting ImGui");
+		ImPlot::DestroyContext();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
