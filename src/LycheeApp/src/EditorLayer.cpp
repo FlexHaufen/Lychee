@@ -11,7 +11,6 @@
 
 //*** INCLUDE ***
 #include "EditorLayer.h"
-#include <imgui.h>
 
 //*** DEFINES ***
 

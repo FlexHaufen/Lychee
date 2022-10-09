@@ -11,6 +11,7 @@
 # pragma once
 
 // *** INCLUDES ***
+#include "Lychee/lypch.h"
 
 // ** Window **
 #include "Lychee/Core/Window/Window.h"
