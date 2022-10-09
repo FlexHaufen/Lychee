@@ -3,13 +3,13 @@ A **simple** and **fast** electronic / logic simulator
 <img src="resource/images/Lychee.svg" height="100">
 
 ## Build
-- VS Community 2022 amd64 compieler
+- VS Community 2022 amd64 compiler
 - Cmake Version **3.24.1**
 - ImGui has to be on **docking** branch
 
 
 ## Ambition
-- project_sigma should be a free (unless i decide else) Digital / Electronic simulator
+- Lychee should be a free (unless i decide else) Digital / Electronic simulator
 - It should be easy to use and should have a simple interface
 - It should run on every patato
 
