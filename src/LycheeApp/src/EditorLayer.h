@@ -11,6 +11,7 @@
 #pragma once
 
 //*** INCLUDES ***
+#include <Lychee/lypch.h>
 #include <Lychee/Lychee.h>
 #include "Panels/Tools/CalculatorPanel/CalculatorPanel.h"
 #include "Panels/Settings/SettingsPanel.h"

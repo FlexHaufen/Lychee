@@ -49,7 +49,6 @@
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
-
 #include "Lychee/Helper/Types.h"
 
 //TODO: Maby move to another file
@@ -57,12 +56,17 @@
 // *** DEFINES ***
 // ** DEBUG **
 // #define LY_LOG_EVENTS
-#define LY_IMGUI_SHOW_DEMO
+#define LY_RENDER_IMGUI 		//! dont change this
+#define LY_IMGUI_SHOW_DEMO      // Demo window    
+#define LY_IMPLOT_SHOW_DEMO     // Demo window
+
+#define LY_SHOW_WINDOWTITLE_FPS    // FPS counter on window title
 
 // ** CONFIG **
 // * General *
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION
+#define LY_VERSION_STR              "v0.1.4b"
+#define LY_VERSION_INT              000104      // format: 00.00.00
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
@@ -76,6 +80,7 @@
 #define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
+
 
 #define LY_OPENGL_VERSION           "#version 410"
 #define LY_IMGUI_INSTALL_CALLBACKS  true

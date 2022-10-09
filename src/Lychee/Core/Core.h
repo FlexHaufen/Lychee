@@ -11,6 +11,7 @@
 # pragma once
 
 // *** INCLUDES ***
+#include "Lychee/lypch.h"
 
 // ** Window **
 #include "Lychee/Core/Window/Window.h"
@@ -18,6 +19,9 @@
 //** Events **
 #include "Lychee/Events/KeyEvent.h"
 #include "Lychee/Events/ApplicationEvent.h"
+
+//** Time **
+#include "Lychee/Core/Time/Deltatime.h"
 
 //** Layers **
 #include "Lychee/Core/Layer/LayerStack.h"
@@ -97,7 +101,7 @@ namespace Lychee {
              * @return true if window is rezised 
              */
             bool OnWindowResize(WindowResizeEvent& e);
-
+    private:
         // *** MEMBERS ***7
         static Core* s_Instance;    // Instance of core - for external usage
         
@@ -105,7 +109,7 @@ namespace Lychee {
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
-
+        f32 m_lastFrameTime = 0.0f; // Last frame time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui

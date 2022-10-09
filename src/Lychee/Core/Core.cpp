@@ -10,7 +10,6 @@
  */
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
 #include "Lychee/Core/Core.h"
 
 // *** DEFINE ***
@@ -23,11 +22,12 @@ namespace Lychee {
         s_Instance = this;
 
         Lychee::Log::Init();
-        LY_CORE_INFO("Init Core");
+        LY_CORE_INFO("Lychee {0}", LY_VERSION_STR);
+        LY_CORE_INFO("--------------------------");
+        LY_CORE_INFO("Initializing Core");
 
-        // TODO: Add define
         std::filesystem::current_path(LY_DEFAULT_PATH);
-        LY_CORE_INFO("Current Path: {0}",std::filesystem::current_path());
+        LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
 
         #ifdef _DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
@@ -48,15 +48,19 @@ namespace Lychee {
     Core::~Core() {
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
-        LY_CORE_INFO("Quitting Core");
+        LY_CORE_INFO("Terminating Core");
     }
 
     void Core::Run() {
-        while (m_isRunning) {      
-            if (!m_isMinimized) {
+        while (m_isRunning) {
 
+                float time = (f32)glfwGetTime();
+                DeltaTime deltaTime = time - m_lastFrameTime;
+                m_lastFrameTime = time;
+
+            if (!m_isMinimized) {
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate();
+					layer->OnUpdate(deltaTime);
                 }
                
                 m_ImGuiLayer->Begin();
@@ -67,7 +71,7 @@ namespace Lychee {
             
                 m_ImGuiLayer->End();
             }
-            m_Window->OnUpdate();
+            m_Window->OnUpdate(deltaTime);
         }
         LY_CORE_WARN("Core stopped running");
     }

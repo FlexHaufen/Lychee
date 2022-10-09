@@ -24,7 +24,7 @@ namespace Lychee {
 
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer") {
-		LY_CORE_INFO("Creating ImGuiLayer");
+		LY_CORE_INFO("Initializing ImGuiLayer");
 	}
 
 	void ImGuiLayer::OnAttach()	{
@@ -32,7 +32,7 @@ namespace Lychee {
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 
-		LY_CORE_INFO("Running ImGui on version: {0}", ImGui::GetVersion());
+		LY_CORE_INFO("Running ImGui version: {0}", ImGui::GetVersion());
 
 		ImGui::CreateContext();
 		ImPlot::CreateContext();
@@ -58,7 +58,7 @@ namespace Lychee {
 	}
 
 	void ImGuiLayer::OnDetach() {
-		LY_CORE_INFO("Quitting ImGui");
+		LY_CORE_INFO("Terminating ImGui");
 		ImPlot::DestroyContext();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
