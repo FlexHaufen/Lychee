@@ -124,16 +124,16 @@ namespace Lychee {
 				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);1
-				if (ImGui::MenuItem("New", "Ctrl+N"));
+				if (ImGui::MenuItem("New", "Ctrl+N")){}
 
-				if (ImGui::MenuItem("Open...", "Ctrl+O"));
+				if (ImGui::MenuItem("Open...", "Ctrl+O")){}
 
-				if (ImGui::MenuItem("Save", "Ctrl+S"));
+				if (ImGui::MenuItem("Save", "Ctrl+S")){}
 
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"));
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")){}
 
 				if (ImGui::MenuItem("Exit")) Core::Get().Close();
-				ImGui::EndMenu();
+					ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Edit")) {
 				ImGui::Separator();

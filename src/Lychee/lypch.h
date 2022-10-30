@@ -9,6 +9,7 @@
  * 
  */
 #pragma once
+#pragma warning(push, 0)
 
 // *** INCLUDES ***
 // ** EXTERNAL FILES **
@@ -46,6 +47,8 @@
 
 // ImPlot
 #include <implot.h>
+#pragma warning(pop)
+
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"

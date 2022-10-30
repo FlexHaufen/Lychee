@@ -42,9 +42,12 @@ namespace Lychee {
 				LY_TRACE("INPUT {0}", str);
 				LY_TRACE("RES {0}", result_f);
 			#endif
+			// FIXME: Fix this warning
+			// argument: conversion from 'size_t' to 'c8', possible loss of data
+
 			result_f = CalcSolve(str, 0, std::strlen(str), &result_f);
 		}
-		sprintf(result_c, "%f", result_f);
+		sprintf_s(result_c, "%f", result_f);
 		
 	
 		ImGui::NewLine();
