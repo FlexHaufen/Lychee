@@ -117,7 +117,7 @@ namespace Lychee {
 	bool Core::OnWindowResize(WindowResizeEvent& e) {
 		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_isMinimized = true;
-			return false;
+			return true;
 		}
 		m_isMinimized = false;
 		return false;
