@@ -54,9 +54,9 @@ namespace Lychee {
     void Core::Run() {
         while (m_isRunning) {
 
-                float time = (f32)glfwGetTime();
-                DeltaTime deltaTime = time - m_lastFrameTime;
-                m_lastFrameTime = time;
+            float time = (f32)glfwGetTime();
+            DeltaTime deltaTime = time - m_lastFrameTime;
+            m_lastFrameTime = time;
 
             if (!m_isMinimized) {
                 for (Layer* layer : m_LayerStack) {

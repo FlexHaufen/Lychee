@@ -33,6 +33,7 @@ namespace Lychee {
 		IMGUI_CHECKVERSION();
 
 		LY_CORE_INFO("Running ImGui version: {0}", ImGui::GetVersion());
+		LY_CORE_INFO("Running ImPlot version: {0}", IMPLOT_VERSION);
 
 		ImGui::CreateContext();
 		ImPlot::CreateContext();

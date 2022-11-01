@@ -171,8 +171,8 @@ static uint8_t s_GLFWWindowCount = 0;
 		// NOTE: This function may use unnecessary resources.
 		//		 It will not be compiled in releas builds.
 		#ifdef LY_SHOW_WINDOWTITLE_FPS
-			static u8 i = 0; 
-			static const u16 p = 10000;
+			static u8 i = 50; 
+			static const u8 p = 50;
 
 			if (i > p) {
 				i = 0;
