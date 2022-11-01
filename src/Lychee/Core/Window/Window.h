@@ -18,6 +18,9 @@
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
 
+//** Renderer **
+#include "Lychee/Renderer/Renderer.h"
+#include "Lychee/Renderer/GraphicsContext.h"
 
 //*** DEFIENS ***
 
@@ -107,8 +110,7 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
-        // TODO: Implement later
-        //Scope<GraphicsContext> m_Context;
+        Scope<GraphicsContext> m_Context;
 		
 	};
 

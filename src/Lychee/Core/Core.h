@@ -29,6 +29,9 @@
 //** ImGui **
 #include "Lychee/ImGui/ImGuiLayer.h"
 
+//** Renderer **
+#include "Lychee/Renderer/Renderer.h"
+
 //*** DEFINES ***
 
 
@@ -78,9 +81,25 @@ namespace Lychee {
             void PushLayer(Layer* layer);
             void PushOverlay(Layer* layer);
 
-            // TODO: Describe this stuff
+            /**
+             * @brief Get the ImGuiLayer instance
+             * 
+             * @return ImGuiLayer* 
+             */
             ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+
+            /**
+             * @brief Gets Core instance
+             * 
+             * @return Core& 
+             */
 		    static Core& Get() { return *s_Instance; }
+
+            /**
+             * @brief Get the Window instance
+             * 
+             * @return Window& 
+             */
             Window& GetWindow() { return *m_Window; }
 
         private:

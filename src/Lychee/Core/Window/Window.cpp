@@ -59,7 +59,8 @@ static uint8_t s_GLFWWindowCount = 0;
                                         nullptr, 
                                         nullptr);
 		
-		glfwMakeContextCurrent(m_glfwWindow);
+		m_Context = GraphicsContext::Create(m_glfwWindow);
+		m_Context->Init();
 
         // glad: load all OpenGL function pointers
 		LY_CORE_INFO("Initializing glad");
@@ -186,7 +187,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		#endif
 
 		glfwPollEvents();
-        glfwSwapBuffers(m_glfwWindow);
+		m_Context->SwapBuffers();
 	}
 
 	void Window::SetVSync(bool enabled) {

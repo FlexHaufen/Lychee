@@ -20,7 +20,13 @@
 #pragma warning(pop)
 
 //*** DEFINES ***
-#define LY_LOGGER_ENABLE
+#ifndef NLY_DEBUG
+    #define LY_LOGGER_ENABLE
+#else
+    // TODO: This will change later -> maby logger is only file logging is enabled
+    #define LY_LOGGER_ENABLE
+#endif
+
 
 //*** NAMESPACE ***
 namespace Lychee {
