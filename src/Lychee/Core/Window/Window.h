@@ -18,6 +18,8 @@
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
 
+//** Renderer **
+#include "Lychee/Renderer/Renderer.h"
 
 //*** DEFIENS ***
 
