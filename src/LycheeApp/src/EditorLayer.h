@@ -29,9 +29,14 @@ namespace Lychee {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
+		virtual void OnUpdate(DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
 		void OnEvent(Event& e) override;
 	private:
+
+
+		Lychee::Ref<Lychee::Shader> m_Shader;
+		Lychee::Ref<Lychee::VertexArray> m_VertexArray;
 
 		void OnMenuBarRender();
 

@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <functional>
 #include <filesystem>
+#include <fstream>
 
 #include <string>
 #include <sstream>
@@ -37,6 +38,7 @@
 #include <GLFW/glfw3native.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // ImGui
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
@@ -60,7 +62,7 @@
 #ifndef NLY_DEBUG
     // DEBUG MODE
     #define LY_DEBUG
-    #define LY_RENDER_IMGUI 		
+    //#define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
     // #define LY_LOG_EVENTS
