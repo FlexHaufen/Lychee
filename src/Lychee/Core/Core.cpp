@@ -29,7 +29,7 @@ namespace Lychee {
         std::filesystem::current_path(LY_DEFAULT_PATH);
         LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
 
-        #ifdef _DEBUG
+        #ifdef LY_DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
             m_Window = new Window(LY_WINDOW_NAME_DEBUG,
                                   LY_WINDOW_SIZE_X,

@@ -57,11 +57,20 @@
 //TODO: Maby move to another file
 
 // *** DEFINES ***
-// ** DEBUG **
-// #define LY_LOG_EVENTS
-#define LY_RENDER_IMGUI 		//! dont change this
-#define LY_IMGUI_SHOW_DEMO      // Demo window    
-#define LY_IMPLOT_SHOW_DEMO     // Demo window
+#ifndef NLY_DEBUG
+    // DEBUG MODE
+    #define LY_DEBUG
+    #define LY_RENDER_IMGUI 		
+    #define LY_IMGUI_SHOW_DEMO      // Demo window    
+    #define LY_IMPLOT_SHOW_DEMO     // Demo window
+    // #define LY_LOG_EVENTS
+#else
+    // RELEAS MODE
+    #undef LY_DEBUG
+    #define LY_RENDER_IMGUI 		//! dont change this
+#endif
+
+
 
 #define LY_SHOW_WINDOWTITLE_FPS    // FPS counter on window title
 
