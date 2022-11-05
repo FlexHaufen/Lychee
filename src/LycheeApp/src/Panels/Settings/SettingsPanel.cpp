@@ -63,7 +63,7 @@ namespace Lychee {
             for (int i = 0; i < 10; i++)
                 ImGui::Text("Scrolling Text %d", i);
             ImGui::EndChild();
-            static float f = 0.5f;
+            static f32 f = 0.5f;
             static int n = 0;
             ImGui::SliderFloat("Value", &f, 0.0f, 1.0f);
             ImGui::InputFloat("Input", &f, 0.1f);

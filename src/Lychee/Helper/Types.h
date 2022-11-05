@@ -1,5 +1,7 @@
 #include <cstdint>
 
+#pragma once
+
 // *** CUSTOM TYPE DEFINTIONS ***
 
 // unsigned

@@ -28,7 +28,7 @@ namespace Lychee {
 		return CreateRef<OpenGLVertexBuffer>(size);
 	}
 
-	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size) {
+	Ref<VertexBuffer> VertexBuffer::Create(f32* vertices, uint32_t size) {
         switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None: 
 				return nullptr;

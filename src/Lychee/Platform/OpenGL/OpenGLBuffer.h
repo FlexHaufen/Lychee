@@ -20,7 +20,7 @@ namespace Lychee {
 	class OpenGLVertexBuffer : public VertexBuffer {
 	public:
 		OpenGLVertexBuffer(u32 size);
-		OpenGLVertexBuffer(float* vertices, u32 size);
+		OpenGLVertexBuffer(f32* vertices, u32 size);
 		virtual ~OpenGLVertexBuffer();
 
 		virtual void Bind() const override;

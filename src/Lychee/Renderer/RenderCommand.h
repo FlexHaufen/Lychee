@@ -50,7 +50,7 @@ namespace Lychee {
 		}
  		 
 		
-		static void SetLineWidth(float width) {
+		static void SetLineWidth(f32 width) {
 			m_RendererAPI->SetLineWidth(width);
 		}
 	private:

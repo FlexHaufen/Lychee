@@ -25,6 +25,7 @@ namespace Lychee {
 				// Not supported
 				return nullptr;
 			case RendererAPI::API::OpenGL:  
+				return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);		
 				break;
 		}
         return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);

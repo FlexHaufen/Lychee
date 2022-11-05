@@ -37,14 +37,14 @@ namespace Lychee {
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
-		return { (float)xpos, (float)ypos };
+		return { (f32)xpos, (f32)ypos };
 	}
 
-	float Input::GetMouseX() {
+	f32 Input::GetMouseX() {
 		return GetMousePosition().x;
 	}
 
-	float Input::GetMouseY() {
+	f32 Input::GetMouseY() {
 		return GetMousePosition().y;
 	}
 

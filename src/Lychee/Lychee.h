@@ -19,8 +19,9 @@
 #include "Lychee/Core/Input/Input.h"
 #include "Lychee/Helper/KeyCodes.h"
 #include "Lychee/Helper/MouseCodes.h"
+#include "Lychee/Helper/Types.h"
 
-
+// ** Rendering **
 #include "Lychee/Renderer/Renderer.h"
 #include "Lychee/Renderer/RenderCommand.h"
 
@@ -28,4 +29,5 @@
 #include "Lychee/Renderer/Shader.h"
 #include "Lychee/Renderer/VertexArray.h"
 
+#include "Lychee/Renderer/OrthographicCameraController.h"
 //*** DEFINES ***

@@ -113,7 +113,7 @@ namespace Lychee {
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
 		static Ref<VertexBuffer> Create(u32 size);
-		static Ref<VertexBuffer> Create(float* vertices, u32 size);
+		static Ref<VertexBuffer> Create(f32* vertices, u32 size);
 	};
 
 	// NOTE: Currently Lychee only supports 32-bit index buffers

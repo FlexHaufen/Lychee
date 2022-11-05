@@ -38,7 +38,7 @@ namespace Lychee {
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount = 0) = 0;
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount) = 0;
 		
-		virtual void SetLineWidth(float width) = 0;
+		virtual void SetLineWidth(f32 width) = 0;
 
 		static API GetAPI() { return m_API; }
 		static Scope<RendererAPI> Create();

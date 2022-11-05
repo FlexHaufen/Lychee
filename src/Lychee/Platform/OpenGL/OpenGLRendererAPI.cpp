@@ -16,16 +16,14 @@
 namespace Lychee {
 	
 	void OpenGLMessageCallback(
-		u16 source,
-		u16 type,
-		u16 id,
-		u16 severity,
-		i16 length,
+		u32 source,
+		u32 type,
+		u32 id,
+		u32 severity,
+		i32 length,
 		const c8* message,
-		const void* userParam) 
-	{
-		switch (severity)
-		{
+		const void* userParam) {
+		switch (severity) {
 			case GL_DEBUG_SEVERITY_HIGH:         LY_CORE_CRITICAL(message); return;
 			case GL_DEBUG_SEVERITY_MEDIUM:       LY_CORE_ERROR(message); return;
 			case GL_DEBUG_SEVERITY_LOW:          LY_CORE_WARN(message); return;

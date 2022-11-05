@@ -22,13 +22,15 @@ namespace Lychee {
 	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer") {
+		: Layer("EditorLayer"),
+		  m_CameraController(2560.0f / 1440.0f) {
+
 		LY_INFO("Initializing Editor");
 
 		//! ------- TESTING -------
 		m_VertexArray = VertexArray::Create();
 
-		float vertices[3 * 7] = {
+		f32 vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 			0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 			0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
@@ -47,36 +49,34 @@ namespace Lychee {
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		std::string vertexSrc = R"(
-				#version 330 core
-				
-				layout(location = 0) in vec3 a_Position;
-				layout(location = 1) in vec4 a_Color;
-				uniform mat4 u_ViewProjection;
-				uniform mat4 u_Transform;
-				out vec3 v_Position;
-				out vec4 v_Color;
-				void main()
-				{
-					v_Position = a_Position;
-					v_Color = a_Color;
-					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
-				}
-			)";
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec4 a_Color;
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+			out vec3 v_Position;
+			out vec4 v_Color;
+			void main() {
+				v_Position = a_Position;
+				v_Color = a_Color;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
 
 		std::string fragmentSrc = R"(
-				#version 330 core
-				
-				layout(location = 0) out vec4 color;
-				in vec3 v_Position;
-				in vec4 v_Color;
-				void main()
-				{
-					color = vec4(v_Position * 0.5 + 0.5, 1.0);
-					color = v_Color;
-				}
-			)";
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec3 v_Position;
+			in vec4 v_Color;
+			void main() {
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				color = v_Color;
+			}
+		)";
 
-		m_Shader = Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
+		m_Shader = Shader::Create("Triangle", vertexSrc, fragmentSrc);
 		//! -----------------------
 
 	}
@@ -89,10 +89,14 @@ namespace Lychee {
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
 		//! ------- TESTING -------
-		RenderCommand::SetClearColor({0.5f, 0.1f, 0.1f, 1});
+		m_CameraController.OnUpdate(dt);
+
+		RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
 		RenderCommand::Clear();
 
-		Renderer::BeginScene();
+		
+		Renderer::BeginScene(m_CameraController.GetCamera());
+
 		Renderer::Submit(m_Shader, m_VertexArray);
 
 		Renderer::EndScene();
@@ -140,7 +144,7 @@ namespace Lychee {
 		// DockSpace
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
-		float minWinSizeX = style.WindowMinSize.x;
+		f32 minWinSizeX = style.WindowMinSize.x;
 		style.WindowMinSize.x = 370.0f;
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
@@ -171,7 +175,7 @@ namespace Lychee {
 
 	void EditorLayer::OnEvent(Event& e)	{
 
-		EventDispatcher dispatcher(e);
+		m_CameraController.OnEvent(e);
 
 		#ifdef LY_LOG_KEY_EVENT
 			if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
@@ -180,9 +184,9 @@ namespace Lychee {
 			}	
 		#endif
 
-
-		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
-		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 
 	void EditorLayer::OnMenuBarRender() {
@@ -234,4 +238,25 @@ namespace Lychee {
 			ImGui::EndMenuBar();
 		}
 	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e) {
+		// Shortcuts
+		if (e.IsRepeat()) {
+			return false;
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+		}
+		return true;
+	}
+
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e) {
+		if (e.GetMouseButton() == Mouse::ButtonLeft) {
+		//	if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+		//		m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+		}
+		return false;
+	}
+
 }
+
