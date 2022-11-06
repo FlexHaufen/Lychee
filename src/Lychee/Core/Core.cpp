@@ -29,7 +29,7 @@ namespace Lychee {
         std::filesystem::current_path(LY_DEFAULT_PATH);
         LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
 
-        #ifdef _DEBUG
+        #ifdef LY_DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
             m_Window = new Window(LY_WINDOW_NAME_DEBUG,
                                   LY_WINDOW_SIZE_X,
@@ -41,6 +41,9 @@ namespace Lychee {
 		#endif
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
+
+        Renderer::Init();
+
         m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
     }
@@ -48,15 +51,15 @@ namespace Lychee {
     Core::~Core() {
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
+        Renderer::Shutdown();
         LY_CORE_INFO("Terminating Core");
     }
 
     void Core::Run() {
         while (m_isRunning) {
-
-                float time = (f32)glfwGetTime();
-                DeltaTime deltaTime = time - m_lastFrameTime;
-                m_lastFrameTime = time;
+            f32 time = (f32)glfwGetTime();
+            DeltaTime deltaTime = time - m_lastFrameTime;
+            m_lastFrameTime = time;
 
             if (!m_isMinimized) {
                 for (Layer* layer : m_LayerStack) {
@@ -117,8 +120,10 @@ namespace Lychee {
 	bool Core::OnWindowResize(WindowResizeEvent& e) {
 		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_isMinimized = true;
-			return false;
+			return true;
 		}
+
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		m_isMinimized = false;
 		return false;
 	}

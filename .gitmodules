@@ -7,6 +7,7 @@
 [submodule "lib/vendor/imgui"]
 	path = lib/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
+	branch = docking
 [submodule "lib/vendor/glm"]
 	path = lib/vendor/glm
 	url = https://github.com/g-truc/glm.git

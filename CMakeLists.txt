@@ -18,8 +18,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/release)
 
 # COMPILER FLAGS
 #
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
-#set(CMAKE_CXX_FLAGS_RELEASE "/O3 /g0")
+set(CMAKE_CXX_FLAGS_DEBUG "/W1 /W2 /W3 /Zi")
+set(CMAKE_CXX_FLAGS_RELEASE "/O3 /g0 /DNLY_DEBUG")
 
 
 #----------------------------------------------------

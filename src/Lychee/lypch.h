@@ -9,6 +9,7 @@
  * 
  */
 #pragma once
+#pragma warning(push, 0)
 
 // *** INCLUDES ***
 // ** EXTERNAL FILES **
@@ -21,6 +22,7 @@
 #include <algorithm>
 #include <functional>
 #include <filesystem>
+#include <fstream>
 
 #include <string>
 #include <sstream>
@@ -36,6 +38,7 @@
 #include <GLFW/glfw3native.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // ImGui
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
@@ -46,6 +49,8 @@
 
 // ImPlot
 #include <implot.h>
+#pragma warning(pop)
+
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
@@ -54,19 +59,28 @@
 //TODO: Maby move to another file
 
 // *** DEFINES ***
-// ** DEBUG **
-// #define LY_LOG_EVENTS
-#define LY_RENDER_IMGUI 		//! dont change this
-#define LY_IMGUI_SHOW_DEMO      // Demo window    
-#define LY_IMPLOT_SHOW_DEMO     // Demo window
+#ifndef NLY_DEBUG
+    // DEBUG MODE
+    #define LY_DEBUG
+    //#define LY_RENDER_IMGUI 		
+    #define LY_IMGUI_SHOW_DEMO      // Demo window    
+    #define LY_IMPLOT_SHOW_DEMO     // Demo window
+    // #define LY_LOG_EVENTS
+#else
+    // RELEAS MODE
+    #undef LY_DEBUG
+    #define LY_RENDER_IMGUI 		//! dont change this
+#endif
+
+
 
 #define LY_SHOW_WINDOWTITLE_FPS    // FPS counter on window title
 
 // ** CONFIG **
 // * General *
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION_STR              "v0.1.4b"
-#define LY_VERSION_INT              000104      // format: 00.00.00
+#define LY_VERSION_STR              "v0.1.5b"
+#define LY_VERSION_INT              000105      // format: 00.00.00
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"

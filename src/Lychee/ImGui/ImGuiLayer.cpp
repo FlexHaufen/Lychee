@@ -33,6 +33,7 @@ namespace Lychee {
 		IMGUI_CHECKVERSION();
 
 		LY_CORE_INFO("Running ImGui version: {0}", ImGui::GetVersion());
+		LY_CORE_INFO("Running ImPlot version: {0}", IMPLOT_VERSION);
 
 		ImGui::CreateContext();
 		ImPlot::CreateContext();
@@ -82,7 +83,7 @@ namespace Lychee {
 	void ImGuiLayer::End() {
 		ImGuiIO& io = ImGui::GetIO();
 		Core& app = Core::Get();
-		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2((f32)app.GetWindow().GetWidth(), (f32)app.GetWindow().GetHeight());
 
 		// Rendering
 		ImGui::Render();

@@ -14,8 +14,8 @@
 #include "vector.h"
 
 //*** DEFINES ***
-#define M_PI 3.1415926
-#define M_E  2.7182818
+const f32 M_PI = 3.1415926f;
+const f32 M_E  = 2.7182818f;
 
 
 c8* reverseString(const c8* string,c8 length){

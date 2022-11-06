@@ -59,7 +59,8 @@ static uint8_t s_GLFWWindowCount = 0;
                                         nullptr, 
                                         nullptr);
 		
-		glfwMakeContextCurrent(m_glfwWindow);
+		m_Context = GraphicsContext::Create(m_glfwWindow);
+		m_Context->Init();
 
         // glad: load all OpenGL function pointers
 		LY_CORE_INFO("Initializing glad");
@@ -146,7 +147,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		glfwSetScrollCallback(m_glfwWindow, [](GLFWwindow* window, f64 xOffset, f64 yOffset) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent event((float)xOffset, (float)yOffset);
+			MouseScrolledEvent event((f32)xOffset, (f32)yOffset);
 			data.eventCallback(event);
 		});
 
@@ -154,7 +155,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		glfwSetCursorPosCallback(m_glfwWindow, [](GLFWwindow* window, f64 xPos, f64 yPos) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
-			MouseMovedEvent event((float)xPos, (float)yPos);
+			MouseMovedEvent event((f32)xPos, (f32)yPos);
 			data.eventCallback(event);
 		});
 
@@ -171,12 +172,12 @@ static uint8_t s_GLFWWindowCount = 0;
 		// NOTE: This function may use unnecessary resources.
 		//		 It will not be compiled in releas builds.
 		#ifdef LY_SHOW_WINDOWTITLE_FPS
-			static u8 i = 0; 
-			static const u8 p = 10000;
+			static u8 i = 50; 
+			static const u8 p = 50;
 
 			if (i > p) {
 				i = 0;
-				u8 fps = 1 / dt.GetSeconds();
+				u8 fps = u8(1 / dt.GetSeconds());
 				std::string title =  m_sWindowData.title + " FPS:  " + std::to_string(fps);
 				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
 			} 
@@ -186,7 +187,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		#endif
 
 		glfwPollEvents();
-        glfwSwapBuffers(m_glfwWindow);
+		m_Context->SwapBuffers();
 	}
 
 	void Window::SetVSync(bool enabled) {
