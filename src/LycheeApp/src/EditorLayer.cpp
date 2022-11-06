@@ -23,7 +23,7 @@ namespace Lychee {
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"),
-		  m_CameraController(2560.0f / 1440.0f) {
+		  m_CameraController(1920.0f / 1080.0f, true) {
 
 		LY_INFO("Initializing Editor");
 
