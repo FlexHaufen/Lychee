@@ -57,8 +57,7 @@ namespace Lychee {
 
     void Core::Run() {
         while (m_isRunning) {
-
-            float time = (f32)glfwGetTime();
+            f32 time = (f32)glfwGetTime();
             DeltaTime deltaTime = time - m_lastFrameTime;
             m_lastFrameTime = time;
 

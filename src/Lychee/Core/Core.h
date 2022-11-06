@@ -29,9 +29,6 @@
 //** ImGui **
 #include "Lychee/ImGui/ImGuiLayer.h"
 
-//** Renderer **
-#include "Lychee/Renderer/Renderer.h"
-
 //*** DEFINES ***
 
 

@@ -25,9 +25,9 @@ namespace Lychee {
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
 
-		/* virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount = 0) override;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount = 0) override;
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount) override;
-		*/
+		
 		virtual void SetLineWidth(f32 width) override;
 	};
 

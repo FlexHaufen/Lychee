@@ -29,9 +29,19 @@ namespace Lychee {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
+		virtual void OnUpdate(DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
 		void OnEvent(Event& e) override;
 	private:
+
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+
+
+		Lychee::Ref<Lychee::Shader> m_Shader;
+		Lychee::Ref<Lychee::VertexArray> m_VertexArray;
+
+		Lychee::OrthographicCameraController m_CameraController;
 
 		void OnMenuBarRender();
 

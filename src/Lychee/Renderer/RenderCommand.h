@@ -41,16 +41,16 @@ namespace Lychee {
 			m_RendererAPI->Clear();
 		}
 
-		/* static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) {
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) {
 			m_RendererAPI->DrawIndexed(vertexArray, indexCount);
-		} */
+		}
 
-		/* static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) {
+		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) {
 			m_RendererAPI->DrawLines(vertexArray, vertexCount);
 		}
- 		 */
+ 		 
 		
-		static void SetLineWidth(float width) {
+		static void SetLineWidth(f32 width) {
 			m_RendererAPI->SetLineWidth(width);
 		}
 	private:

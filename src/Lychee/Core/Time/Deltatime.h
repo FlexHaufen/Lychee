@@ -33,6 +33,8 @@ namespace Lychee {
         f32 GetSeconds() const { return m_time; }
         f32 GetMillisecons() const { return m_time * 1000.0f;}
 
+        operator f32() const {return m_time;}
+
     private:
         //** Members **
         f32 m_time;
