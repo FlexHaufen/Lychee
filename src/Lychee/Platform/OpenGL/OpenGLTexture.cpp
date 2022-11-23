@@ -39,7 +39,6 @@ namespace Lychee {
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
 
-		LY_CORE_TRACE("Data = {0}", data);
 			
 		if (data) {
 			m_IsLoaded = true;
