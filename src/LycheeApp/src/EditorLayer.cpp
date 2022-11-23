@@ -51,13 +51,11 @@ namespace Lychee {
 
 		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture.png");
 
-		m_Shader = Shader::Create("src/LycheeApp/src/assets/shaders/Shader.glsl");
-		m_Shader->Bind();
-		m_Shader->SetFloat4("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+		auto textureShader = m_ShaderLibrary.Load("src/LycheeApp/src/assets/shaders/Texture.glsl");
 
-		m_TextureShader = Shader::Create("src/LycheeApp/src/assets/shaders/Texture.glsl");
-		m_TextureShader->Bind();
-		m_TextureShader->SetInt("u_Texture", 0);
+
+		textureShader->Bind();
+		textureShader->SetInt("u_Texture", 0);
 
 		//! -----------------------
 
@@ -79,8 +77,9 @@ namespace Lychee {
 		
 		Renderer::BeginScene(m_CameraController.GetCamera());
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
 		m_Texture->Bind();
-		Renderer::Submit(m_TextureShader, m_VertexArray);
+		Renderer::Submit(textureShader, m_VertexArray);
 
 		Renderer::EndScene();
 		//! -----------------------
