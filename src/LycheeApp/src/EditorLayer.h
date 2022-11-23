@@ -38,8 +38,9 @@ namespace Lychee {
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 
-		Lychee::Ref<Lychee::Shader> m_Shader;
+		Lychee::Ref<Lychee::Shader> m_Shader, m_TextureShader;
 		Lychee::Ref<Lychee::VertexArray> m_VertexArray;
+		Lychee::Ref<Lychee::Texture2D> m_Texture;
 
 		Lychee::OrthographicCameraController m_CameraController;
 

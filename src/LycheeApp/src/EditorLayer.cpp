@@ -30,53 +30,102 @@ namespace Lychee {
 		//! ------- TESTING -------
 		m_VertexArray = VertexArray::Create();
 
-		f32 vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-			0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-			0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		f32 vertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,		// btm left
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,		// btm right
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,		// top right
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f		// top left
 		};
 
 		Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		BufferLayout layout = {
 			{ eShaderDataType::Float3, "a_Position" },
-			{ eShaderDataType::Float4, "a_Color" }
+			{ eShaderDataType::Float2, "a_TextCoord" }
 		};
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
+		// *** COLOR SHADERS ****
 		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
+	
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
+			
 			out vec3 v_Position;
-			out vec4 v_Color;
+			
 			void main() {
 				v_Position = a_Position;
-				v_Color = a_Color;
+			
 				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
+		// *** TEXTURE SHADERS ***
 		std::string fragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
+
 			in vec3 v_Position;
-			in vec4 v_Color;
+			uniform vec3 u_Color;
+
 			void main() {
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
+				color = vec4(u_Color, 1.0);
+				
 			}
 		)";
 
-		m_Shader = Shader::Create("Triangle", vertexSrc, fragmentSrc);
+
+		std::string vertexSrc_texture = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TextCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+			
+			out vec2 v_TextCoord;
+			
+			void main() {
+				v_TextCoord = a_TextCoord;
+			
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string fragmentSrc_texture = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec2 v_TextCoord;
+			
+			uniform sampler2D u_Texture;
+
+			void main() {
+				color = texture(u_Texture, v_TextCoord);
+				
+			}
+		)";
+
+		// TODO: Find out relative path here
+		m_Texture = Texture2D::Create("C:/Users/janin/Documents/01_Projects/Projects/Lychee/src/LycheeApp/src/assets/test_texture.png");
+
+		m_Shader = Shader::Create("Srq", vertexSrc, fragmentSrc);
+		m_Shader->Bind();
+		m_Shader->SetFloat4("u_Color", glm::vec4(1.0, 1.0, 1.0, 1.0));
+
+		m_TextureShader = Shader::Create("Sqr_Texture", vertexSrc_texture, fragmentSrc_texture);
+		m_TextureShader->Bind();
+		m_TextureShader->SetInt("u_Texture", 0);
+
 		//! -----------------------
 
 	}
@@ -97,7 +146,8 @@ namespace Lychee {
 		
 		Renderer::BeginScene(m_CameraController.GetCamera());
 
-		Renderer::Submit(m_Shader, m_VertexArray);
+		m_Texture->Bind();
+		Renderer::Submit(m_TextureShader, m_VertexArray);
 
 		Renderer::EndScene();
 		//! -----------------------
