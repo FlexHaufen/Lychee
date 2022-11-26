@@ -29,7 +29,7 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnAttach() {
-		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture.png");
+		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture2.png");
 	}
 
 	void EditorLayer::OnDetach() {

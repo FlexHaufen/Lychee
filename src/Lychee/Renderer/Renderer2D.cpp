@@ -22,9 +22,9 @@ namespace Lychee {
 
     struct Renderer2D_Data {
         Ref<VertexArray>    QuadVertexArray;
-		//Ref<VertexBuffer>   QuadVertexBuffer;
-		Ref<Shader>         FlatColorShader;
 		Ref<Shader>         TextureShader;
+
+        Ref<Texture2D>      WhiteTexture;
 
     };
 
@@ -55,8 +55,12 @@ namespace Lychee {
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		s_Data->QuadVertexArray->SetIndexBuffer(indexBuffer);
 
+        s_Data->WhiteTexture = Texture2D::Create(1, 1);
+        u32 whiteTextureData = 0xFFFFFFFF;
+        s_Data->WhiteTexture->SetData(&whiteTextureData, sizeof(whiteTextureData));
+
+
         // FIXME: this path is bad - find other loaction for simple shaders
-		s_Data->FlatColorShader = Shader::Create("src/LycheeApp/src/assets/shaders/FlatColorShader.glsl");
         s_Data->TextureShader = Shader::Create("src/LycheeApp/src/assets/shaders/TextureShader.glsl");
 
         s_Data->TextureShader->Bind();
@@ -69,9 +73,6 @@ namespace Lychee {
     }
 
     void Renderer2D::BeginScene(const OrthographicCamera& camera) {
-        s_Data->FlatColorShader->Bind();
-        s_Data->FlatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
         s_Data->TextureShader->Bind();
         s_Data->TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
     }
@@ -90,13 +91,15 @@ namespace Lychee {
     }
 
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color) {
-        s_Data->FlatColorShader->Bind();
-        s_Data->FlatColorShader->SetFloat4("u_Color", color); 
+        s_Data->TextureShader->SetFloat4("u_Color", color);
+
+        // Bind White texture
+        s_Data->WhiteTexture->Bind();
 
         // Calculate transform: Translation * Rotation * Scale
         // Rotation is not added!
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-        s_Data->FlatColorShader->SetMat4("u_Transform", transform); 
+        s_Data->TextureShader->SetMat4("u_Transform", transform); 
         
         s_Data->QuadVertexArray->Bind();
         RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
@@ -108,19 +111,15 @@ namespace Lychee {
     }
     
     void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D> texture) {
-        s_Data->TextureShader->Bind();
+        s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f)); 
+        texture->Bind();
 
         // Calculate transform: Translation * Rotation * Scale
         // Rotation is not added!
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
         s_Data->TextureShader->SetMat4("u_Transform", transform); 
         
-        texture->Bind();
-
         s_Data->QuadVertexArray->Bind();
         RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
-        
     }
-
-
 }
