@@ -11,6 +11,7 @@
 
 // *** INCLUDES ***
 #include "Lychee/Renderer/Renderer.h"
+#include "Lychee/Renderer/Renderer2D.h"
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -20,12 +21,12 @@ namespace Lychee {
 	void Renderer::Init() {
         LY_CORE_INFO("Initializing Renderer");
 		RenderCommand::Init();
-		//Renderer2D::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown() {
         LY_CORE_INFO("Terminating Renderer");
-		//Renderer2D::Shutdown();
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height) {

@@ -23,6 +23,7 @@
 
 // ** Rendering **
 #include "Lychee/Renderer/Renderer.h"
+#include "Lychee/Renderer/Renderer2D.h"
 #include "Lychee/Renderer/RenderCommand.h"
 
 #include "Lychee/Renderer/Buffer.h"

@@ -26,42 +26,10 @@ namespace Lychee {
 		  m_CameraController(1920.0f / 1080.0f, true) {
 
 		LY_INFO("Initializing Editor");
-
-		//! ------- TESTING -------
-		m_VertexArray = VertexArray::Create();
-
-		f32 vertices[5 * 4] = {
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,		// btm left
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,		// btm right
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,		// top right
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f		// top left
-		};
-
-		Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-		BufferLayout layout = {
-			{ eShaderDataType::Float3, "a_Position" },
-			{ eShaderDataType::Float2, "a_TextCoord" }
-		};
-		vertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(vertexBuffer);
-
-		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		m_VertexArray->SetIndexBuffer(indexBuffer);
-
-		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture.png");
-
-		auto textureShader = m_ShaderLibrary.Load("src/LycheeApp/src/assets/shaders/Texture.glsl");
-
-
-		textureShader->Bind();
-		textureShader->SetInt("u_Texture", 0);
-
-		//! -----------------------
-
 	}
 
 	void EditorLayer::OnAttach() {
+		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture.png");
 	}
 
 	void EditorLayer::OnDetach() {
@@ -73,15 +41,15 @@ namespace Lychee {
 
 		RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
 		RenderCommand::Clear();
-
 		
-		Renderer::BeginScene(m_CameraController.GetCamera());
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
+		
 
-		auto textureShader = m_ShaderLibrary.Get("Texture");
-		m_Texture->Bind();
-		Renderer::Submit(textureShader, m_VertexArray);
-
-		Renderer::EndScene();
+		Renderer2D::DrawQuad({-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
+		Renderer2D::DrawQuad({0.5f, -0.5f}, {0.5f, 0.75f}, {0.2f, 0.3f, 0.8f, 1.0f});
+		Renderer2D::DrawQuad({0.0f, 0.0f}, {4.0f, 4.0f}, m_Texture);
+		
+		Renderer2D::EndScene();
 		//! -----------------------
 	}
 
