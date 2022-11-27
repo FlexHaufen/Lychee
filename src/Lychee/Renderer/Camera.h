@@ -14,7 +14,7 @@
 #include "Lychee/lypch.h"
 
 // *** NAMESPACE ***
-namespace Hazel {
+namespace Lychee {
 
     /**
      * @brief Camera Class

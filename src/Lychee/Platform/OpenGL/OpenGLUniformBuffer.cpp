@@ -1,6 +1,6 @@
 /**
  * @file OpenGLUniformBuffer.cpp
- * @author flaxhaufen
+ * @author flexhaufen
  * @brief 
  * @version 0.1
  * @date 2022-11-27

@@ -45,9 +45,14 @@ namespace Lychee {
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
 		
 
-		Renderer2D::DrawQuad({-1.0f, 0.0f}, {0.8f, 0.8f}, {0.8f, 0.2f, 0.3f, 1.0f});
-		Renderer2D::DrawQuad({0.5f, -0.5f}, {0.5f, 0.75f}, {0.2f, 0.3f, 0.8f, 1.0f});
-		Renderer2D::DrawQuad({0.0f, 0.0f}, {4.0f, 4.0f}, m_Texture);
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_Texture, 10.0f);
+		Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.3f, m_Texture, 20.0f);
+		Renderer2D::EndScene();
+
 		
 		Renderer2D::EndScene();
 		//! -----------------------
