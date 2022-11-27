@@ -51,6 +51,9 @@
 #include <implot.h>
 #pragma warning(pop)
 
+// Stb image
+#include <stb_image.h>
+
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"

@@ -93,6 +93,11 @@ add_library(implot
 			${IMPLOT_PATH}/implot_items.cpp
 			${IMPLOT_PATH}/implot_demo.cpp)
 
+### STBIMAGE ###
+set(STBIMAGE_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/stb_image)
+add_library(stb_image 
+			${STBIMAGE_PATH}/stb_image.h
+			${STBIMAGE_PATH}/stb_image.cpp)
 
 #----------------------------------------------------
 #				      INCLUDE DIRS
@@ -129,7 +134,8 @@ include_directories(
 set(LIBS glfw
 	glad
 	imgui
-	implot)
+	implot
+	stb_image)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 

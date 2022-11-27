@@ -23,10 +23,12 @@
 
 // ** Rendering **
 #include "Lychee/Renderer/Renderer.h"
+#include "Lychee/Renderer/Renderer2D.h"
 #include "Lychee/Renderer/RenderCommand.h"
 
 #include "Lychee/Renderer/Buffer.h"
 #include "Lychee/Renderer/Shader.h"
+#include "Lychee/Renderer/Texture.h"
 #include "Lychee/Renderer/VertexArray.h"
 
 #include "Lychee/Renderer/OrthographicCameraController.h"
