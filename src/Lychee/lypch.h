@@ -107,8 +107,12 @@
 #define LY_FONT_REGULAR             "./resource/fonts/Rilu-Regular.ttf"
 
 // * Window *
-#define LY_WINDOW_SIZE_X            1500
-#define LY_WINDOW_SIZE_Y            1000
+#define LY_WINDOW_SIZE_X            1920
+#define LY_WINDOW_SIZE_Y            1080
+
+#define LY_CAMERA_SIZE_X            1920.0f
+#define LY_CAMERA_SIZE_Y            1080.0f
+
 #define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
