@@ -20,12 +20,6 @@ namespace Lychee {
 	class RenderCommand {
 	public:
 		static void Init() {
-
-			// Check if given RendererAPI exists
-			if (m_RendererAPI == nullptr) {
-				LY_CORE_CRITICAL("Render API does not exist or is unknown");
-				return;
-			}
 			m_RendererAPI->Init();
 		}
 

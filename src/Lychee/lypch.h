@@ -11,7 +11,9 @@
 #pragma once
 #pragma warning(push, 0)
 
-// *** INCLUDES ***
+// ***************************************************************
+// ************************ INCLUDES *****************************
+// ***************************************************************
 // ** EXTERNAL FILES **
 #include <Windows.h>
 
@@ -59,9 +61,10 @@
 #include "Lychee/Core/Log.h"
 #include "Lychee/Helper/Types.h"
 
-//TODO: Maby move to another file
-
-// *** DEFINES ***
+// ***************************************************************
+// ************************* DEFINES *****************************
+// ***************************************************************
+// ** DEBUG **
 #ifndef NLY_DEBUG
     // DEBUG MODE
     #define LY_DEBUG
@@ -76,11 +79,23 @@
 #endif
 
 
+#ifdef LY_DEBUG
+    #define LY_DEBUGBREAK() __debugbreak()
+	#define LY_ENABLE_ASSERTS
+#else
+	#define LY_DEBUGBREAK()
+#endif
 
-#define LY_SHOW_WINDOWTITLE_FPS    // FPS counter on window title
+// ** MACROS **
+#define LY_EXPAND_MACRO(x) x
+#define LY_STRINGIFY_MACRO(x) #x
+
 
 // ** CONFIG **
+//TODO: Maby move to another file
 // * General *
+#define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
+
 #define LY_PROJECT_NAME             "Lychee"
 #define LY_VERSION_STR              "v0.1.5b"
 #define LY_VERSION_INT              000105      // format: 00.00.00

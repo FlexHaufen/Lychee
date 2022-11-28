@@ -23,22 +23,26 @@ namespace Lychee {
 	{
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:    
-				// Not supported
+				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
 				return nullptr;
 			case RendererAPI::API::OpenGL:  
 				return CreateRef<OpenGLShader>(filepath);
 		}
+		
+		LY_CORE_ASSERT(false, "Unknown RenderAPI!");
 		return nullptr;
 	}
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) {
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:  
-				// Not supported
+				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
 				return nullptr;
 			case RendererAPI::API::OpenGL:  
 				return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);		
 		}
+
+		LY_CORE_ASSERT(false, "Unknown RenderAPI!");
         return nullptr;
 	}
 

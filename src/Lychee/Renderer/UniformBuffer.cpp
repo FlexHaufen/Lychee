@@ -20,10 +20,14 @@ namespace Lychee {
 
 	Ref<UniformBuffer> UniformBuffer::Create(u32 size, u32 binding) {
 		switch (Renderer::GetAPI()) {
-			case RendererAPI::API::None:    return nullptr;
-			case RendererAPI::API::OpenGL:  return CreateRef<OpenGLUniformBuffer>(size, binding);
+			case RendererAPI::API::None:    
+				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
+				return nullptr;
+			case RendererAPI::API::OpenGL:  
+				return CreateRef<OpenGLUniformBuffer>(size, binding);
 		}
 
+		LY_CORE_ASSERT(false, "Unknown RenderAPI!");
 		return nullptr;
 	}
 
