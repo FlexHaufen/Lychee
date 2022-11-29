@@ -17,9 +17,8 @@ namespace Lychee {
 
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		: m_WindowHandle(windowHandle) {
-		if (windowHandle == nullptr) {
-			LY_CORE_CRITICAL("Could not create OpenGL window");
-		}
+
+		LY_CORE_ASSERT(windowHandle, "Could not create OpenGL window");
 	}
 
 	void OpenGLContext::Init() {

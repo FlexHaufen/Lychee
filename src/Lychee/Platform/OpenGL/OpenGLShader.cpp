@@ -10,6 +10,49 @@
 */
 namespace Lychee {
 
+	namespace Utils {
+
+		static GLenum ShaderTypeFromString(const std::string& type) {
+			if (type == "vertex")
+				return GL_VERTEX_SHADER;
+			if (type == "fragment" || type == "pixel")
+				return GL_FRAGMENT_SHADER;
+
+			LY_CORE_ERROR("Unknown shader type!");
+			return 0;
+		}
+		static const char* GetCacheDirectory() {
+			// TODO: make sure the assets directory is valid
+			return "src/LycheeApp/src/assets/cache/shader/opengl";
+		}
+
+		static void CreateCacheDirectoryIfNeeded() {
+			std::string cacheDirectory = GetCacheDirectory();
+			if (!std::filesystem::exists(cacheDirectory))
+				std::filesystem::create_directories(cacheDirectory);
+		}
+	}
+
+
+	OpenGLShader::OpenGLShader(const std::string& filepath)
+		: m_FilePath(filepath) {
+
+		Utils::CreateCacheDirectoryIfNeeded();
+
+		std::string source = ReadFile(filepath);
+		auto shaderSources = PreProcess(source);
+
+		Compile(shaderSources);
+		//CreateProgram();	// TODO: implement
+
+		// Extract name from filepath
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
+	}
+
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)	{
 
@@ -18,11 +61,55 @@ namespace Lychee {
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
 
 		Compile(sources);
-		//CreateProgram();
+		//CreateProgram();	// TODO: implement
 	}
 
 	OpenGLShader::~OpenGLShader() {
 		glDeleteProgram(m_RendererID);
+	}
+
+	std::string OpenGLShader::ReadFile(const std::string& filepath) {
+
+		std::string result;
+		std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
+		if (in) {
+			in.seekg(0, std::ios::end);
+			// FIXME: Results in a warning
+			size_t size = in.tellg();
+			if (size != -1) {
+				result.resize(size);
+				in.seekg(0, std::ios::beg);
+				in.read(&result[0], size);
+			}
+			else {
+				LY_CORE_ERROR("Could not read from file '{0}'", filepath);
+			}
+		}
+		else {
+			LY_CORE_ERROR("Could not open file '{0}'", filepath);
+		}
+
+		return result;
+	}
+
+	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source) {
+
+		std::unordered_map<GLenum, std::string> shaderSources;
+
+		const char* typeToken = "#type";
+		size_t typeTokenLength = strlen(typeToken);
+		size_t pos = source.find(typeToken, 0); //Start of shader type declaration line
+		while (pos != std::string::npos) {
+			size_t eol = source.find_first_of("\r\n", pos); //End of shader type declaration line
+			size_t begin = pos + typeTokenLength + 1; //Start of shader type name (after "#type " keyword)
+			std::string type = source.substr(begin, eol - begin);
+			size_t nextLinePos = source.find_first_not_of("\r\n", eol); //Start of shader code after shader type declaration line
+			pos = source.find(typeToken, nextLinePos); //Start of next shader type declaration line
+
+			shaderSources[Utils::ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
+		}
+
+		return shaderSources;
 	}
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources){

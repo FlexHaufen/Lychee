@@ -20,11 +20,14 @@ namespace Lychee {
 
 	Scope<RendererAPI> RendererAPI::Create() {
 		switch (m_API) {
-			case RendererAPI::API::None:    
+			case RendererAPI::API::None:  
+				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
 				return nullptr;
 			case RendererAPI::API::OpenGL:  
 				return CreateScope<OpenGLRendererAPI>();
 		}
+
+		LY_CORE_ASSERT(false, "Unknown RenderAPI");
 		return nullptr;
 	}
 

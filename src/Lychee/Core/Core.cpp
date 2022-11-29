@@ -52,7 +52,7 @@ namespace Lychee {
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
         Renderer::Shutdown();
-        LY_CORE_INFO("Terminating Core");
+        LY_CORE_INFO("Core is going down for Shutdown NOW!");
     }
 
     void Core::Run() {

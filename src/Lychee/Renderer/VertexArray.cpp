@@ -21,11 +21,13 @@ namespace Lychee {
 	Ref<VertexArray> VertexArray::Create() {
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:   
+				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
 				return nullptr;
 			case RendererAPI::API::OpenGL:  
 				return CreateRef<OpenGLVertexArray>();
 		}
 
+		LY_CORE_ASSERT(false, "Unknown RenderAPI!");
 		return nullptr;
 	}
 
