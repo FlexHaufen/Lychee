@@ -2,6 +2,12 @@
  * @file Log.h
  * @author flexhaufen
  * @brief logger
+ *          TRACE       -> For debugging
+ *          INFO        -> Generally useful information to log
+ *          WARNING     -> Anything that can potentially cause application oddities.
+ *          ERROR       -> Any error which is fatal to the operation, but not the application
+ *          CIRTICAL    -> Any error that is forcing a shutdown of the service or application
+ * 
  * @version 0.1
  * @date 2022-09-21
  * 
