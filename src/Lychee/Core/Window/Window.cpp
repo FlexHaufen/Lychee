@@ -24,9 +24,9 @@
 //*** NAMESPACE ***
 namespace Lychee {
 
-static uint8_t s_GLFWWindowCount = 0;
+static u8 s_GLFWWindowCount = 0;
 
-	static void GLFWErrorCallback(int error, const char* description) {
+	static void GLFWErrorCallback(s32 error, const c8* description) {
 		LY_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
@@ -53,8 +53,8 @@ static uint8_t s_GLFWWindowCount = 0;
 
 		
 		LY_CORE_INFO("Initializing glfw Window");
-		m_glfwWindow = glfwCreateWindow((int)m_sWindowData.width, 
-                                        (int)m_sWindowData.height, 
+		m_glfwWindow = glfwCreateWindow((s32)m_sWindowData.width, 
+                                        (s32)m_sWindowData.height, 
                                         m_sWindowData.title.c_str(), 
                                         nullptr, 
                                         nullptr);
@@ -80,7 +80,7 @@ static uint8_t s_GLFWWindowCount = 0;
 
 		//** Callbacks **
 		//* Window Resize *
-		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, i32 width, i32 height) {
+		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, s32 width, s32 height) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			data.width = width;
 			data.height = height;
@@ -96,7 +96,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		});
 
 		//* Keys *
-		glfwSetKeyCallback(m_glfwWindow, [](GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods) {
+		glfwSetKeyCallback(m_glfwWindow, [](GLFWwindow* window, s32 key, s32 scancode, s32 action, s32 mods) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
@@ -126,7 +126,7 @@ static uint8_t s_GLFWWindowCount = 0;
 		});
 
 		//* Mouse Button *
-		glfwSetMouseButtonCallback(m_glfwWindow, [](GLFWwindow* window, i32 button, i32 action, i32 mods) {
+		glfwSetMouseButtonCallback(m_glfwWindow, [](GLFWwindow* window, s32 button, s32 action, s32 mods) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
@@ -191,7 +191,7 @@ static uint8_t s_GLFWWindowCount = 0;
 	}
 
 	void Window::SetVSync(bool enabled) {
-        glfwSwapInterval(int(enabled));
+        glfwSwapInterval(s32(enabled));
 		m_sWindowData.isVSyncOn = enabled;
 	}
 

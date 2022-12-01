@@ -18,7 +18,7 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size) {
+	Ref<VertexBuffer> VertexBuffer::Create(u32 size) {
         switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:  
 				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
@@ -31,7 +31,7 @@ namespace Lychee {
 		return CreateRef<OpenGLVertexBuffer>(size);
 	}
 
-	Ref<VertexBuffer> VertexBuffer::Create(f32* vertices, uint32_t size) {
+	Ref<VertexBuffer> VertexBuffer::Create(f32* vertices, u32 size) {
         switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None: 
 				LY_CORE_ASSERT(false, "RenderAPI is NONE!");
@@ -45,7 +45,7 @@ namespace Lychee {
 		return CreateRef<OpenGLVertexBuffer>(vertices, size);
 	}
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size) {
+	Ref<IndexBuffer> IndexBuffer::Create(u32* indices, u32 size) {
 		switch (Renderer::GetAPI()) {
 			case RendererAPI::API::None:   
 				LY_CORE_ASSERT(false, "RenderAPI is NONE!");

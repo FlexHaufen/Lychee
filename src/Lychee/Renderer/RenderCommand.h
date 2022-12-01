@@ -23,7 +23,7 @@ namespace Lychee {
 			m_RendererAPI->Init();
 		}
 
-		static void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+		static void SetViewport(u32 x, u32 y, u32 width, u32 height) {
 			m_RendererAPI->SetViewport(x, y, width, height);
 		}
 
@@ -35,11 +35,11 @@ namespace Lychee {
 			m_RendererAPI->Clear();
 		}
 
-		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) {
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount = 0) {
 			m_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 
-		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) {
+		static void DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount) {
 			m_RendererAPI->DrawLines(vertexArray, vertexCount);
 		}
  		 

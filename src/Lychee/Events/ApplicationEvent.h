@@ -20,11 +20,11 @@ namespace Lychee {
 
 	class WindowResizeEvent : public Event {
 	public:
-		WindowResizeEvent(unsigned int width, unsigned int height)
+		WindowResizeEvent(u32 width, u32 height)
 			: m_Width(width), m_Height(height) {}
 
-		unsigned int GetWidth() const { return m_Width; }
-		unsigned int GetHeight() const { return m_Height; }
+		u32 GetWidth() const { return m_Width; }
+		u32 GetHeight() const { return m_Height; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -35,7 +35,7 @@ namespace Lychee {
 		EVENT_CLASS_TYPE(WindowResize)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	private:
-		unsigned int m_Width, m_Height;
+		u32 m_Width, m_Height;
 	};
 
 	class WindowCloseEvent : public Event {

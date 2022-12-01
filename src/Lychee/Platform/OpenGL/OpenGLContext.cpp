@@ -23,7 +23,7 @@ namespace Lychee {
 
 	void OpenGLContext::Init() {
 		glfwMakeContextCurrent(m_WindowHandle);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		s32 status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		
 		if(!status) {
 			LY_CORE_ERROR("Failed to initialize Glad!");

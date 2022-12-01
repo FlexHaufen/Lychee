@@ -23,8 +23,8 @@ namespace Lychee {
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void SetInt(const std::string& name, i32 value) = 0;
-		virtual void SetIntArray(const std::string& name, i32* values, u32 count) = 0;
+        virtual void SetInt(const std::string& name, s32 value) = 0;
+		virtual void SetIntArray(const std::string& name, s32* values, u32 count) = 0;
 		virtual void SetFloat(const std::string& name, f32 value) = 0;
 		virtual void SetFloat2(const std::string& name, const glm::vec2& value) = 0;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) = 0;

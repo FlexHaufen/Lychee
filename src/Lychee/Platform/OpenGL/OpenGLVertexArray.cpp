@@ -88,8 +88,8 @@ namespace Lychee {
 				}
 				case eShaderDataType::Mat3:
 				case eShaderDataType::Mat4: {
-					uint8_t count = element.GetComponentCount();
-					for (uint8_t i = 0; i < count; i++) {
+					u8 count = element.GetComponentCount();
+					for (u8 i = 0; i < count; i++) {
 						glEnableVertexAttribArray(m_VertexBufferIndex);
 						glVertexAttribPointer(m_VertexBufferIndex,
 							count,

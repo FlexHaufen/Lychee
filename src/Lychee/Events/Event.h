@@ -46,9 +46,9 @@ namespace Lychee {
     // ** DEFINES **
     #define EVENT_CLASS_TYPE(type) static eEventType GetStaticType() { return eEventType::type; } \
                                    virtual eEventType GetEventType() const override { return GetStaticType(); }\
-                                   virtual const char* GetName() const override { return #type; }
+                                   virtual const c8* GetName() const override { return #type; }
 
-    #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
+    #define EVENT_CLASS_CATEGORY(category) virtual s32 GetCategoryFlags() const override { return category; }
 
     /**
      * @brief Event class
@@ -59,8 +59,8 @@ namespace Lychee {
 		virtual ~Event() = default;
 
 		virtual eEventType GetEventType() const = 0;
-		virtual const char* GetName() const = 0;
-		virtual int GetCategoryFlags() const = 0;
+		virtual const c8* GetName() const = 0;
+		virtual s32 GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
 		/**

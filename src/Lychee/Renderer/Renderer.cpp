@@ -29,7 +29,7 @@ namespace Lychee {
 		Renderer2D::Shutdown();
 	}
 
-	void Renderer::OnWindowResize(uint32_t width, uint32_t height) {
+	void Renderer::OnWindowResize(u32 width, u32 height) {
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 

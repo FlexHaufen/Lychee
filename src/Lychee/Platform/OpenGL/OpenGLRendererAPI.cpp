@@ -20,7 +20,7 @@ namespace Lychee {
 		u32 type,
 		u32 id,
 		u32 severity,
-		i32 length,
+		s32 length,
 		const c8* message,
 		const void* userParam) {
 		switch (severity) {

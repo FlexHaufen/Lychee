@@ -21,7 +21,7 @@ namespace Lychee {
 			LY_CORE_ERROR("Unknown shader type!");
 			return 0;
 		}
-		static const char* GetCacheDirectory() {
+		static const c8* GetCacheDirectory() {
 			// TODO: make sure the assets directory is valid
 			return "src/LycheeApp/src/assets/cache/shader/opengl";
 		}
@@ -96,7 +96,7 @@ namespace Lychee {
 
 		std::unordered_map<GLenum, std::string> shaderSources;
 
-		const char* typeToken = "#type";
+		const c8* typeToken = "#type";
 		size_t typeTokenLength = strlen(typeToken);
 		size_t pos = source.find(typeToken, 0); //Start of shader type declaration line
 		while (pos != std::string::npos) {
@@ -119,7 +119,7 @@ namespace Lychee {
 			LY_CORE_ERROR("   Size {0}", shaderSources.size());
 		}
 		std::array<GLenum, 2> glShaderIDs;
-		int glShaderIDIndex = 0;
+		s32 glShaderIDIndex = 0;
 		for (auto& kv : shaderSources) {
 			GLenum type = kv.first;
 			const std::string& source = kv.second;
@@ -157,7 +157,7 @@ namespace Lychee {
 
 		// Note the different functions here: glGetProgram* instead of glGetShader*.
 		GLint isLinked = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+		glGetProgramiv(program, GL_LINK_STATUS, (s32*)&isLinked);
 		if (isLinked == GL_FALSE) {
 			GLint maxLength = 0;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
@@ -188,7 +188,7 @@ namespace Lychee {
 		std::vector<GLuint> shaderIDs;
 		for (auto&& [stage, spirv] : m_OpenGLSPIRV) {
 			GLuint shaderID = shaderIDs.emplace_back(glCreateShader(stage));
-			glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), spirv.size() * sizeof(uint32_t));
+			glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), spirv.size() * sizeof(u32));
 			glSpecializeShader(shaderID, "main", 0, nullptr, nullptr);
 			glAttachShader(program, shaderID);
 		}
@@ -228,11 +228,11 @@ namespace Lychee {
 		glUseProgram(0);
 	}
 	
-	void OpenGLShader::SetInt(const std::string& name, int value) {
+	void OpenGLShader::SetInt(const std::string& name, s32 value) {
 		UploadUniformInt(name, value);
 	}
 
-	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count) {
+	void OpenGLShader::SetIntArray(const std::string& name, s32* values, u32 count) {
 		UploadUniformIntArray(name, values, count);
 	}
 
@@ -256,12 +256,12 @@ namespace Lychee {
 		UploadUniformMat4(name, value);
 	}
 
-	void OpenGLShader::UploadUniformInt(const std::string& name, int value) {
+	void OpenGLShader::UploadUniformInt(const std::string& name, s32 value) {
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1i(location, value);
 	}
 
-	void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count) {
+	void OpenGLShader::UploadUniformIntArray(const std::string& name, s32* values, u32 count) {
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1iv(location, count, values);
 	}

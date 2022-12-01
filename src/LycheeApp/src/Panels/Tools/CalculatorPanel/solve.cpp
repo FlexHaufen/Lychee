@@ -24,7 +24,7 @@ c8* reverseString(const c8* string,c8 length){
         return nullptr;
 
     tmp[length]='\0';
-    for (i32 i = 0; i < length; ++i) {
+    for (s32 i = 0; i < length; ++i) {
         tmp[i]=string[length-1-i];
     }
     return tmp; //make sure to free the returned pointer

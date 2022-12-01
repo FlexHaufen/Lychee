@@ -22,19 +22,19 @@ namespace Lychee {
 
 	bool Input::IsKeyPressed(const KeyCode key)	{
 		auto* window = static_cast<GLFWwindow*>(Core::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(window, static_cast<int32_t>(key));
+		auto state = glfwGetKey(window, static_cast<s32>(key));
 		return state == GLFW_PRESS;
 	}
 
 	bool Input::IsMouseButtonPressed(const MouseCode button) {
 		auto* window = static_cast<GLFWwindow*>(Core::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));
+		auto state = glfwGetMouseButton(window, static_cast<s32>(button));
 		return state == GLFW_PRESS;
 	}
 
 	glm::vec2 Input::GetMousePosition() {
 		auto* window = static_cast<GLFWwindow*>(Core::Get().GetWindow().GetNativeWindow());
-		double xpos, ypos;
+		f64 xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
 		return { (f32)xpos, (f32)ypos };

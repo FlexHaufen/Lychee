@@ -29,7 +29,7 @@ namespace Lychee {
 		f32 TilingFactor;
 		
 		// Editor-only
-		i32 EntityID;
+		s32 EntityID;
 	};
 
 	struct sCircleVertex {
@@ -40,7 +40,7 @@ namespace Lychee {
 		f32 Fade;
 
 		// Editor-only
-		i32 EntityID;
+		s32 EntityID;
 	};
 
 	struct sLineVertex {
@@ -48,7 +48,7 @@ namespace Lychee {
 		glm::vec4 Color;
 
 		// Editor-only
-		i32 EntityID;
+		s32 EntityID;
 	};
 
     
@@ -171,7 +171,7 @@ namespace Lychee {
 		u32 whiteTextureData = 0xFFFFFFFF;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(u32));
 
-		i32 samplers[s_Data.MaxTextureSlots];
+		s32 samplers[s_Data.MaxTextureSlots];
 		for (u32 i = 0; i < s_Data.MaxTextureSlots; i++) {
 			samplers[i] = i;
         }
@@ -288,7 +288,7 @@ namespace Lychee {
 		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, i32 entityID) {
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, s32 entityID) {
 		constexpr size_t quadVertexCount = 4;
 		const f32 textureIndex = 0.0f; // White Texture
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -312,7 +312,7 @@ namespace Lychee {
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, f32 tilingFactor, const glm::vec4& tintColor, i32 entityID) {
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, f32 tilingFactor, const glm::vec4& tintColor, s32 entityID) {
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
@@ -376,7 +376,7 @@ namespace Lychee {
 		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, f32 thickness /*= 1.0f*/, f32 fade /*= 0.005f*/, i32 entityID /*= -1*/) {
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, f32 thickness /*= 1.0f*/, f32 fade /*= 0.005f*/, s32 entityID /*= -1*/) {
 		// TODO: implement for circles
 		// if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		// 	NextBatch();
@@ -396,7 +396,7 @@ namespace Lychee {
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawLine(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, i32 entityID) {
+	void Renderer2D::DrawLine(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, s32 entityID) {
 		s_Data.LineVertexBufferPtr->Position = p0;
 		s_Data.LineVertexBufferPtr->Color = color;
 		s_Data.LineVertexBufferPtr->EntityID = entityID;
@@ -410,7 +410,7 @@ namespace Lychee {
 		s_Data.LineVertexCount += 2;
 	}
 
-	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, i32 entityID) {
+	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, s32 entityID) {
 		glm::vec3 p0 = glm::vec3(position.x - size.x * 0.5f, position.y - size.y * 0.5f, position.z);
 		glm::vec3 p1 = glm::vec3(position.x + size.x * 0.5f, position.y - size.y * 0.5f, position.z);
 		glm::vec3 p2 = glm::vec3(position.x + size.x * 0.5f, position.y + size.y * 0.5f, position.z);
@@ -422,7 +422,7 @@ namespace Lychee {
 		DrawLine(p3, p0, color, entityID);
 	}
 
-	void Renderer2D::DrawRect(const glm::mat4& transform, const glm::vec4& color, i32 entityID) {
+	void Renderer2D::DrawRect(const glm::mat4& transform, const glm::vec4& color, s32 entityID) {
 		glm::vec3 lineVertices[4];
 		for (size_t i = 0; i < 4; i++)
 			lineVertices[i] = transform * s_Data.QuadVertexPositions[i];
