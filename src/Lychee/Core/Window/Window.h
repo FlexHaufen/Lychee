@@ -111,7 +111,9 @@ namespace Lychee {
 		sWindowData m_sWindowData;	  // Window data
 
         Scope<GraphicsContext> m_Context;
-		
+
+		f32 m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
+		u16 m_frameCounterFps = 0;		// Frames since last fps update
 	};
 
 }

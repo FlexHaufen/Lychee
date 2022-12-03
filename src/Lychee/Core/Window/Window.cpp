@@ -172,17 +172,14 @@ static u8 s_GLFWWindowCount = 0;
 		// NOTE: This function may use unnecessary resources.
 		//		 It will not be compiled in releas builds.
 		#ifdef LY_SHOW_WINDOWTITLE_FPS
-			static u8 i = 50; 
-			static const u8 p = 50;
+			m_elapsedTimeFps += dt.GetSeconds();
+			m_frameCounterFps++;
 
-			if (i > p) {
-				i = 0;
-				u8 fps = u8(1 / dt.GetSeconds());
-				std::string title =  m_sWindowData.title + " FPS:  " + std::to_string(fps);
+			if (m_elapsedTimeFps >= 1.0f) {
+				std::string title =  m_sWindowData.title + " FPS:  " + std::to_string(m_frameCounterFps);
 				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
-			} 
-			else {
-				i++;
+				m_frameCounterFps = 0;
+				m_elapsedTimeFps = 0;
 			}
 		#endif
 
