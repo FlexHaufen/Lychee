@@ -18,18 +18,24 @@ namespace Lychee {
 
 	// *** VERTEXBUFFER ***
 	OpenGLVertexBuffer::OpenGLVertexBuffer(u32 size) {
+        LY_PROFILE_FUNCTION();
+
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 	}
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(f32* vertices, u32 size) {
+        LY_PROFILE_FUNCTION();
+
 		glCreateBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer() {
+        LY_PROFILE_FUNCTION();
+		
 		glDeleteBuffers(1, &m_RendererID);
 	}
 

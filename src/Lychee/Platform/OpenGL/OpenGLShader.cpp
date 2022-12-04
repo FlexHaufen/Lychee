@@ -36,6 +36,7 @@ namespace Lychee {
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 		: m_FilePath(filepath) {
+        LY_PROFILE_FUNCTION();
 
 		Utils::CreateCacheDirectoryIfNeeded();
 
@@ -55,6 +56,7 @@ namespace Lychee {
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)	{
+        LY_PROFILE_FUNCTION();
 
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -69,6 +71,7 @@ namespace Lychee {
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath) {
+        LY_PROFILE_FUNCTION();
 
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
@@ -93,6 +96,7 @@ namespace Lychee {
 	}
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source) {
+        LY_PROFILE_FUNCTION();
 
 		std::unordered_map<GLenum, std::string> shaderSources;
 
@@ -113,6 +117,8 @@ namespace Lychee {
 	}
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources){
+        LY_PROFILE_FUNCTION();
+
 		GLuint program = glCreateProgram();
 		if (shaderSources.size() > 2) {
 			LY_CORE_ERROR("We only support 2 shaders for now");

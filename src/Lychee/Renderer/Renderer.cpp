@@ -30,10 +30,14 @@ namespace Lychee {
 	}
 
 	void Renderer::OnWindowResize(u32 width, u32 height) {
+        LY_PROFILE_FUNCTION();
+
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera) {
+        LY_PROFILE_FUNCTION();
+
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
@@ -41,6 +45,8 @@ namespace Lychee {
 	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform) {
+        LY_PROFILE_FUNCTION();
+
 		shader->Bind();
 		shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);

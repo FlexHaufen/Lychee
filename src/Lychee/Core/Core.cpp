@@ -23,11 +23,17 @@ namespace Lychee {
 
         Lychee::Log::Init();
         LY_CORE_INFO("Lychee {0}", LY_VERSION_STR);
-        LY_CORE_INFO("--------------------------");
+        LY_CORE_INFO("-----------------------------------------------");
         LY_CORE_INFO("Initializing Core");
 
         std::filesystem::current_path(LY_DEFAULT_PATH);
         LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
+
+
+        #ifdef LY_PROFILE
+            LY_CORE_WARN("Profiler is enabled and may use unnecessary recources");
+        #endif
+        LY_PROFILE_BEGIN_SESSION("Profile", "LycheeProfile.json");
 
         #ifdef LY_DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
@@ -49,13 +55,18 @@ namespace Lychee {
     }
 
     Core::~Core() {
+        LY_PROFILE_FUNCTION();
+
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
         Renderer::Shutdown();
+	    LY_PROFILE_END_SESSION();
         LY_CORE_INFO("Core is going down for Shutdown NOW!");
     }
 
     void Core::Run() {
+        LY_PROFILE_FUNCTION();
+
         while (m_isRunning) {
             f32 time = (f32)glfwGetTime();
             DeltaTime deltaTime = time - m_lastFrameTime;
@@ -96,6 +107,7 @@ namespace Lychee {
 
     // ** EVENTS **
     void Core::OnEvent(Event& e) {
+        LY_PROFILE_FUNCTION();
 
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));

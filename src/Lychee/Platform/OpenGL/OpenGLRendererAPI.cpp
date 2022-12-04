@@ -61,17 +61,23 @@ namespace Lychee {
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount) {
+        LY_PROFILE_FUNCTION();
+
 		vertexArray->Bind();
 		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void OpenGLRendererAPI::DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount) {
+        LY_PROFILE_FUNCTION();
+
 		vertexArray->Bind();
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
  
 	void OpenGLRendererAPI::SetLineWidth(f32 width) {
+        LY_PROFILE_FUNCTION();
+
 		glLineWidth(width);
 	}
 

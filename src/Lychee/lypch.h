@@ -59,6 +59,7 @@
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
+#include "Lychee/Core/Debug/Instrumentor.h"
 #include "Lychee/Helper/Types.h"
 
 // ***************************************************************
