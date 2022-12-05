@@ -162,8 +162,8 @@ namespace Lychee {
 			m_CameraController.OnResize((f32)viewportPanelSize.x, (f32)viewportPanelSize.y);
 		}
 
-		u32 textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
+		u64 textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1 }, ImVec2{1, 0});
 		ImGui::End();
 		ImGui::PopStyleVar();
 		ImGui::End();

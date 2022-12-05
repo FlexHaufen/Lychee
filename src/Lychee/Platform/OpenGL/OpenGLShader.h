@@ -4,7 +4,6 @@
 #include "Lychee/Renderer/Shader.h"
 
 
-// TODO: REMOVE!
 typedef u32 GLenum;
 
 namespace Lychee {
