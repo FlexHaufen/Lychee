@@ -28,6 +28,7 @@
 #include "Lychee/Renderer/Renderer.h"
 #include "Lychee/Renderer/Renderer2D.h"
 #include "Lychee/Renderer/RenderCommand.h"
+#include "Lychee/Renderer/Framebuffer.h"
 
 #include "Lychee/Renderer/Shader.h"
 #include "Lychee/Renderer/Texture.h"
