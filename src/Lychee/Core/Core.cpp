@@ -87,6 +87,7 @@ namespace Lychee {
             }
             m_Window->OnUpdate(deltaTime);
         }
+        // TODO (flex): Remove warning, cuz its unnecessary
         LY_CORE_WARN("Core stopped running");
     }
 

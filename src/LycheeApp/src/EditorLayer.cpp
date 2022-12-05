@@ -30,6 +30,14 @@ namespace Lychee {
 
 	void EditorLayer::OnAttach() {
 		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture2.png");
+
+		
+		sFramebufferSpecification fbSpec;
+		fbSpec.Attachments = { eFramebufferTextureFormat::RGBA8, eFramebufferTextureFormat::RED_INTEGER, eFramebufferTextureFormat::Depth };
+		fbSpec.Width = LY_WINDOW_SIZE_X;
+		fbSpec.Height = LY_WINDOW_SIZE_Y;
+		m_Framebuffer = Framebuffer::Create(fbSpec);
+		
 	}
 
 	void EditorLayer::OnDetach() {
@@ -38,6 +46,8 @@ namespace Lychee {
 	void EditorLayer::OnUpdate(DeltaTime dt) {
 		//! ------- TESTING -------
 		m_CameraController.OnUpdate(dt);
+
+		m_Framebuffer->Bind();
 
 		RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
 		RenderCommand::Clear();
@@ -54,6 +64,8 @@ namespace Lychee {
 
 		
 		Renderer2D::EndScene();
+
+		m_Framebuffer->Unbind();
 		//! -----------------------
 	}
 
@@ -122,7 +134,38 @@ namespace Lychee {
 		if(m_Settings.p_open)
 			m_Settings.OnImGuiRender(&m_Settings.p_open);
 
+		
+		// NOTE (flex): Random ass Stats windows
+		ImGui::Begin("Stats");
+		auto stats = Renderer2D::GetStats();
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+		ImGui::Text("Quads: %d", stats.QuadCount);
+		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+		ImGui::End();
 
+
+		//** VIEWPORT **
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});		
+		ImGui::Begin("Viewport");
+
+		// Disable event blocking
+		Core::Get().GetImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
+
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		// NOTE: Now fucking idea what this does
+		if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize) {
+
+			m_Framebuffer->Resize((u32)viewportPanelSize.x, (u32)viewportPanelSize.y);
+			m_ViewportSize = {(u32)viewportPanelSize.x, (u32)viewportPanelSize.y};
+			m_CameraController.OnResize((f32)viewportPanelSize.x, (f32)viewportPanelSize.y);
+		}
+
+		u32 textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
+		ImGui::End();
+		ImGui::PopStyleVar();
 		ImGui::End();
 	#endif
 	}

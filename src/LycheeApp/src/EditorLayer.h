@@ -34,10 +34,13 @@ namespace Lychee {
 		void OnEvent(Event& e) override;
 	private:
 
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
+
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 		Lychee::Ref<Lychee::Texture2D> m_Texture;
+		Lychee::Ref<Lychee::Framebuffer> m_Framebuffer;
 
 		Lychee::OrthographicCameraController m_CameraController;
 
