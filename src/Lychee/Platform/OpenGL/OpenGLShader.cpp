@@ -21,15 +21,16 @@ namespace Lychee {
 			LY_CORE_ERROR("Unknown shader type!");
 			return 0;
 		}
+
 		static const c8* GetCacheDirectory() {
-			// TODO: make sure the assets directory is valid
-			return "src/LycheeApp/src/assets/cache/shader/opengl";
+			return "src/Lychee/assets/cache/shader/opengl";
 		}
 
 		static void CreateCacheDirectoryIfNeeded() {
 			std::string cacheDirectory = GetCacheDirectory();
-			if (!std::filesystem::exists(cacheDirectory))
+			if (!std::filesystem::exists(cacheDirectory)) {
 				std::filesystem::create_directories(cacheDirectory);
+			}
 		}
 	}
 
@@ -38,7 +39,8 @@ namespace Lychee {
 		: m_FilePath(filepath) {
         LY_PROFILE_FUNCTION();
 
-		Utils::CreateCacheDirectoryIfNeeded();
+		// NOTE: Not used at the Moment
+		// Utils::CreateCacheDirectoryIfNeeded();
 
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);

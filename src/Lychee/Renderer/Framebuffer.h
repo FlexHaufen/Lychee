@@ -38,7 +38,6 @@ namespace Lychee {
 			: TextureFormat(format) {}
 
 		eFramebufferTextureFormat TextureFormat = eFramebufferTextureFormat::None;
-		// TODO: filtering/wrap
 	};
 
 	struct sFramebufferAttachmentSpecification {

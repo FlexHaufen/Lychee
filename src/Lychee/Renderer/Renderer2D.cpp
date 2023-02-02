@@ -56,7 +56,7 @@ namespace Lychee {
 		static const u32 MaxQuads = 20000;
 		static const u32 MaxVertices = MaxQuads * 4;
 		static const u32 MaxIndices = MaxQuads * 6;
-		static const u32 MaxTextureSlots = 32; // TODO: RenderCaps
+		static const u32 MaxTextureSlots = 32;
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
