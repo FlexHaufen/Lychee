@@ -5,8 +5,6 @@
 // *** CUSTOM TYPE DEFINTIONS ***
 
 // unsigned
-typedef unsigned char   uc8;
-
 typedef uint8_t         u8;
 typedef uint16_t        u16;
 typedef uint32_t        u32;
@@ -24,6 +22,25 @@ typedef int64_t         s64;
 typedef float           f32;
 typedef double          f64;
 typedef long double     f128;
+
+/**
+ * @brief 2D vector
+ * 
+ * @tparam T type of vector
+ */
+template <typename T>
+struct v2{
+    T x;
+    T y;
+
+    // ** Operator Overloading **
+    inline v2<T> operator+ (const v2<T>& a) const { return {x + a.x, y + a.y}; }
+    inline v2<T> operator- (const v2<T>& a) const { return {x - a.x, y - a.y}; }
+    inline v2<T> operator* (const v2<T>& a) const { return {x * a.x, y * a.y}; }
+    inline v2<T> operator/ (const v2<T>& a) const { return {x / a.x, y / a.y}; }
+    inline v2<T> operator= (const v2<T>& a)       { x = a.x; y = a.y; return a; }
+    inline bool operator== (const v2<T>& a) const { return (x == a.x && y == a.y); }
+};
 
 
 #define LY_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)

@@ -23,24 +23,29 @@
 namespace Lychee {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer") {
+		: Layer("ImGuiLayer")
+		, m_Window(Core::Get().GetWindow().GetNativeWindow()) {
 		LY_CORE_INFO("Initializing ImGuiLayer");
+
 	}
 
 	void ImGuiLayer::OnAttach()	{
+
+		ImGui::SFML::Init(m_Window);
+
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 
 		LY_CORE_INFO("Running ImGui version: {0}", ImGui::GetVersion());
-		LY_CORE_INFO("Running ImPlot version: {0}", IMPLOT_VERSION);
+		//LY_CORE_INFO("Running ImPlot version: {0}", IMPLOT_VERSION);
 
 		ImGui::CreateContext();
-		ImPlot::CreateContext();
+		//ImPlot::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
@@ -48,22 +53,11 @@ namespace Lychee {
 
 		// Setup Dear ImGui style
 		SetStyle();
-
-		Core& app = Core::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
-
-		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(window, LY_IMGUI_INSTALL_CALLBACKS);
-
-		ImGui_ImplOpenGL3_Init(LY_OPENGL_VERSION);
 	}
 
 	void ImGuiLayer::OnDetach() {
 		LY_CORE_INFO("Terminating ImGui");
-		ImPlot::DestroyContext();
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		ImGui::SFML::Shutdown();
 	}
 
 	void ImGuiLayer::OnEvent(Event& e) {
@@ -74,27 +68,17 @@ namespace Lychee {
 		}
 	}
 	
-	void ImGuiLayer::Begin() {
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+	void ImGuiLayer::OnUpdate(DeltaTime dt) {
+		ImGui::SFML::Update(m_Window, dt);
 	}
 
-	void ImGuiLayer::End() {
-		ImGuiIO& io = ImGui::GetIO();
-		Core& app = Core::Get();
-		io.DisplaySize = ImVec2((f32)app.GetWindow().GetWidth(), (f32)app.GetWindow().GetHeight());
+	void ImGuiLayer::OnRender(LayerStack &layerstack) {
 
-		// Rendering
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
+		for (auto* layer : layerstack) {
+			layer->OnImGuiRender();
 		}
+
+		ImGui::SFML::Render(m_Window);
 	}
 
 	void ImGuiLayer::SetStyle() {

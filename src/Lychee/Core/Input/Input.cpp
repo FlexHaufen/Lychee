@@ -20,6 +20,7 @@
 //*** NAMESPACE ***
 namespace Lychee {
 
+	/*
 	bool Input::IsKeyPressed(const KeyCode key)	{
 		auto* window = static_cast<GLFWwindow*>(Core::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, static_cast<s32>(key));
@@ -47,5 +48,6 @@ namespace Lychee {
 	f32 Input::GetMouseY() {
 		return GetMousePosition().y;
 	}
+	*/
 
 }

@@ -22,21 +22,13 @@ namespace Lychee {
 	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"),
-		  m_CameraController(LY_CAMERA_SIZE_X / LY_CAMERA_SIZE_Y, true) {
+		: Layer("EditorLayer") {
 
 		LY_INFO("Initializing Editor");
 	}
 
 	void EditorLayer::OnAttach() {
-		m_Texture = Texture2D::Create("src/LycheeApp/src/assets/textures/test_texture2.png");
 
-		
-		sFramebufferSpecification fbSpec;
-		fbSpec.Attachments = { eFramebufferTextureFormat::RGBA8, eFramebufferTextureFormat::RED_INTEGER, eFramebufferTextureFormat::Depth };
-		fbSpec.Width = LY_WINDOW_SIZE_X;
-		fbSpec.Height = LY_WINDOW_SIZE_Y;
-		m_Framebuffer = Framebuffer::Create(fbSpec);
 		
 	}
 
@@ -44,27 +36,7 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
-		//! ------- TESTING -------
-		m_CameraController.OnUpdate(dt);
 
-
-		Renderer2D::ResetStats();
-
-		m_Framebuffer->Bind();
-		{
-			RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
-			RenderCommand::Clear();
-		}
-		{
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, -45.0f, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.2f, 0.8f, 0.3f, 1.0f });
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_Texture, 10.0f);
-			Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.3f, m_Texture, 20.0f);
-			Renderer2D::EndScene();
-		}
-		m_Framebuffer->Unbind();
-		//! -----------------------
 	}
 
 	void EditorLayer::OnImGuiRender() {
@@ -122,27 +94,10 @@ namespace Lychee {
 		#endif
 
 		#ifdef LY_IMPLOT_SHOW_DEMO
-			ImPlot::ShowDemoWindow();
+			//ImPlot::ShowDemoWindow();
 		#endif
 		// Render menubar
 		OnMenuBarRender();
-
-		if(m_Calculator.p_open)
-			m_Calculator.OnImGuiRender(&m_Calculator.p_open);
-		if(m_Settings.p_open)
-			m_Settings.OnImGuiRender(&m_Settings.p_open);
-
-		
-		// NOTE (flex): Random ass Stats windows
-		ImGui::Begin("Stats");
-		auto stats = Renderer2D::GetStats();
-		ImGui::Text("Renderer2D Stats:");
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.QuadCount);
-		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-		ImGui::End();
-
 
 		//** VIEWPORT **
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});		
@@ -153,15 +108,14 @@ namespace Lychee {
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		// NOTE: Now fucking idea what this does
-		if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize) {
+		//if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize) {
+		//	m_Framebuffer->Resize((u32)viewportPanelSize.x, (u32)viewportPanelSize.y);
+		//	m_ViewportSize = {(u32)viewportPanelSize.x, (u32)viewportPanelSize.y};
+		//	m_CameraController.OnResize((f32)viewportPanelSize.x, (f32)viewportPanelSize.y);
+		//}
 
-			m_Framebuffer->Resize((u32)viewportPanelSize.x, (u32)viewportPanelSize.y);
-			m_ViewportSize = {(u32)viewportPanelSize.x, (u32)viewportPanelSize.y};
-			m_CameraController.OnResize((f32)viewportPanelSize.x, (f32)viewportPanelSize.y);
-		}
-
-		u64 textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1 }, ImVec2{1, 0});
+		//u64 textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		//ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1 }, ImVec2{1, 0});
 		ImGui::End();
 		ImGui::PopStyleVar();
 		ImGui::End();
@@ -169,8 +123,6 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnEvent(Event& e)	{
-
-		m_CameraController.OnEvent(e);
 
 		#ifdef LY_LOG_KEY_EVENT
 			if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
@@ -204,7 +156,6 @@ namespace Lychee {
 			}
 			if (ImGui::BeginMenu("Edit")) {
 				ImGui::Separator();
-				ImGui::MenuItem("Settings", NULL, &m_Settings.p_open);
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("View")) {
@@ -218,7 +169,6 @@ namespace Lychee {
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Tools")) {
-				ImGui::MenuItem("Calculator", NULL, &m_Calculator.p_open);
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Help")) {
@@ -239,8 +189,8 @@ namespace Lychee {
 		if (e.IsRepeat()) {
 			return false;
 
-		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
-		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+		//bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		//bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
 		}
 		return true;
 	}

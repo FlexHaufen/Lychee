@@ -61,15 +61,6 @@ set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/lib/vendor/imgui/)
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/imgui-sfml/)
 
 
-### IMPLOT ###
-set(IMPLOT_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/implot)
-add_library(implot 
-			${IMPLOT_PATH}/implot.h
-			${IMPLOT_PATH}/implot_internal.h
-			${IMPLOT_PATH}/implot.cpp
-			${IMPLOT_PATH}/implot_items.cpp
-			${IMPLOT_PATH}/implot_demo.cpp)
-
 ### STBIMAGE ###
 set(STBIMAGE_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/stb_image)
 add_library(stb_image 
@@ -81,8 +72,6 @@ add_library(stb_image
 #----------------------------------------------------
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
-	# implot
-	"${CMAKE_SOURCE_DIR}/lib/vendor/implot"
 	#SFML
 	"${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include"
 	# spdlog
@@ -104,7 +93,6 @@ set(LIBS 	sfml-window
 			sfml-audio
 			sfml-network
 			ImGui-SFML
-			implot
 			stb_image)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})

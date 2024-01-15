@@ -14,13 +14,12 @@
 #include "Lychee/lypch.h"
 //** Events **
 #include "Lychee/Events/Event.h"
+#include "Lychee/Events/KeyEvent.h"
+#include "Lychee/Events/MouseEvent.h"
+#include "Lychee/Events/ApplicationEvent.h"
 
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
-
-//** Renderer **
-#include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Renderer/GraphicsContext.h"
 
 //*** DEFIENS ***
 
@@ -53,10 +52,16 @@ namespace Lychee {
 		virtual ~Window();
 
 		/**
-		 * @brief Window update funnction
+		 * @brief Window update function
 		 * 
 		 */
 		void OnUpdate(DeltaTime dt);
+
+		/**
+		 * @brief Window display function
+		 * 
+		 */
+		void OnDisplay() { m_Window.display(); }
 
 		/**
 		 * @brief Get the Width
@@ -77,7 +82,7 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		void* GetNativeWindow() const { return m_glfwWindow; }
+		sf::RenderWindow& GetNativeWindow() { return m_Window; }
 	private:
 
 		/**
@@ -94,7 +99,7 @@ namespace Lychee {
 	private:
 
         //** Members **
-		GLFWwindow* m_glfwWindow; // GLFW Window
+		sf::RenderWindow m_Window; // SFML Window
 		
 		/**
 		 * @brief Data of window
@@ -110,7 +115,7 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
-        Scope<GraphicsContext> m_Context;
+        //Scope<GraphicsContext> m_Context;
 
 		f32 m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		u16 m_frameCounterFps = 0;		// Frames since last fps update

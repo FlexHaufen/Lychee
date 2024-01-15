@@ -1,9 +1,6 @@
 [submodule "lib/vendor/spdlog"]
 	path = lib/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "lib/vendor/implot"]
-	path = lib/vendor/implot
-	url = https://github.com/epezent/implot.git
 [submodule "lib/vendor/imgui-sfml"]
 	path = lib/vendor/imgui-sfml
 	url = git@github.com:SFML/imgui-sfml.git

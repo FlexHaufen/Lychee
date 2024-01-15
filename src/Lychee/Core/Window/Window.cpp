@@ -13,22 +13,17 @@
 #include "Lychee/Core/Window/Window.h"
 
 //*** DEFINES ***
-#include "Lychee/Events/KeyEvent.h"
-#include "Lychee/Events/MouseEvent.h"
-#include "Lychee/Events/ApplicationEvent.h"
-
-// STB Image
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 
 //*** NAMESPACE ***
 namespace Lychee {
 
-static u8 s_GLFWWindowCount = 0;
+//static u8 s_GLFWWindowCount = 0;
 
+	/*
 	static void GLFWErrorCallback(s32 error, const c8* description) {
 		LY_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
+	*/
 
 	Window::Window(std::string title, u32 width, u32 height) {
 		m_sWindowData.title = title;
@@ -45,41 +40,27 @@ static u8 s_GLFWWindowCount = 0;
 	
 		LY_CORE_INFO("Initializing window: {0} ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
 
-        LY_CORE_INFO("Initializing glfw");
-        if(!glfwInit()){
-            LY_CORE_ERROR("Failed to initialize GLFW!");
-        }
-        glfwSetErrorCallback(GLFWErrorCallback);
-
-		
-		LY_CORE_INFO("Initializing glfw Window");
-		m_glfwWindow = glfwCreateWindow((s32)m_sWindowData.width, 
-                                        (s32)m_sWindowData.height, 
-                                        m_sWindowData.title.c_str(), 
-                                        nullptr, 
-                                        nullptr);
-		
-		m_Context = GraphicsContext::Create(m_glfwWindow);
-		m_Context->Init();
-
-        // glad: load all OpenGL function pointers
-		LY_CORE_INFO("Initializing glad");
-	    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		    LY_CORE_ERROR("Failed to initalize GLAD!");
-		    return;
-	    }
-		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
+		LY_CORE_INFO("Initializing SFML Window");
+        m_Window.create(sf::VideoMode(m_sWindowData.width, m_sWindowData.height), m_sWindowData.title);
 
 		// Set window ico
-		GLFWimage glfwWindowIco[1];
-		glfwWindowIco[0].pixels = stbi_load(LY_ICON_PNG, &glfwWindowIco[0].width, &glfwWindowIco[0].height, nullptr, 4);
-		glfwSetWindowIcon(m_glfwWindow, 1, glfwWindowIco) ;
+		auto windowIcon = sf::Image();
+		if (!windowIcon.loadFromFile(LY_ICON_PNG)) {
+			LY_CORE_WARN("Could not load window icon at [{0}]", LY_ICON_PNG);
+		}
+		else {
+			m_Window.setIcon(windowIcon.getSize().x, windowIcon.getSize().y, windowIcon.getPixelsPtr());
+		}
+		
 
         LY_CORE_INFO("Setting vsync to {0}", LY_VSYNC_DEFAULT);
 		SetVSync(LY_VSYNC_DEFAULT);
 
+
+		// TODO (flex): Window callbacks
 		//** Callbacks **
 		//* Window Resize *
+		/*
 		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, s32 width, s32 height) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			data.width = width;
@@ -158,13 +139,13 @@ static u8 s_GLFWWindowCount = 0;
 			MouseMovedEvent event((f32)xPos, (f32)yPos);
 			data.eventCallback(event);
 		});
+		*/
 
 	}
 
 	void Window::Terminate() {
         LY_CORE_INFO("Terminating window");
-		glfwDestroyWindow(m_glfwWindow);	
-        glfwTerminate();
+		m_Window.close();
 	}
 
 	void Window::OnUpdate(DeltaTime dt) {
@@ -177,18 +158,16 @@ static u8 s_GLFWWindowCount = 0;
 
 			if (m_elapsedTimeFps >= 1.0f) {
 				std::string title =  m_sWindowData.title + " FPS:  " + std::to_string(m_frameCounterFps);
-				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
+				m_Window.setTitle(title);
 				m_frameCounterFps = 0;
 				m_elapsedTimeFps = 0;
 			}
 		#endif
-
-		glfwPollEvents();
-		m_Context->SwapBuffers();
+		m_Window.clear(LY_SCENE_CLEAR_BACKGROUND);
 	}
 
 	void Window::SetVSync(bool enabled) {
-        glfwSwapInterval(s32(enabled));
+		m_Window.setVerticalSyncEnabled(enabled);
 		m_sWindowData.isVSyncOn = enabled;
 	}
 

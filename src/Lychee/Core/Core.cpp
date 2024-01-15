@@ -48,7 +48,6 @@ namespace Lychee {
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
 
-        Renderer::Init();
 
         m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -59,7 +58,6 @@ namespace Lychee {
 
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
-        Renderer::Shutdown();
 	    LY_PROFILE_END_SESSION();
         LY_CORE_INFO("Core is going down for Shutdown NOW!");
     }
@@ -67,25 +65,25 @@ namespace Lychee {
     void Core::Run() {
         LY_PROFILE_FUNCTION();
 
+    
+
         while (m_isRunning) {
-            f32 time = (f32)glfwGetTime();
-            DeltaTime deltaTime = time - m_lastFrameTime;
-            m_lastFrameTime = time;
+
+            m_deltaTime.OnUpdate();
 
             if (!m_isMinimized) {
+                // ** Update **
+                m_Window->OnUpdate(m_deltaTime);
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate(deltaTime);
+					layer->OnUpdate(m_deltaTime);
                 }
                
-                m_ImGuiLayer->Begin();
-                
-                for (Layer* layer : m_LayerStack) {
-                    layer->OnImGuiRender();
-                }
-            
-                m_ImGuiLayer->End();
+                m_ImGuiLayer->OnUpdate(m_deltaTime);
+
+                // ** Render **
+                m_ImGuiLayer->OnRender(m_LayerStack);
+                m_Window->OnDisplay();
             }
-            m_Window->OnUpdate(deltaTime);
         }
     }
 
@@ -133,8 +131,6 @@ namespace Lychee {
 			m_isMinimized = true;
 			return true;
 		}
-
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		m_isMinimized = false;
 		return false;
 	}
