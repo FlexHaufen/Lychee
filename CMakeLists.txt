@@ -62,6 +62,11 @@ add_library(glad
 			${CMAKE_SOURCE_DIR}/lib/glad/include/glad/glad.h
 			${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c)
 
+#---------SFML---------
+set(SFML_STATIC_LIBRARIES TRUE)
+set(SFML_DIR ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/lib/cmake/SFML)
+find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network)
+
 
 ### IMGUI ##
 set(IMGUI_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/imgui)
@@ -112,6 +117,8 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/lib/vendor/imgui"
 	# implot
 	"${CMAKE_SOURCE_DIR}/lib/vendor/implot"
+	#SFML
+	"${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include"
 	# spdlog
 	"${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include"
 	# glfw
@@ -131,11 +138,16 @@ include_directories(
 #----------------------------------------------------
 
 #Put all libraries into a variable
-set(LIBS glfw
-	glad
-	imgui
-	implot
-	stb_image)
+set(LIBS 	sfml-window
+			sfml-system
+			sfml-graphics
+			sfml-audio
+			sfml-network
+			glfw
+			glad
+			imgui
+			implot
+			stb_image)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
