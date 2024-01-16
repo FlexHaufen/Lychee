@@ -38,8 +38,8 @@ namespace Lychee {
 		virtual void OnDetach() override;
 		virtual void OnEvent(Event& e) override;
 
-		void OnUpdate(DeltaTime dt);
-		void OnRender(LayerStack &layerstack);
+		void OnSfmlUpdate(DeltaTime dt);
+		void OnSfmlRender();
 		
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 		

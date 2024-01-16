@@ -61,7 +61,13 @@ namespace Lychee {
 		 * @brief Window display function
 		 * 
 		 */
-		void OnDisplay() { m_Window.display(); }
+		void Display() { m_Window.display(); }
+
+		/**
+		 * @brief Window clear function
+		 * 
+		 */
+		void Clear() { m_Window.clear(LY_SCENE_CLEAR_BACKGROUND); }
 
 		/**
 		 * @brief Get the Width

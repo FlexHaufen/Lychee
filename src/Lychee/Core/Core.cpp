@@ -65,25 +65,34 @@ namespace Lychee {
     void Core::Run() {
         LY_PROFILE_FUNCTION();
 
-    
+        for (Layer* layer : m_LayerStack) {
+            layer->OnAttach();
+        }
 
         while (m_isRunning) {
 
             m_deltaTime.OnUpdate();
 
             if (!m_isMinimized) {
-                // ** Update **
+                // ---------- Update ----------
                 m_Window->OnUpdate(m_deltaTime);
+                m_ImGuiLayer->OnSfmlUpdate(m_deltaTime);
                 for (Layer* layer : m_LayerStack) {
 					layer->OnUpdate(m_deltaTime);
                 }
-               
-                m_ImGuiLayer->OnUpdate(m_deltaTime);
 
-                // ** Render **
-                m_ImGuiLayer->OnRender(m_LayerStack);
-                m_Window->OnDisplay();
+                // ---------- Render ----------
+                m_Window->Clear();
+                for (Layer* layer : m_LayerStack) {
+					layer->OnImGuiRender();
+                }
+                m_ImGuiLayer->OnSfmlRender();
+                m_Window->Display();
             }
+        }
+
+        for (Layer* layer : m_LayerStack) {
+            layer->OnDetach();
         }
     }
 

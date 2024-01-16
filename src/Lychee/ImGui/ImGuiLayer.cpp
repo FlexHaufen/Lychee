@@ -68,16 +68,11 @@ namespace Lychee {
 		}
 	}
 	
-	void ImGuiLayer::OnUpdate(DeltaTime dt) {
+	void ImGuiLayer::OnSfmlUpdate(DeltaTime dt) {
 		ImGui::SFML::Update(m_Window, dt);
 	}
 
-	void ImGuiLayer::OnRender(LayerStack &layerstack) {
-
-		for (auto* layer : layerstack) {
-			layer->OnImGuiRender();
-		}
-
+	void ImGuiLayer::OnSfmlRender() {
 		ImGui::SFML::Render(m_Window);
 	}
 
