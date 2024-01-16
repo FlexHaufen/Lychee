@@ -22,8 +22,6 @@ namespace Lychee {
         s_Instance = this;
 
         Lychee::Log::Init();
-        LY_CORE_INFO("Lychee {0}", LY_VERSION_STR);
-        LY_CORE_INFO("-----------------------------------------------");
         LY_CORE_INFO("Initializing Core");
 
         std::filesystem::current_path(LY_DEFAULT_PATH);
