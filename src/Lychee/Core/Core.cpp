@@ -105,9 +105,16 @@ namespace Lychee {
     void Core::OnEvent(sf::Event& e) {
         LY_PROFILE_FUNCTION();
 
-        //EventDispatcher dispatcher(e);
-        //dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
-        //dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
+        switch(e.type) {
+            case sf::Event::Closed:
+                OnWindowClose(e);
+                break;
+            case sf::Event::Resized:
+                OnWindowResize(e);
+                break;
+            default:
+                break;
+        }
 
         for (auto i : m_LayerStack) {
             i->OnEvent(e);
@@ -118,19 +125,18 @@ namespace Lychee {
         #endif
     }
 
-    /*
-    bool Core::OnWindowClose(WindowCloseEvent& e) {
+    bool Core::OnWindowClose(sf::Event& e) {
         m_isRunning = false;
         return true;
     }
 
-	bool Core::OnWindowResize(WindowResizeEvent& e) {
-		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+	bool Core::OnWindowResize(sf::Event& e) {
+		if (e.size.width == 0 || e.size.width == 0) {
 			m_isMinimized = true;
 			return true;
 		}
 		m_isMinimized = false;
 		return false;
 	}
-    */ 
+    
 }

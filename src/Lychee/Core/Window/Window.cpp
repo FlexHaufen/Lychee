@@ -47,6 +47,9 @@ namespace Lychee {
 		
         LY_CORE_INFO("Setting vsync to {0}", LY_VSYNC_DEFAULT);
 		SetVSync(LY_VSYNC_DEFAULT);
+
+
+		LY_CORE_INFO("Setting up CORE events");
 	}
 
 	void Window::Terminate() {

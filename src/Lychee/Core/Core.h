@@ -98,6 +98,10 @@ namespace Lychee {
         Window& GetWindow() { return *m_Window; }
 
     private:
+        bool OnWindowClose(sf::Event& e);
+	    bool OnWindowResize(sf::Event& e);
+
+    private:
         // *** MEMBERS ***7
         static Core* s_Instance;    // Instance of core - for external usage
         
