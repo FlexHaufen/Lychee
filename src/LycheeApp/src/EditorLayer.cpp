@@ -122,18 +122,18 @@ namespace Lychee {
 	#endif
 	}
 
-	void EditorLayer::OnEvent(Event& e)	{
+	void EditorLayer::OnEvent(sf::Event& e)	{
 
-		#ifdef LY_LOG_KEY_EVENT
-			if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
-				Lychee::KeyPressedEvent& eKey = (Lychee::KeyPressedEvent&)e;
-				LY_TRACE("KEY PRESSED: {0}", (c8)eKey.GetKeyCode());
-			}	
-		#endif
+		//#ifdef LY_LOG_KEY_EVENT
+		//	if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
+		//		Lychee::KeyPressedEvent& eKey = (Lychee::KeyPressedEvent&)e;
+		//		LY_TRACE("KEY PRESSED: {0}", (c8)eKey.GetKeyCode());
+		//	}	
+		//#endif
 
-		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
-		dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		//EventDispatcher dispatcher(e);
+		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 
 	void EditorLayer::OnMenuBarRender() {
@@ -184,6 +184,7 @@ namespace Lychee {
 		}
 	}
 
+	/*
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e) {
 		// Shortcuts
 		if (e.IsRepeat()) {
@@ -202,6 +203,6 @@ namespace Lychee {
 		}
 		return false;
 	}
-
+	*/
 }
 

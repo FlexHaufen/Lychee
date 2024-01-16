@@ -63,7 +63,7 @@
     #define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
-    // #define LY_LOG_EVENTS
+    #define LY_LOG_EVENTS
 #else
     // RELEAS MODE
     #undef LY_DEBUG

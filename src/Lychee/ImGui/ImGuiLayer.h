@@ -16,9 +16,9 @@
 #include "Lychee/Core/Layer/Layer.h"
 
 //* Events *
-#include "Lychee/Events/ApplicationEvent.h"
-#include "Lychee/Events/KeyEvent.h"
-#include "Lychee/Events/MouseEvent.h"
+//#include "Lychee/Events/ApplicationEvent.h"
+//#include "Lychee/Events/KeyEvent.h"
+//#include "Lychee/Events/MouseEvent.h"
 
 #include "Lychee/Core/Time/Deltatime.h"
 
@@ -36,7 +36,7 @@ namespace Lychee {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnEvent(Event& e) override;
+		virtual void OnEvent(sf::Event& e) override;
 
 		void OnSfmlUpdate(DeltaTime dt);
 		void OnSfmlRender();

@@ -18,11 +18,5 @@
 
 #include "Lychee/Core/Time/Deltatime.h"
 
-// ** Input & Types & Codes **
-#include "Lychee/Core/Input/Input.h"
-#include "Lychee/Helper/KeyCodes.h"
-#include "Lychee/Helper/MouseCodes.h"
-#include "Lychee/Helper/Types.h"
-
 
 //*** DEFINES ***

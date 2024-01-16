@@ -12,11 +12,9 @@
 
 //*** INCLUDES ***
 #include "Lychee/lypch.h"
+
 //** Events **
-#include "Lychee/Events/Event.h"
-#include "Lychee/Events/KeyEvent.h"
-#include "Lychee/Events/MouseEvent.h"
-#include "Lychee/Events/ApplicationEvent.h"
+#include "Lychee/Events/EventManager.h"
 
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
@@ -26,7 +24,7 @@
 //*** NAMESPACE ***
 namespace Lychee {
 
-     using EventCallbackFn = std::function<void(Event&)>;
+    using EventCallbackFn = std::function<void(sf::Event&)>;
 
 
     /**
@@ -121,7 +119,7 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
-        //Scope<GraphicsContext> m_Context;
+		EventManager m_EventManager;
 
 		f32 m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		u16 m_frameCounterFps = 0;		// Frames since last fps update

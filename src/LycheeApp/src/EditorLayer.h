@@ -29,12 +29,12 @@ namespace Lychee {
 
 		virtual void OnUpdate(DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
-		void OnEvent(Event& e) override;
+		void OnEvent(sf::Event& e) override;
 	private:
 
 
-		bool OnKeyPressed(KeyPressedEvent& e);
-		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		//bool OnKeyPressed(KeyPressedEvent& e);
+		//bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 
 

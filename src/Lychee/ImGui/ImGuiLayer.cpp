@@ -60,12 +60,13 @@ namespace Lychee {
 		ImGui::SFML::Shutdown();
 	}
 
-	void ImGuiLayer::OnEvent(Event& e) {
-		if (m_BlockEvents) {
-			ImGuiIO& io = ImGui::GetIO();
-			e.m_isHandled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-			e.m_isHandled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
-		}
+	void ImGuiLayer::OnEvent(sf::Event& e) {
+		ImGui::SFML::ProcessEvent(e);
+		//if (m_BlockEvents) {
+		//	ImGuiIO& io = ImGui::GetIO();
+		//	e.m_isHandled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+		//	e.m_isHandled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		//}
 	}
 	
 	void ImGuiLayer::OnSfmlUpdate(DeltaTime dt) {

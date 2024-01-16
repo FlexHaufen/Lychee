@@ -65,10 +65,6 @@ namespace Lychee {
     void Core::Run() {
         LY_PROFILE_FUNCTION();
 
-        for (Layer* layer : m_LayerStack) {
-            layer->OnAttach();
-        }
-
         while (m_isRunning) {
 
             m_deltaTime.OnUpdate();
@@ -90,10 +86,6 @@ namespace Lychee {
                 m_Window->Display();
             }
         }
-
-        for (Layer* layer : m_LayerStack) {
-            layer->OnDetach();
-        }
     }
 
     void Core::Close() {
@@ -112,24 +104,23 @@ namespace Lychee {
 	}
 
     // ** EVENTS **
-    void Core::OnEvent(Event& e) {
+    void Core::OnEvent(sf::Event& e) {
         LY_PROFILE_FUNCTION();
 
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
+        //EventDispatcher dispatcher(e);
+        //dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
+        //dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
 
+        for (auto i : m_LayerStack) {
+            i->OnEvent(e);
+        }
 
-        for (auto i = m_LayerStack.rbegin(); i != m_LayerStack.rend(); ++i) {
-			if (e.m_isHandled) 
-				break;
-			(*i)->OnEvent(e);
-		}
         #ifdef LY_LOG_EVENTS
-            LY_CORE_TRACE(e);
+            LY_CORE_TRACE(e.type);
         #endif
     }
 
+    /*
     bool Core::OnWindowClose(WindowCloseEvent& e) {
         m_isRunning = false;
         return true;
@@ -143,4 +134,5 @@ namespace Lychee {
 		m_isMinimized = false;
 		return false;
 	}
+    */ 
 }
