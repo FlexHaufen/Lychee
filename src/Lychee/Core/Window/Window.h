@@ -10,7 +10,7 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/lypch.h"
 
 //** Events **
@@ -19,9 +19,9 @@
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
 
-//*** DEFIENS ***
+// *** DEFIENS ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
     using EventCallbackFn = std::function<void(sf::Event&)>;

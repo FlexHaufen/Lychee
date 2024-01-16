@@ -19,4 +19,4 @@
 #include "Lychee/Core/Time/Deltatime.h"
 
 
-//*** DEFINES ***
+// *** DEFINES ***

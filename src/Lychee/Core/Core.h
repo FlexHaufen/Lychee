@@ -28,10 +28,10 @@
 //** ImGui **
 #include "Lychee/ImGui/ImGuiLayer.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
     /**

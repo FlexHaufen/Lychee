@@ -9,14 +9,14 @@
  * 
  */
 
-//*** INCLUDE ***
+// *** INCLUDE ***
 #include "EditorLayer.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
 //#define LY_LOG_KEY_EVENT
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	extern const std::filesystem::path g_AssetPath;

@@ -10,13 +10,13 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include <Lychee/lypch.h>
 #include <Lychee/Lychee.h>
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class EditorLayer : public Layer {

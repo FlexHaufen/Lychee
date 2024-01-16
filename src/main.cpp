@@ -9,11 +9,11 @@
  * 
  */
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "LycheeApp/src/LycheeApp.h"
 
 
-//*** MAIN ***
+// *** MAIN ***
 int main(int argc, char **argv) {
 
 	Lychee::LycheeApp* ly_app = new Lychee::LycheeApp();

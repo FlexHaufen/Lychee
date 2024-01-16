@@ -9,12 +9,12 @@
  * 
  */
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/Core/Layer/Layer.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	Layer::Layer(const std::string& debugName)

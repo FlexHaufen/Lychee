@@ -10,14 +10,14 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/lypch.h"
 #include "Lychee/Events/EventManager.h"
 #include "Lychee/Core/Time/Deltatime.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class Layer {

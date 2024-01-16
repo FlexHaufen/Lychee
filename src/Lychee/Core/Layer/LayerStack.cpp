@@ -9,12 +9,12 @@
  * 
  */
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/Core/Layer/LayerStack.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	LayerStack::~LayerStack() {

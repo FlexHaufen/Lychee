@@ -11,7 +11,7 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/lypch.h"
 #include "Lychee/Core/Layer/Layer.h"
 
@@ -24,9 +24,9 @@
 
 #include "Lychee/Core/Layer/LayerStack.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class ImGuiLayer : public Layer { 

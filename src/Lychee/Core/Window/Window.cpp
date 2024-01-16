@@ -9,12 +9,12 @@
  * 
  */
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/Core/Window/Window.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 

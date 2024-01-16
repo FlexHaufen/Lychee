@@ -27,7 +27,7 @@
 
     #include <filesystem>
 
-//*** DEFINES ***
+// *** DEFINES ***
 #ifndef NLY_DEBUG
     #define LY_LOGGER_ENABLE
     #define LY_ENABLE_ASSERTS
@@ -38,7 +38,7 @@
 #endif
 
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
     /**
      * @brief Logger Class
@@ -67,7 +67,7 @@ namespace Lychee {
 		static inline std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 	private:
 
-        //*** MEMBERS ***
+        // *** MEMBERS ***
 		static inline std::shared_ptr<spdlog::logger> s_CoreLogger;     // Core Logger
 		static inline std::shared_ptr<spdlog::logger> s_ClientLogger;   // Client Logger
 	};

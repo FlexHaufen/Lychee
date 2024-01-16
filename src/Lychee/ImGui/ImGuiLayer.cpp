@@ -10,16 +10,16 @@
  * 
  */
 
-//*** INCLUDES *** 
+// *** INCLUDES *** 
 #include "Lychee/lypch.h"
 #include "Lychee/ImGui/ImGuiLayer.h"
 #include "Lychee/Core/Core.h"
 
 
-//*** DEFINES ***
+// *** DEFINES ***
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	ImGuiLayer::ImGuiLayer()
