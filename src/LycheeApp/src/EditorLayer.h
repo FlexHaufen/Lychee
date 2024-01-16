@@ -10,15 +10,13 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include <Lychee/lypch.h>
 #include <Lychee/Lychee.h>
-#include "Panels/Tools/CalculatorPanel/CalculatorPanel.h"
-#include "Panels/Settings/SettingsPanel.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class EditorLayer : public Layer {
@@ -31,21 +29,16 @@ namespace Lychee {
 
 		virtual void OnUpdate(DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
-		void OnEvent(Event& e) override;
+		void OnEvent(sf::Event& e) override;
 	private:
 
-		bool OnKeyPressed(KeyPressedEvent& e);
-		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
-		Lychee::Ref<Lychee::Texture2D> m_Texture;
+		//bool OnKeyPressed(KeyPressedEvent& e);
+		//bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
-		Lychee::OrthographicCameraController m_CameraController;
+
 
 		void OnMenuBarRender();
-
-		CalculatorPanel m_Calculator;
-		SettingsPanel	m_Settings;
-
 
 		enum class SceneState {
 			Edit = 0, Play = 1, Simulate = 2

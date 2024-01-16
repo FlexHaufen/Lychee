@@ -30,19 +30,30 @@ namespace Lychee {
 		logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Lychee.log", true));
 
-		logSinks[0]->set_pattern("%^[%T] %n: %v%$");
-		logSinks[1]->set_pattern("[%T] [%l] %n: %v");
+		// ** Console Log **
+		//							"[DD.MM.YY HH:MM:SS.ms][pid][tid] [CORE]: msg]"
+		logSinks[0]->set_pattern("%^[%d.%m.%C %T.%e][%P][%t] %n: %v%$");
+		// ** File Log **
+		//							"[DD.MM.YY HH:MM:SS.ms][pid][tid][level]  [APP]: msg]"
+		logSinks[1]->set_pattern("%^[%d.%m.%C %T.%e][%P][%t][%l]\t %n: %v");
 
-		s_CoreLogger = std::make_shared<spdlog::logger>("LYCHEE [CORE]", begin(logSinks), end(logSinks));
+		// ** LOGGER **
+		// CORE
+		s_CoreLogger = std::make_shared<spdlog::logger>("[CORE]", begin(logSinks), end(logSinks));
 		spdlog::register_logger(s_CoreLogger);
 		s_CoreLogger->set_level(spdlog::level::trace);
 		s_CoreLogger->flush_on(spdlog::level::trace);
 
-		s_ClientLogger = std::make_shared<spdlog::logger>("LYCHEE  [APP]", begin(logSinks), end(logSinks));
+		// CLIENT		
+		s_ClientLogger = std::make_shared<spdlog::logger>("[CLIENT]", begin(logSinks), end(logSinks));
 		spdlog::register_logger(s_ClientLogger);
-		s_ClientLogger->set_level(spdlog::level::trace);
-		s_ClientLogger->flush_on(spdlog::level::trace);
+		s_ClientLogger->set_level(spdlog::level::info);
+		s_ClientLogger->flush_on(spdlog::level::info);
 
+		LY_CORE_INFO("-------------------------------------");
+		LY_CORE_INFO("Lychee Engine {0}", LY_VERSION_STR);
+		LY_CORE_INFO("-------------------------------------");
 		LY_CORE_INFO("Logger Initialized");
+
 	}
 }

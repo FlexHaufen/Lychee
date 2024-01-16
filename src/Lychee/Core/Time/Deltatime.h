@@ -10,12 +10,12 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include <Lychee/lypch.h>
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
     
     /**
@@ -24,20 +24,17 @@ namespace Lychee {
      */
     class DeltaTime {
     public:
-        DeltaTime(f32 time = 0.0f)
-        :   m_time(time)
-        {
+        void OnUpdate() { m_time = m_clk.restart(); }
 
-        }
+        f32 GetSeconds() const { return m_time.asSeconds(); }
+        f32 GetMillisecons() const { return (f32)m_time.asMilliseconds();}
 
-        f32 GetSeconds() const { return m_time; }
-        f32 GetMillisecons() const { return m_time * 1000.0f;}
-
-        operator f32() const {return m_time;}
+        operator sf::Time() {return m_time;}
 
     private:
         //** Members **
-        f32 m_time;
+        sf::Time m_time;
+        sf::Clock m_clk;
 
     };
 }

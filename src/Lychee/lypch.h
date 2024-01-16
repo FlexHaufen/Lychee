@@ -9,7 +9,6 @@
  * 
  */
 #pragma once
-#pragma warning(push, 0)
 
 // ***************************************************************
 // ************************ INCLUDES *****************************
@@ -33,25 +32,17 @@
 #include <unordered_map>
 #include <unordered_set>
 
-// ** LOCAL LIBS **
-#include <glad/glad.h>
 
-#include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+// * SFML *
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
 // ImGui
-#define IMGUI_IMPL_OPENGL_LOADER_GLAD
-#include <imgui.h>
-#include <imconfig.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
-
-// ImPlot
-#include <implot.h>
-#pragma warning(pop)
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imgui-SFML.h"
+#include "imgui.h"
 
 // Stb image
 #include <stb_image.h>
@@ -59,6 +50,7 @@
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
+#include "Lychee/Core/Debug/Instrumentor.h"
 #include "Lychee/Helper/Types.h"
 
 // ***************************************************************
@@ -68,10 +60,10 @@
 #ifndef NLY_DEBUG
     // DEBUG MODE
     #define LY_DEBUG
-    //#define LY_RENDER_IMGUI 		
+    #define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
-    // #define LY_LOG_EVENTS
+    #define LY_LOG_EVENTS
 #else
     // RELEAS MODE
     #undef LY_DEBUG
@@ -97,8 +89,7 @@
 #define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
 
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION_STR              "v0.1.6b"
-#define LY_VERSION_INT              000106      // format: 00.00.00
+#define LY_VERSION_STR              "v1.0.0b"
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
@@ -107,6 +98,8 @@
 #define LY_FONT_REGULAR             "./resource/fonts/Rilu-Regular.ttf"
 
 // * Window *
+#define LY_SCENE_CLEAR_BACKGROUND   sf::Color(158, 222, 232, 255)   // light blue
+
 #define LY_WINDOW_SIZE_X            1920
 #define LY_WINDOW_SIZE_Y            1080
 
@@ -117,6 +110,4 @@
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
 
-
-#define LY_OPENGL_VERSION           "#version 410"
 #define LY_IMGUI_INSTALL_CALLBACKS  true

@@ -10,26 +10,13 @@
  */
 #pragma once
 
-//*** INCLUDES ***
-#include "Lychee/Core/Core.h"        // Main App
-#include "Lychee/Core/Log.h"         // Logger
+// *** INCLUDES ***
+// ** Main app **
+#include "Lychee/Core/Core.h"
+// ** Logger **
+#include "Lychee/Core/Log.h"        
 
 #include "Lychee/Core/Time/Deltatime.h"
 
-#include "Lychee/Core/Input/Input.h"
-#include "Lychee/Helper/KeyCodes.h"
-#include "Lychee/Helper/MouseCodes.h"
-#include "Lychee/Helper/Types.h"
 
-// ** Rendering **
-#include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Renderer/Renderer2D.h"
-#include "Lychee/Renderer/RenderCommand.h"
-
-#include "Lychee/Renderer/Buffer.h"
-#include "Lychee/Renderer/Shader.h"
-#include "Lychee/Renderer/Texture.h"
-#include "Lychee/Renderer/VertexArray.h"
-
-#include "Lychee/Renderer/OrthographicCameraController.h"
-//*** DEFINES ***
+// *** DEFINES ***

@@ -17,8 +17,7 @@
 #include "Lychee/Core/Window/Window.h"
 
 //** Events **
-#include "Lychee/Events/KeyEvent.h"
-#include "Lychee/Events/ApplicationEvent.h"
+#include "Lychee/Events/EventManager.h"
 
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
@@ -29,10 +28,10 @@
 //** ImGui **
 #include "Lychee/ImGui/ImGuiLayer.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
     /**
@@ -41,82 +40,67 @@ namespace Lychee {
      */
     class Core {
 
-        public:
+    public:
 
-            /**
-             * @brief Construct a new Core object
-             * 
-             */
-            Core();
+        /**
+         * @brief Construct a new Core object
+         * 
+         */
+        Core();
 
-            /**
-             * @brief Destroy the Core object
-             * 
-             */
-            ~Core();
+        /**
+         * @brief Destroy the Core object
+         * 
+         */
+        ~Core();
 
-            /**
-             * @brief Running loop
-             * 
-             */
-            void Run();
+        /**
+         * @brief Running loop
+         * 
+         */
+        void Run();
 
-            /**
-             * @brief Closes App
-             * 
-             */
-            void Close();
+        /**
+         * @brief Closes App
+         * 
+         */
+        void Close();
 
-            /**
-             * @brief Event Handling
-             * 
-             * @param e Event
-             */
-            void OnEvent(Event& e);
-
-
-            void PushLayer(Layer* layer);
-            void PushOverlay(Layer* layer);
-
-            /**
-             * @brief Get the ImGuiLayer instance
-             * 
-             * @return ImGuiLayer* 
-             */
-            ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
-
-            /**
-             * @brief Gets Core instance
-             * 
-             * @return Core& 
-             */
-		    static Core& Get() { return *s_Instance; }
-
-            /**
-             * @brief Get the Window instance
-             * 
-             * @return Window& 
-             */
-            Window& GetWindow() { return *m_Window; }
-
-        private:
+        /**
+         * @brief Event Handling
+         * 
+         */
+        void OnEvent(sf::Event& e);
 
 
-            /**
-             * @brief Window close event
-             * 
-             * @param e Event
-             * @return true if window is closed
-             */
-    		bool OnWindowClose(WindowCloseEvent& e);
+        void PushLayer(Layer* layer);
+        void PushOverlay(Layer* layer);
 
-            /**
-             * @brief Window resize event
-             * 
-             * @param e Event
-             * @return true if window is rezised 
-             */
-            bool OnWindowResize(WindowResizeEvent& e);
+        /**
+         * @brief Get the ImGuiLayer instance
+         * 
+         * @return ImGuiLayer* 
+         */
+        ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
+
+        /**
+         * @brief Gets Core instance
+         * 
+         * @return Core& 
+         */
+        static Core& Get() { return *s_Instance; }
+
+        /**
+         * @brief Get the Window instance
+         * 
+         * @return Window& 
+         */
+        Window& GetWindow() { return *m_Window; }
+
+    private:
+        bool OnWindowClose(sf::Event& e);
+	    bool OnWindowResize(sf::Event& e);
+
     private:
         // *** MEMBERS ***7
         static Core* s_Instance;    // Instance of core - for external usage
@@ -125,6 +109,7 @@ namespace Lychee {
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
+        DeltaTime m_deltaTime;
         f32 m_lastFrameTime = 0.0f; // Last frame time
 
         // * Random ass layers *

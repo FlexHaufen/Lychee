@@ -22,12 +22,16 @@ namespace Lychee {
         s_Instance = this;
 
         Lychee::Log::Init();
-        LY_CORE_INFO("Lychee {0}", LY_VERSION_STR);
-        LY_CORE_INFO("--------------------------");
         LY_CORE_INFO("Initializing Core");
 
         std::filesystem::current_path(LY_DEFAULT_PATH);
         LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
+
+
+        #ifdef LY_PROFILE
+            LY_CORE_WARN("Profiler is enabled and may use unnecessary recources");
+        #endif
+        LY_PROFILE_BEGIN_SESSION("Profile", "LycheeProfile.json");
 
         #ifdef LY_DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
@@ -42,41 +46,44 @@ namespace Lychee {
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
 
-        Renderer::Init();
 
         m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
     }
 
     Core::~Core() {
+        LY_PROFILE_FUNCTION();
+
         // delet m_Window -> doesn't matter becose aplication will
         // terminate anyway
-        Renderer::Shutdown();
+	    LY_PROFILE_END_SESSION();
         LY_CORE_INFO("Core is going down for Shutdown NOW!");
     }
 
     void Core::Run() {
+        LY_PROFILE_FUNCTION();
+
         while (m_isRunning) {
-            f32 time = (f32)glfwGetTime();
-            DeltaTime deltaTime = time - m_lastFrameTime;
-            m_lastFrameTime = time;
+
+            m_deltaTime.OnUpdate();
 
             if (!m_isMinimized) {
+                // ---------- Update ----------
+                m_Window->OnUpdate(m_deltaTime);
+                m_ImGuiLayer->OnSfmlUpdate(m_deltaTime);
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate(deltaTime);
+					layer->OnUpdate(m_deltaTime);
                 }
-               
-                m_ImGuiLayer->Begin();
-                
+
+                // ---------- Render ----------
+                m_Window->Clear();
                 for (Layer* layer : m_LayerStack) {
-                    layer->OnImGuiRender();
+					layer->OnImGuiRender();
                 }
-            
-                m_ImGuiLayer->End();
+                m_ImGuiLayer->OnSfmlRender();
+                m_Window->Display();
             }
-            m_Window->OnUpdate(deltaTime);
         }
-        LY_CORE_WARN("Core stopped running");
     }
 
     void Core::Close() {
@@ -95,36 +102,41 @@ namespace Lychee {
 	}
 
     // ** EVENTS **
-    void Core::OnEvent(Event& e) {
+    void Core::OnEvent(sf::Event& e) {
+        LY_PROFILE_FUNCTION();
 
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
+        switch(e.type) {
+            case sf::Event::Closed:
+                OnWindowClose(e);
+                break;
+            case sf::Event::Resized:
+                OnWindowResize(e);
+                break;
+            default:
+                break;
+        }
 
+        for (auto i : m_LayerStack) {
+            i->OnEvent(e);
+        }
 
-        for (auto i = m_LayerStack.rbegin(); i != m_LayerStack.rend(); ++i) {
-			if (e.m_isHandled) 
-				break;
-			(*i)->OnEvent(e);
-		}
         #ifdef LY_LOG_EVENTS
-            LY_CORE_TRACE(e);
+            LY_CORE_TRACE(e.type);
         #endif
     }
 
-    bool Core::OnWindowClose(WindowCloseEvent& e) {
+    bool Core::OnWindowClose(sf::Event& e) {
         m_isRunning = false;
         return true;
     }
 
-	bool Core::OnWindowResize(WindowResizeEvent& e) {
-		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+	bool Core::OnWindowResize(sf::Event& e) {
+		if (e.size.width == 0 || e.size.width == 0) {
 			m_isMinimized = true;
 			return true;
 		}
-
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		m_isMinimized = false;
 		return false;
 	}
+    
 }

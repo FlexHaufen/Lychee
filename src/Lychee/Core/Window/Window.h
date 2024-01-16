@@ -10,24 +10,21 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/lypch.h"
+
 //** Events **
-#include "Lychee/Events/Event.h"
+#include "Lychee/Events/EventManager.h"
 
 //** Time **
 #include "Lychee/Core/Time/Deltatime.h"
 
-//** Renderer **
-#include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Renderer/GraphicsContext.h"
+// *** DEFIENS ***
 
-//*** DEFIENS ***
-
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
-     using EventCallbackFn = std::function<void(Event&)>;
+    using EventCallbackFn = std::function<void(sf::Event&)>;
 
 
     /**
@@ -53,10 +50,22 @@ namespace Lychee {
 		virtual ~Window();
 
 		/**
-		 * @brief Window update funnction
+		 * @brief Window update function
 		 * 
 		 */
 		void OnUpdate(DeltaTime dt);
+
+		/**
+		 * @brief Window display function
+		 * 
+		 */
+		void Display() { m_Window.display(); }
+
+		/**
+		 * @brief Window clear function
+		 * 
+		 */
+		void Clear() { m_Window.clear(LY_SCENE_CLEAR_BACKGROUND); }
 
 		/**
 		 * @brief Get the Width
@@ -77,7 +86,7 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		void* GetNativeWindow() const { return m_glfwWindow; }
+		sf::RenderWindow& GetNativeWindow() { return m_Window; }
 	private:
 
 		/**
@@ -94,7 +103,7 @@ namespace Lychee {
 	private:
 
         //** Members **
-		GLFWwindow* m_glfwWindow; // GLFW Window
+		sf::RenderWindow m_Window; // SFML Window
 		
 		/**
 		 * @brief Data of window
@@ -110,8 +119,10 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
-        Scope<GraphicsContext> m_Context;
-		
+		EventManager m_EventManager;
+
+		f32 m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
+		u16 m_frameCounterFps = 0;		// Frames since last fps update
 	};
 
 }

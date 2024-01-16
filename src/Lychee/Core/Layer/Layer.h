@@ -10,14 +10,14 @@
  */
 #pragma once
 
-//*** INCLUDES ***
+// *** INCLUDES ***
 #include "Lychee/lypch.h"
-#include "Lychee/Events/Event.h"
+#include "Lychee/Events/EventManager.h"
 #include "Lychee/Core/Time/Deltatime.h"
 
-//*** DEFINES ***
+// *** DEFINES ***
 
-//*** NAMESPACE ***
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class Layer {
@@ -29,7 +29,7 @@ namespace Lychee {
 		virtual void OnDetach() {}
 		virtual void OnUpdate(DeltaTime dt) {}
 		virtual void OnImGuiRender() {}
-		virtual void OnEvent(Event& event) {}
+		virtual void OnEvent(sf::Event &e) {}
 
 		const std::string& GetName() const { return m_DebugName; }
 	protected:
