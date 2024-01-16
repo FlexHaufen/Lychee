@@ -7,3 +7,4 @@
 [submodule "lib/vendor/imgui"]
 	path = lib/vendor/imgui
 	url = git@github.com:SFML/imgui-sfml.git
+	branch = docking

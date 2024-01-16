@@ -1,13 +1,23 @@
 # Lychee  
-A **simple**, **fast** & **lightweight** Engine for designing windows apps
+A **simple**, **fast** & **lightweight** game engine.
 
 <img src="resource/images/Lychee.svg" height="100">
 
+## Intention
+- Lychee should be a free (unless i decide else)
+- It should be easy to use and should have a simple user-interface
+- It should run on every patato
+
+## Dependencies
+- [SFML](https://www.sfml-dev.org/index.php) 
+- [spdlog](https://github.com/gabime/spdlog)
+- [ImGui](https://github.com/ocornut/imgui)
+- [ImGUi-SFML](https://github.com/SFML/imgui-sfml)
+
 ## Setup
 ### Requirements
-- VS Community 2022 amd64 compiler
 - Cmake Version **Version 3.24.1** or higher
-- Editor **Visual Studio Code**
+- MSVC 19 or higher
 
 ### Setup Repo
 1. Clone
@@ -16,10 +26,12 @@ A **simple**, **fast** & **lightweight** Engine for designing windows apps
     ```
 
 2. Setup submodules in ./Lychee
-    ```bash 
+    ```shell
     git submodule update --init --recursive
     ```
-3. **IMPORTANT:** The ImGui-Repo (*submodule*) has to be checktout on the **docking** branch, or else, it won't work.
+    ```shell
+    git submodule update --recursive --remote
+    ```
 
 4. Configure Cmake
     - In VScode press F1 - Type Cmake Configure - Press Enter
@@ -63,10 +75,7 @@ To Run the .exe file via F5 you first need to configure a ```launch.json``` in y
 }
 ```
 
-## Ambition
-- Lychee should be a free (unless i decide else)
-- It should be easy to use and should have a simple user-interface
-- It should run on every patato
+
 
 ## Acknowledgements
  - [Hazel Engine](https://github.com/TheCherno/Hazel)
