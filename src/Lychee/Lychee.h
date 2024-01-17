@@ -13,6 +13,8 @@
 // *** INCLUDES ***
 // ** Main app **
 #include "Lychee/Core/Core.h"
+#include "Lychee/Scene/Scene.h"
+
 // ** Logger **
 #include "Lychee/Core/Log.h"        
 

@@ -32,7 +32,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
+#include <math.h>
+#include <cmath>
 
 // * SFML *
 #include <SFML/Graphics.hpp>
@@ -47,6 +48,8 @@
 // Stb image
 #include <stb_image.h>
 
+// EnTT
+#include "entt.hpp"
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"

@@ -36,9 +36,13 @@ namespace Lychee {
 		//bool OnKeyPressed(KeyPressedEvent& e);
 		//bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
-
-
 		void OnMenuBarRender();
+
+	private:
+
+		// ** Members **
+		Ref<Scene> m_ActiveScene;		// Current active Scene
+		sf::Vector2f m_ViewportSize;	// Current ViewPortSize
 
 		enum class SceneState {
 			Edit = 0, Play = 1, Simulate = 2

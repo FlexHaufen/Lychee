@@ -25,18 +25,22 @@ namespace Lychee {
 		: Layer("EditorLayer") {
 
 		LY_INFO("Initializing Editor");
+
+		// TODO (flex): add default size for viewport
+
+		LY_INFO("Getting Current scene");
+		m_ActiveScene = CreateRef<Scene>();
 	}
 
 	void EditorLayer::OnAttach() {
 
-		
 	}
 
 	void EditorLayer::OnDetach() {
 	}
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
-
+		m_ActiveScene->OnUpdate(dt);
 	}
 
 	void EditorLayer::OnImGuiRender() {
@@ -106,16 +110,16 @@ namespace Lychee {
 		// Disable event blocking
 		Core::Get().GetImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
 
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		// NOTE: Now fucking idea what this does
-		//if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize) {
-		//	m_Framebuffer->Resize((u32)viewportPanelSize.x, (u32)viewportPanelSize.y);
-		//	m_ViewportSize = {(u32)viewportPanelSize.x, (u32)viewportPanelSize.y};
-		//	m_CameraController.OnResize((f32)viewportPanelSize.x, (f32)viewportPanelSize.y);
-		//}
+		sf::Vector2f viewportSize(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+		if (m_ViewportSize != viewportSize) {
+			m_ViewportSize = viewportSize;
+			m_ActiveScene->OnViewpoertResize({m_ViewportSize.x,
+											  m_ViewportSize.y
+			});
+		}
 
-		//u64 textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		//ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1 }, ImVec2{1, 0});
+        ImGui::Image(m_ActiveScene->OnRender());
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 		ImGui::End();
@@ -183,26 +187,5 @@ namespace Lychee {
 			ImGui::EndMenuBar();
 		}
 	}
-
-	/*
-	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e) {
-		// Shortcuts
-		if (e.IsRepeat()) {
-			return false;
-
-		//bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
-		//bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
-		}
-		return true;
-	}
-
-	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e) {
-		if (e.GetMouseButton() == Mouse::ButtonLeft) {
-		//	if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
-		//		m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
-		}
-		return false;
-	}
-	*/
 }
 
