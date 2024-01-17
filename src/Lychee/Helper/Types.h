@@ -34,6 +34,9 @@ struct v2{
     T x;
     T y;
 
+    v2(T x , T y) {this->x = x; this->y = y;}
+    
+
     // ** Operator Overloading **
     inline v2<T> operator+ (const v2<T>& a) const { return {x + a.x, y + a.y}; }
     inline v2<T> operator- (const v2<T>& a) const { return {x - a.x, y - a.y}; }
@@ -49,15 +52,19 @@ struct v2{
  * 
  */
 struct v2f {
+
+    v2f(f32 x , f32 y) {this->x = x; this->y = y;}
+
     f32 x;
     f32 y;
 
     // ** Operator Overloading **
-    inline v2f operator+ (const v2f& a) const { return {x + a.x, y + a.y}; }
-    inline v2f operator- (const v2f& a) const { return {x - a.x, y - a.y}; }
-    inline v2f operator* (const v2f& a) const { return {x * a.x, y * a.y}; }
-    inline v2f operator/ (const v2f& a) const { return {x / a.x, y / a.y}; }
-    inline v2f operator= (const v2f& a)       { x = a.x; y = a.y; return a; }
+    inline v2f operator+  (const v2f& a) const { return {x + a.x, y + a.y}; }
+    inline v2f operator+= (const v2f& a)       { return {x += a.x, y += a.y}; }
+    inline v2f operator-  (const v2f& a) const { return {x - a.x, y - a.y}; }
+    inline v2f operator*  (const v2f& a) const { return {x * a.x, y * a.y}; }
+    inline v2f operator/  (const v2f& a) const { return {x / a.x, y / a.y}; }
+    inline v2f operator=  (const v2f& a)       { x = a.x; y = a.y; return a; }
     inline bool operator== (const v2f& a) const { return (x == a.x && y == a.y); }
 };
 

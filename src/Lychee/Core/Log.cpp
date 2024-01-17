@@ -47,8 +47,8 @@ namespace Lychee {
 		// CLIENT		
 		s_ClientLogger = std::make_shared<spdlog::logger>("[CLIENT]", begin(logSinks), end(logSinks));
 		spdlog::register_logger(s_ClientLogger);
-		s_ClientLogger->set_level(spdlog::level::info);
-		s_ClientLogger->flush_on(spdlog::level::info);
+		s_ClientLogger->set_level(spdlog::level::trace);
+		s_ClientLogger->flush_on(spdlog::level::trace);
 
 		LY_CORE_INFO("-------------------------------------");
 		LY_CORE_INFO("Lychee Engine {0}", LY_VERSION_STR);

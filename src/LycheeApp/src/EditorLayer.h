@@ -22,14 +22,14 @@ namespace Lychee {
 	class EditorLayer : public Layer {
 	public:
 		EditorLayer();
-		virtual ~EditorLayer() = default;
+		~EditorLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
 		virtual void OnUpdate(DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
-		void OnEvent(sf::Event& e) override;
+		virtual void OnEvent(sf::Event& e) override;
 	private:
 
 
@@ -41,8 +41,10 @@ namespace Lychee {
 	private:
 
 		// ** Members **
-		Ref<Scene> m_ActiveScene;		// Current active Scene
-		sf::Vector2f m_ViewportSize;	// Current ViewPortSize
+		Ref<Scene> m_ActiveScene;					// Current active Scene
+		sf::Vector2f m_ViewportSize;				// Current ViewPortSize
+	
+		Camera m_EditorCamera;						// Current Scene Camera
 
 		enum class SceneState {
 			Edit = 0, Play = 1, Simulate = 2

@@ -66,15 +66,12 @@ namespace Lychee {
          */
         void OnUpdate(DeltaTime dt);
 
-        void OnViewpoertResize(v2f size);
-
-        const sf::RenderTexture& OnRender();
+        sf::RenderTexture& OnRender(Camera& editorCamera);
 
     private:
 
         // ** Members **
         sf::RenderTexture   m_RenderTexture;        // sf::RenderTexture
-        sf::View            m_View;                 // sf::View
         
         entt::registry      m_Registry;             // entt Registry
 

@@ -22,7 +22,6 @@ namespace Lychee {
     Scene::Scene(){
         LY_CORE_INFO("Initializing Scene");
 		m_RenderTexture.create(LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y);
-        m_RenderTexture.setView(m_View);
     }
 
     Scene::~Scene() {
@@ -53,13 +52,11 @@ namespace Lychee {
 
 
     void Scene::OnUpdate(DeltaTime dt) {
+        
     }
 
-    void Scene::OnViewpoertResize(v2f size) {
-        m_View.setSize(sf::Vector2f(size.x, size.y));        
-    }
 
-    const sf::RenderTexture& Scene::OnRender() {
+    sf::RenderTexture& Scene::OnRender(Camera& editorCamera) {
 		m_RenderTexture.clear(LY_SCENE_CLEAR_BACKGROUND);
 
         // ------ RENDER HERE -------
@@ -72,7 +69,9 @@ namespace Lychee {
 
 		// --------------------------
 
+        m_RenderTexture.setView(editorCamera.GetView());
 		m_RenderTexture.display();
+
 
         return m_RenderTexture;
     }

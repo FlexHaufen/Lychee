@@ -22,7 +22,8 @@ namespace Lychee {
 	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer") {
+	: Layer("EditorLayer")
+	, m_EditorCamera({LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y}) {
 
 		LY_INFO("Initializing Editor");
 
@@ -30,6 +31,7 @@ namespace Lychee {
 
 		LY_INFO("Getting Current scene");
 		m_ActiveScene = CreateRef<Scene>();
+		//m_ViewportPos = m_ActiveScene->m_View.getCenter();
 	}
 
 	void EditorLayer::OnAttach() {
@@ -40,6 +42,7 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
+		m_EditorCamera.OnUpdate(dt);
 		m_ActiveScene->OnUpdate(dt);
 	}
 
@@ -109,16 +112,7 @@ namespace Lychee {
 
 		// Disable event blocking
 		Core::Get().GetImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
-
-		sf::Vector2f viewportSize(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
-		if (m_ViewportSize != viewportSize) {
-			m_ViewportSize = viewportSize;
-			m_ActiveScene->OnViewpoertResize({m_ViewportSize.x,
-											  m_ViewportSize.y
-			});
-		}
-
-        ImGui::Image(m_ActiveScene->OnRender());
+        ImGui::Image(m_ActiveScene->OnRender(m_EditorCamera));
 
 		ImGui::End();
 		ImGui::PopStyleVar();
@@ -128,16 +122,35 @@ namespace Lychee {
 
 	void EditorLayer::OnEvent(sf::Event& e)	{
 
-		//#ifdef LY_LOG_KEY_EVENT
-		//	if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
-		//		Lychee::KeyPressedEvent& eKey = (Lychee::KeyPressedEvent&)e;
-		//		LY_TRACE("KEY PRESSED: {0}", (c8)eKey.GetKeyCode());
-		//	}	
-		//#endif
+		// TODO (flex): put into camera OnEvent function
+		switch(e.type) {
+			// ** Camera movement **
+			case sf::Event::KeyPressed:
+				switch (e.key.code) {
+					case sf::Keyboard::W:
+						m_EditorCamera.Move(0, -10);
+						break;
+					case sf::Keyboard::A:
+						m_EditorCamera.Move(-10, 0);
+						break;
+					case sf::Keyboard::S:
+						m_EditorCamera.Move(0, 10);
+						break;
+					case sf::Keyboard::D:
+						m_EditorCamera.Move(10, 0);
+						break;
+					default:
+						break;
+				}
+				break;
+			// ** Camera Zoom **
+			case sf::Event::MouseWheelMoved:
+				m_EditorCamera.Zoom((e.mouseWheel.delta >  0) ? 1.1f : 0.9f);
+				break;
 
-		//EventDispatcher dispatcher(e);
-		//dispatcher.Dispatch<KeyPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
-		//dispatcher.Dispatch<MouseButtonPressedEvent>(LY_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+			default:
+				break;
+		} 
 	}
 
 	void EditorLayer::OnMenuBarRender() {

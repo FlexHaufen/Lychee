@@ -112,7 +112,7 @@ namespace Lychee {
                 break;
         }
 
-        for (auto i : m_LayerStack) {
+        for (auto& i : m_LayerStack) {
             i->OnEvent(e);
         }
 
