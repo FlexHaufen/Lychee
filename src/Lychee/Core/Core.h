@@ -13,19 +13,11 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-// ** Window **
+#include "Lychee/Core/Layer/LayerStack.h"
+#include "Lychee/Core/Time/Deltatime.h"
 #include "Lychee/Core/Window/Window.h"
 
-//** Events **
 #include "Lychee/Events/EventManager.h"
-
-//** Time **
-#include "Lychee/Core/Time/Deltatime.h"
-
-//** Layers **
-#include "Lychee/Core/Layer/LayerStack.h"
-
-//** ImGui **
 #include "Lychee/ImGui/ImGuiLayer.h"
 
 // *** DEFINES ***
@@ -109,8 +101,7 @@ namespace Lychee {
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
-        DeltaTime m_deltaTime;
-        f32 m_lastFrameTime = 0.0f; // Last frame time
+        DeltaTime m_dt;             // delta time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui

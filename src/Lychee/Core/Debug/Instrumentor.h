@@ -141,8 +141,8 @@ namespace Lychee {
 
 // *** DEFINES ***
 // NOTE (flex): The Profiler may be desabled here
+//#define LY_PROFILE
 
-#define LY_PROFILE
 #ifdef LY_PROFILE
 
     // NOTE (flex): Compilers may be added here.

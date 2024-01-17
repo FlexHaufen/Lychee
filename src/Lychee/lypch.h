@@ -63,7 +63,7 @@
     #define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
-    #define LY_LOG_EVENTS
+    // #define LY_LOG_EVENTS
 #else
     // RELEAS MODE
     #undef LY_DEBUG
@@ -103,11 +103,6 @@
 #define LY_WINDOW_SIZE_X            1920
 #define LY_WINDOW_SIZE_Y            1080
 
-#define LY_CAMERA_SIZE_X            1920.0f
-#define LY_CAMERA_SIZE_Y            1080.0f
-
 #define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
-
-#define LY_IMGUI_INSTALL_CALLBACKS  true

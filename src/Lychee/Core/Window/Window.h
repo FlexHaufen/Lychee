@@ -13,10 +13,7 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-//** Events **
 #include "Lychee/Events/EventManager.h"
-
-//** Time **
 #include "Lychee/Core/Time/Deltatime.h"
 
 // *** DEFIENS ***
@@ -100,9 +97,10 @@ namespace Lychee {
 		 * 
 		 */
 		void Terminate();
+		
 	private:
 
-        //** Members **
+        // ** Members **
 		sf::RenderWindow m_Window; // SFML Window
 		
 		/**

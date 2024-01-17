@@ -52,11 +52,7 @@ namespace Lychee {
     }
 
     Core::~Core() {
-        LY_PROFILE_FUNCTION();
-
-        // delet m_Window -> doesn't matter becose aplication will
-        // terminate anyway
-	    LY_PROFILE_END_SESSION();
+        delete m_Window;
         LY_CORE_INFO("Core is going down for Shutdown NOW!");
     }
 
@@ -65,14 +61,14 @@ namespace Lychee {
 
         while (m_isRunning) {
 
-            m_deltaTime.OnUpdate();
+            m_dt.OnUpdate();
 
             if (!m_isMinimized) {
                 // ---------- Update ----------
-                m_Window->OnUpdate(m_deltaTime);
-                m_ImGuiLayer->OnSfmlUpdate(m_deltaTime);
+                m_Window->OnUpdate(m_dt);
+                m_ImGuiLayer->OnSfmlUpdate(m_dt);
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate(m_deltaTime);
+					layer->OnUpdate(m_dt);
                 }
 
                 // ---------- Render ----------
