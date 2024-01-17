@@ -50,6 +50,9 @@ namespace Lychee {
 
 
 		LY_CORE_INFO("Setting up CORE events");
+		// NOTE (flex): callbacks may be added here
+		//m_EventManager.addEventCallback(sf::Event::EventType::Closed, [&](const sf::Event&) { Close(); });
+        //m_EventManager.addKeyPressedCallback(sf::Keyboard::Key::Escape, [&](const sf::Event&) {Close(); });
 	}
 
 	void Window::Terminate() {
