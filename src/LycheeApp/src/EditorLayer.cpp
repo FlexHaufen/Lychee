@@ -32,6 +32,10 @@ namespace Lychee {
 		LY_INFO("Getting Current scene");
 		m_ActiveScene = CreateRef<Scene>();
 		//m_ViewportPos = m_ActiveScene->m_View.getCenter();
+	
+	
+	
+		m_ContentBrowserPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnAttach() {
@@ -109,7 +113,7 @@ namespace Lychee {
 		// ** Viewport **
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});		
 		ImGui::Begin("Viewport");
-
+		m_ViewportFocused = ImGui::IsWindowFocused();
 		// Disable event blocking
 		Core::Get().GetImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
         ImGui::Image(m_ActiveScene->OnRender(m_EditorCamera));
@@ -126,36 +130,37 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnEvent(sf::Event& e)	{
+		if (m_ViewportFocused) {
+			// TODO (flex): put into camera OnEvent function
+			switch(e.type) {
+				// ** Camera movement **
+				case sf::Event::KeyPressed:
+					switch (e.key.code) {
+						case sf::Keyboard::W:
+							m_EditorCamera.Move(0, -10);
+							break;
+						case sf::Keyboard::A:
+							m_EditorCamera.Move(-10, 0);
+							break;
+						case sf::Keyboard::S:
+							m_EditorCamera.Move(0, 10);
+							break;
+						case sf::Keyboard::D:
+							m_EditorCamera.Move(10, 0);
+							break;
+						default:
+							break;
+					}
+					break;
+				// ** Camera Zoom **
+				case sf::Event::MouseWheelMoved:
+					m_EditorCamera.Zoom((e.mouseWheel.delta >  0) ? 1.1f : 0.9f);
+					break;
 
-		// TODO (flex): put into camera OnEvent function
-		switch(e.type) {
-			// ** Camera movement **
-			case sf::Event::KeyPressed:
-				switch (e.key.code) {
-					case sf::Keyboard::W:
-						m_EditorCamera.Move(0, -10);
-						break;
-					case sf::Keyboard::A:
-						m_EditorCamera.Move(-10, 0);
-						break;
-					case sf::Keyboard::S:
-						m_EditorCamera.Move(0, 10);
-						break;
-					case sf::Keyboard::D:
-						m_EditorCamera.Move(10, 0);
-						break;
-					default:
-						break;
-				}
-				break;
-			// ** Camera Zoom **
-			case sf::Event::MouseWheelMoved:
-				m_EditorCamera.Zoom((e.mouseWheel.delta >  0) ? 1.1f : 0.9f);
-				break;
-
-			default:
-				break;
-		} 
+				default:
+					break;
+			} 
+		}
 	}
 
 	void EditorLayer::OnMenuBarRender() {

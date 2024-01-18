@@ -26,6 +26,8 @@ namespace Lychee {
      */
     namespace Component {
 
+        static const char* availableComponents[] = {"Transform" };
+  
         /**
          * @brief Tag Component
          * 

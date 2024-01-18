@@ -53,6 +53,7 @@ namespace Lychee {
 		};
 		SceneState m_SceneState = SceneState::Edit;
 
+		b8 m_ViewportFocused = false;				// True if viewport is focused
 
 		// Panels
 		ContentBrowserPanel m_ContentBrowserPanel;
