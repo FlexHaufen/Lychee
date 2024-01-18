@@ -132,7 +132,7 @@ namespace Lychee {
             transform.pos = {f1[0], f1[1]};
 
             static f32 f2[2] = {transform.scale.x, transform.scale.y};
-            if (ImGui::InputFloat2("Scale", f2))
+            ImGui::InputFloat2("Scale", f2);
             transform.scale = {f2[0], f2[1]};
 
             ImGui::InputFloat("Rotation", &transform.rotation);
