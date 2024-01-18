@@ -80,3 +80,4 @@ To Run the .exe file via F5 you first need to configure a ```launch.json``` in y
 ## Acknowledgements
  - [Hazel Engine](https://github.com/TheCherno/Hazel)
  - [Game Engine Series](https://www.youtube.com/watch?v=JxIZbV_XjAs&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
+ - [ImGui Theme by @Trippasch](https://github.com/Trippasch)
