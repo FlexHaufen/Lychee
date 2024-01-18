@@ -82,7 +82,7 @@ namespace Lychee {
 				m_elapsedTimeFps = 0;
 			}
 		#endif
-		m_Window.clear(LY_SCENE_CLEAR_BACKGROUND);
+		m_Window.clear(LY_MAIN_CLEAR_COLOR);
 	}
 
 	void Window::SetVSync(bool enabled) {

@@ -57,7 +57,7 @@ namespace Lychee {
 
 
     sf::RenderTexture& Scene::OnRender(Camera& editorCamera) {
-		m_RenderTexture.clear(LY_SCENE_CLEAR_BACKGROUND);
+		m_RenderTexture.clear(LY_SCENE_CLEAR_COLOR);
 
         // ------ RENDER HERE -------
 

@@ -37,8 +37,9 @@ namespace Lychee {
         /**
          * @brief Construct a new Core object
          * 
+         * @param isSplashScreenEnabled     true enable splash screen
          */
-        Core();
+        Core(b8 isSplashScreenEnabled = false);
 
         /**
          * @brief Destroy the Core object
@@ -90,11 +91,13 @@ namespace Lychee {
         Window& GetWindow() { return *m_Window; }
 
     private:
-        bool OnWindowClose(sf::Event& e);
-	    bool OnWindowResize(sf::Event& e);
+        b8 OnWindowClose(sf::Event& e);
+	    b8 OnWindowResize(sf::Event& e);
+
+        void OnSplashScreenDisplay();
 
     private:
-        // *** MEMBERS ***7
+        // ** Members **
         static Core* s_Instance;    // Instance of core - for external usage
         
         bool m_isRunning = true;    // True when app is running

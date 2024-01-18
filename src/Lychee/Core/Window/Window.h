@@ -62,7 +62,7 @@ namespace Lychee {
 		 * @brief Window clear function
 		 * 
 		 */
-		void Clear() { m_Window.clear(LY_SCENE_CLEAR_BACKGROUND); }
+		void Clear() { m_Window.clear(LY_MAIN_CLEAR_COLOR); }
 
 		/**
 		 * @brief Get the Width
