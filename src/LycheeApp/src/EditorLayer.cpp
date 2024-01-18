@@ -106,7 +106,7 @@ namespace Lychee {
 		// Render menubar
 		OnMenuBarRender();
 
-		//** VIEWPORT **
+		// ** Viewport **
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});		
 		ImGui::Begin("Viewport");
 
@@ -117,6 +117,11 @@ namespace Lychee {
 		ImGui::End();
 		ImGui::PopStyleVar();
 		ImGui::End();
+
+
+		// ** Panels **
+		m_ContentBrowserPanel.OnImGuiRender();
+
 	#endif
 	}
 

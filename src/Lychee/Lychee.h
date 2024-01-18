@@ -14,6 +14,7 @@
 // ** Main app **
 #include "Lychee/Core/Core.h"
 #include "Lychee/Scene/Scene.h"
+#include "Lychee/Scene/Entity/Entity.h"
 #include "Lychee/Scene/Camera/Camera.h"
 
 // ** Logger **

@@ -14,6 +14,8 @@
 #include <Lychee/lypch.h>
 #include <Lychee/Lychee.h>
 
+#include "LycheeApp/src/Panels/ContentBrowserPanel.h"
+
 // *** DEFINES ***
 
 // *** NAMESPACE ***
@@ -50,6 +52,10 @@ namespace Lychee {
 			Edit = 0, Play = 1, Simulate = 2
 		};
 		SceneState m_SceneState = SceneState::Edit;
+
+
+		// Panels
+		ContentBrowserPanel m_ContentBrowserPanel;
 	};
 
 }

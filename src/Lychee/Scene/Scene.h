@@ -12,6 +12,7 @@
 
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
+//#include "Lychee/Scene/Entity/Entity.h"
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Scene/Camera/Camera.h"
 #include "Lychee/Core/Time/Deltatime.h"
@@ -68,15 +69,15 @@ namespace Lychee {
 
         sf::RenderTexture& OnRender(Camera& editorCamera);
 
+		entt::registry& GetRegistry() { return m_Registry; }
+
     private:
 
         // ** Members **
         sf::RenderTexture   m_RenderTexture;        // sf::RenderTexture
-        
         entt::registry      m_Registry;             // entt Registry
 
 
         friend class Entity;                        // Entity class
-        friend class SceneSerializer;               // Scene Serializer
     };
 }
