@@ -60,12 +60,20 @@ namespace Lychee {
 		m_RenderTexture.clear(LY_SCENE_CLEAR_COLOR);
 
         // ------ RENDER HERE -------
+        
+        // Render Transform origin
+        m_Registry.view<Component::Tag, Component::Transform>().each([&]( auto e, auto &tag, auto &transform) {
+            //if (transform.renderLayer != i) {
+            //    return;
+            //}
 
-		sf::RectangleShape rs;
-		rs.setSize({50, 50});
-		rs.setFillColor({250, 100, 50, 255});
-
-		m_RenderTexture.draw(rs);
+            Entity entity = {e, this};
+            sf::CircleShape c;
+            c.setRadius(2);
+            c.setFillColor(sf::Color::Red);
+            c.setPosition(sf::Vector2f(transform.pos.x - 2, transform.pos.y - 2));
+            m_RenderTexture.draw(c);
+        });
 
 		// --------------------------
 

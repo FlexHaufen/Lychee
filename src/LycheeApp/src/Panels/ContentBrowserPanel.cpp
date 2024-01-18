@@ -65,7 +65,7 @@ namespace Lychee {
                 ImGui::OpenPopup("popup_Components");
             }
             ImGui::SameLine();
-            ImGui::TextUnformatted(selectedComponent == -1 ? "<None>" : Component::availableComponents[selectedComponent]);
+            ImGui::TextUnformatted(selectedComponent == -1 ? "" : Component::availableComponents[selectedComponent]);
             if (ImGui::BeginPopup("popup_Components")) {
                 ImGui::SeparatorText("Components");
                 for (int i = 0; i < IM_ARRAYSIZE(Component::availableComponents); i++) {
@@ -127,12 +127,12 @@ namespace Lychee {
 
             ImGui::SliderInt("render layer", (s32*)&transform.renderLayer, 0, 9);
 
-            f32 f1[2] = {transform.pos.x, transform.pos.y};
+            static f32 f1[2] = {transform.pos.x, transform.pos.y};
             ImGui::InputFloat2("pos", f1);
             transform.pos = {f1[0], f1[1]};
 
-            f32 f2[2] = {transform.scale.x, transform.scale.y};
-            ImGui::InputFloat2("scale", f2);
+            static f32 f2[2] = {transform.scale.x, transform.scale.y};
+            if (ImGui::InputFloat2("Scale", f2))
             transform.scale = {f2[0], f2[1]};
 
             ImGui::InputFloat("Rotation", &transform.rotation);

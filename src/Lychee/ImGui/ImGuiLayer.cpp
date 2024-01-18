@@ -61,9 +61,10 @@ namespace Lychee {
 	}
 
 	void ImGuiLayer::OnEvent(sf::Event& e) {
-		if (!m_BlockEvents) {
+		// FIXME (flex)
+		//if (!m_BlockEvents) {
 			ImGui::SFML::ProcessEvent(e);
-		}
+		//}
 	}
 	
 	void ImGuiLayer::OnSfmlUpdate(DeltaTime dt) {
