@@ -25,19 +25,20 @@ namespace Lychee {
 	ImGuiLayer::ImGuiLayer()
 		: Layer("ImGuiLayer")
 		, m_Window(Core::Get().GetWindow().GetNativeWindow()) {
-		LY_CORE_INFO("Initializing ImGuiLayer");
+		LY_CORE_INFO("ImGuiLayer: Initializing");
 
 	}
 
 	void ImGuiLayer::OnAttach()	{
 
-		ImGui::SFML::Init(m_Window);
 
 
 		// Setup Dear ImGui context
+		ImGui::SFML::Init(m_Window);
 		IMGUI_CHECKVERSION();
 
-		LY_CORE_INFO("Running ImGui version: {0}", ImGui::GetVersion());
+		LY_CORE_INFO("ImGuiLayer: Setting up context");
+		LY_CORE_INFO("ImGuiLayer: \\---- ImGui Version{0}", ImGui::GetVersion());
 		//LY_CORE_INFO("Running ImPlot version: {0}", IMPLOT_VERSION);
 
 		ImGui::CreateContext();
@@ -56,7 +57,7 @@ namespace Lychee {
 	}
 
 	void ImGuiLayer::OnDetach() {
-		LY_CORE_INFO("Terminating ImGui");
+		LY_CORE_INFO("ImGuiLayer: Terminating");
 		ImGui::SFML::Shutdown();
 	}
 
@@ -76,6 +77,7 @@ namespace Lychee {
 	}
 
 	void ImGuiLayer::SetStyle() {
+		LY_CORE_INFO("ImGuiLayer: Applying style");
 
 		ImGuiIO &io = ImGui::GetIO();
 

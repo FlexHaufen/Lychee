@@ -20,12 +20,12 @@
 namespace Lychee {
 
     Scene::Scene(){
-        LY_CORE_INFO("Initializing Scene");
+        LY_CORE_INFO("Scene: Initializing");
 		m_RenderTexture.create(LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y);
     }
 
     Scene::~Scene() {
-        LY_CORE_INFO("Terminating Scene");
+        LY_CORE_INFO("Scene: Terminating");
     }
 
     Entity Scene::CreateEntity(const std::string& name) {

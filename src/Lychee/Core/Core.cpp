@@ -22,9 +22,9 @@ namespace Lychee {
         s_Instance = this;
 
         Lychee::Log::Init();
-        LY_CORE_INFO("Initializing Core");
+        LY_CORE_INFO("Initializing");
         std::filesystem::current_path(LY_DEFAULT_PATH);
-        LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
+        LY_CORE_INFO("\\---- Path: {0}",std::filesystem::current_path());
 
         #ifdef LY_PROFILE
             LY_CORE_WARN("Profiler is enabled and may use unnecessary recources");
@@ -58,7 +58,7 @@ namespace Lychee {
 
     Core::~Core() {
         delete m_Window;
-        LY_CORE_INFO("Core is going down for Shutdown NOW!");
+        LY_CORE_INFO("Terminating");
     }
 
     void Core::Run() {

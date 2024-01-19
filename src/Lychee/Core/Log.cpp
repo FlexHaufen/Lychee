@@ -53,7 +53,7 @@ namespace Lychee {
 		LY_CORE_INFO("-------------------------------------");
 		LY_CORE_INFO("Lychee Engine {0}", LY_VERSION_STR);
 		LY_CORE_INFO("-------------------------------------");
-		LY_CORE_INFO("Logger Initialized");
+		LY_CORE_INFO("Logger: Initialized");
 
 	}
 }
