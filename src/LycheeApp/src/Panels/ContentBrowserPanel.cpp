@@ -74,8 +74,8 @@ namespace Lychee {
                     
                         switch(selectedComponent) {
                             case 0:
-                                if (!m_SelectionContext.HasComponent<Component::Transform>())
-                                m_SelectionContext.AddComponent<Component::Transform>();
+                                if (!m_SelectionContext.HasComponent<Component::RectShape>())
+                                m_SelectionContext.AddComponent<Component::RectShape>();
                                 break;
                             default:
                                 LY_WARN("Componet was selected but could not be added");
@@ -136,6 +136,20 @@ namespace Lychee {
             transform.scale = {f2[0], f2[1]};
 
             ImGui::InputFloat("Rotation", &transform.rotation);
+        }
+
+        if (entity.HasComponent<Component::RectShape>() && ImGui::CollapsingHeader("RectShape")) {
+            auto &rectShape = entity.GetComponent<Component::RectShape>();
+
+            static f32 f1[2] = {rectShape.size.x, rectShape.size.y};
+            ImGui::InputFloat2("size", f1);
+            rectShape.size = {f1[0], f1[1]};
+
+            static ImVec4 color = Conv::sfColor_to_ImColor(rectShape.color);
+            static f32 f2[4] = {color.x, color.y, color.z, color.w};
+            ImGui::ColorEdit4("color", f2);
+            rectShape.color = Conv::ImColor_to_sfColor(ImVec4(f2[0], f2[1], f2[2], f2[3]));
+            LY_TRACE("{0}, {1}, {2}, {3}", rectShape.color.r, rectShape.color.g, rectShape.color.b, rectShape.color.a);
         }
     }
 }

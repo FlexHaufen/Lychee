@@ -38,6 +38,8 @@ namespace Lychee {
         tag.uuid = uuid;
 		tag.tag = name;
 
+		auto& transform = entity.AddComponent<Component::Transform>();
+
         // m_EntityMap[uuid] = entity;
 
 		return entity;
@@ -67,12 +69,21 @@ namespace Lychee {
             //    return;
             //}
 
+            // Dont draw if not in view of main camera
             Entity entity = {e, this};
             sf::CircleShape c;
             c.setRadius(2);
             c.setFillColor(sf::Color::Red);
             c.setPosition(sf::Vector2f(transform.pos.x - 2, transform.pos.y - 2));
             m_RenderTexture.draw(c);
+        });
+
+        m_Registry.view<Component::RectShape, Component::Transform>().each([&](auto e, auto &rectShape, auto &transform) {
+            Entity entity = {e, this};
+            sf::RectangleShape rs(sf::Vector2f(rectShape.size.x, rectShape.size.y));
+            rs.setPosition(transform.pos.x, transform.pos.y);
+            rs.setFillColor(rectShape.color);
+            m_RenderTexture.draw(rs);
         });
 
 		// --------------------------
