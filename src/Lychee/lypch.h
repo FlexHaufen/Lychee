@@ -10,32 +10,27 @@
  */
 #pragma once
 
-// ***************************************************************
-// ************************ INCLUDES *****************************
-// ***************************************************************
-// ** EXTERNAL FILES **
-#include <Windows.h>
+// *** INCLUDES ***
+// ** External Files **
 
-#include <iostream>
-#include <memory>
-
-#include <utility>
 #include <algorithm>
-#include <functional>
+#include <array>
+#include <cmath>
 #include <filesystem>
 #include <fstream>
-
-#include <string>
+#include <functional>
+#include <iostream>
+#include <math.h>
+#include <memory>
 #include <sstream>
-#include <array>
-#include <vector>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
+#include <vector>
+#include <Windows.h>
 
-#include <math.h>
-#include <cmath>
-
-// * SFML *
+// SFML
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -45,24 +40,20 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
-// Stb image
-#include <stb_image.h>
-
 // EnTT
 #include "entt.hpp"
 
 // * yaml-cpp *
 #include "yaml-cpp/yaml.h"
 
-// ** LOCAL FILES **
+// ** Local Files **
 #include "Lychee/Core/Log.h"
 #include "Lychee/Core/Debug/Instrumentor.h"
 #include "Lychee/Helper/Types.h"
 
-// ***************************************************************
-// ************************* DEFINES *****************************
-// ***************************************************************
-// ** DEBUG **
+
+// *** DEFINES ***
+// ** Debug **
 #ifndef NLY_DEBUG
     // DEBUG MODE
     #define LY_DEBUG
@@ -70,10 +61,9 @@
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
     //#define LY_ENABLE_SPLASH_SCREEN
-
-    // #define LY_LOG_EVENTS
+    //#define LY_LOG_EVENTS
 #else
-    // RELEAS MODE
+    // RELEASE MODE
     #undef LY_DEBUG
     #define LY_RENDER_IMGUI 		//! dont change this
     #define LY_ENABLE_SPLASH_SCREEN
@@ -87,13 +77,12 @@
 	#define LY_DEBUGBREAK()
 #endif
 
-// ** MACROS **
+// ** Macros **
 #define LY_EXPAND_MACRO(x) x
 #define LY_STRINGIFY_MACRO(x) #x
 
 
-// ** CONFIG **
-//TODO: Maby move to another file
+// ** Config **
 // * General *
 #define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
 

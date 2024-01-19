@@ -9,10 +9,13 @@ A **simple**, **fast** & **lightweight** game engine.
 - It should run on every patato
 
 ## Dependencies
-- [SFML](https://www.sfml-dev.org/index.php) 
-- [spdlog](https://github.com/gabime/spdlog)
+- [EnTT](https://github.com/skypjack/entt)
 - [ImGui](https://github.com/ocornut/imgui)
 - [ImGUi-SFML](https://github.com/SFML/imgui-sfml)
+- [SFML](https://www.sfml-dev.org/index.php) 
+- [spdlog](https://github.com/gabime/spdlog)
+- [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+
 
 ## Setup
 ### Requirements
