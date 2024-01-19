@@ -149,7 +149,6 @@ namespace Lychee {
             static f32 f2[4] = {color.x, color.y, color.z, color.w};
             ImGui::ColorEdit4("color", f2);
             rectShape.color = Conv::ImColor_to_sfColor(ImVec4(f2[0], f2[1], f2[2], f2[3]));
-            LY_TRACE("{0}, {1}, {2}, {3}", rectShape.color.r, rectShape.color.g, rectShape.color.b, rectShape.color.a);
         }
     }
 }

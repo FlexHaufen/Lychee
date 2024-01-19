@@ -98,7 +98,7 @@
 #define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
 
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION_STR              "v1.0.0b"
+#define LY_VERSION_STR              "v1.0.1b"
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
