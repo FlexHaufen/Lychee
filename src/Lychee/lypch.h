@@ -51,6 +51,9 @@
 // EnTT
 #include "entt.hpp"
 
+// * yaml-cpp *
+#include "yaml-cpp/yaml.h"
+
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
 #include "Lychee/Core/Debug/Instrumentor.h"

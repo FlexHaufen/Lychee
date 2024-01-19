@@ -8,3 +8,6 @@
 	path = lib/vendor/imgui
 	url = git@github.com:SFML/imgui-sfml.git
 	branch = docking
+[submodule "lib/vendor/yaml-cpp"]
+	path = lib/vendor/yaml-cpp
+	url = git@github.com:jbeder/yaml-cpp.git
