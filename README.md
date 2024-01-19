@@ -33,6 +33,8 @@ A **simple**, **fast** & **lightweight** game engine.
     git submodule update --recursive --remote
     ```
 
+    ImGui Has to be on docking branch
+
 4. Configure Cmake
     - In VScode press F1 - Type Cmake Configure - Press Enter
     - Select "Visual Studio Compiler 2022 Release - amd64" - Press Enter

@@ -1,13 +1,12 @@
+[submodule "lib/vendor/imgui"]
+	path = lib/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "lib/vendor/imgui-sfml"]
+	path = lib/vendor/imgui-sfml
+	url = https://github.com/SFML/imgui-sfml.git
+[submodule "lib/vendor/yaml-cpp"]
+	path = lib/vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
 [submodule "lib/vendor/spdlog"]
 	path = lib/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "lib/vendor/imgui-sfml"]
-	path = lib/vendor/imgui-sfml
-	url = git@github.com:SFML/imgui-sfml.git
-[submodule "lib/vendor/imgui"]
-	path = lib/vendor/imgui
-	url = git@github.com:SFML/imgui-sfml.git
-	branch = docking
-[submodule "lib/vendor/yaml-cpp"]
-	path = lib/vendor/yaml-cpp
-	url = git@github.com:jbeder/yaml-cpp.git
