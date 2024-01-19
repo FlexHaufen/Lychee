@@ -32,74 +32,34 @@ namespace Lychee {
          * @param filename      filename
          * @param forceCreation true: filepath will be created if it does not exist
          */
-        Serializer(const std::string& filepath, const std::string& filename, b8 forceCreation = true) {
-            if (std::filesystem::exists(filepath)) {
-                m_FilePath = filepath;
-                m_FileName = filename;
-                return;
-            }
-            else if (forceCreation) {
-                LY_CORE_INFO("Serializer: Creating new savefilepath [{0}]", filepath);
-                std::filesystem::create_directories(filepath);
-                return;
-            }
-            LY_CORE_ERROR("Serializer: Could not find / create savefilepath [{0}]", filepath);
-        };
+        Serializer(const std::string& filepath, const std::string& filename, b8 forceCreation = true);
 
+        /**
+         * @brief Serialize a value to YAML-File
+         * 
+         * @tparam T    Value type
+         * @param key
+         * @param value   
+         */
         template<typename T>
-        void SerializeValue(const std::string& key, const T& value) const {
-            
-            YAML::Node config;
-            std::string yamlFile = m_FilePath + m_FileName;
+        void SerializeValue(const std::string& key, const T& value) const;
 
-            // Load existing YAML file if it exists
-            std::ifstream fin(yamlFile);
-            if (fin.good()) {
-                fin.close();
-                config = YAML::LoadFile(yamlFile);
-            } else {
-                LY_CORE_INFO("Serializer: File [{0}] does not exist, creating new one", m_FileName);
-            }
-            
-            config[key] = value;
-
-            std::ofstream fout(yamlFile);
-            fout << config;
-            fout.close();
-        }
-
+        /**
+         * @brief Deserialize a value from YAML-File
+         * 
+         * @tparam T    Value type
+         * @param key   
+         * @param value 
+         * @return b8   true: successful, false: error
+         */
         template<typename T>
-        b8 DeserializeValue(const std::string& key, T& value) const {
-            std::string yamlFile = m_FilePath + m_FileName;
-            try {
-                YAML::Node config = YAML::LoadFile(yamlFile);
-                if (!config[key]) {
-                    LY_CORE_ERROR("Serializer: Could not find key [{0}] in file [{1}]", key, m_FileName);
-                    return false;
-                }
-
-                try {
-                    value = config[key].as<T>();
-                    return true;
-                } 
-                catch (const YAML::Exception& e) {
-                    LY_CORE_ERROR("Serializer: Error converting YAML value to the specified type: [{0}]", e.what());
-                    return false;
-                }
-            }
-            catch (const YAML::Exception& e) {
-                LY_CORE_ERROR("Serializer: Error loading YAML file [{0}]", e.what());
-                return false;
-            }
-            return false;
-        }
+        b8 DeserializeValue(const std::string& key, T& value) const;
 
     private:
 
         // ** Members **
-
-        std::string m_FilePath;     // SavePath of yamlfile
-        std::string m_FileName;     // Filename of yamlfile
+        std::string m_FilePath;     // SavePath of YAML file
+        std::string m_FileName;     // Filename of YAML file
 
     };
 }
