@@ -56,6 +56,11 @@ set(SFML_DIR ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/lib/cmake/SFML)
 find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network)
 
 
+#---------BOX2D---------
+# FIXME (flex): only debug build possible
+set(BOX2D_LIB ${CMAKE_SOURCE_DIR}/lib/box2d/lib/bin/Release/box2d.lib)
+
+
 #-----IMGUI-SFML-------
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/lib/vendor/imgui/)
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/imgui-sfml/)
@@ -77,6 +82,8 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/lib/entt
 	# spdlog
 	${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include
+	# Box2D
+	${CMAKE_SOURCE_DIR}/lib/box2d/include
 	# stb_image
 	${CMAKE_SOURCE_DIR}/lib/vendor/stb_image
 )
@@ -94,7 +101,8 @@ set(LIBS 	sfml-window
 			sfml-audio
 			sfml-network
 			ImGui-SFML
-			yaml-cpp)
+			yaml-cpp
+			${BOX2D_LIB})
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 

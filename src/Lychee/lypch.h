@@ -40,6 +40,9 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 
+// Box2D
+#include <box2d/box2d.h>
+
 // EnTT
 #include "entt.hpp"
 
