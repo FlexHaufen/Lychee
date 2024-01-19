@@ -32,7 +32,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
+#include <math.h>
+#include <cmath>
 
 // * SFML *
 #include <SFML/Graphics.hpp>
@@ -47,6 +48,11 @@
 // Stb image
 #include <stb_image.h>
 
+// EnTT
+#include "entt.hpp"
+
+// * yaml-cpp *
+#include "yaml-cpp/yaml.h"
 
 // ** LOCAL FILES **
 #include "Lychee/Core/Log.h"
@@ -63,11 +69,14 @@
     #define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
-    #define LY_LOG_EVENTS
+    //#define LY_ENABLE_SPLASH_SCREEN
+
+    // #define LY_LOG_EVENTS
 #else
     // RELEAS MODE
     #undef LY_DEBUG
     #define LY_RENDER_IMGUI 		//! dont change this
+    #define LY_ENABLE_SPLASH_SCREEN
 #endif
 
 
@@ -89,7 +98,7 @@
 #define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
 
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION_STR              "v1.0.0b"
+#define LY_VERSION_STR              "v1.0.1b"
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
@@ -97,17 +106,27 @@
 #define LY_FONT_SIZE                15.0f
 #define LY_FONT_REGULAR             "./resource/fonts/Rilu-Regular.ttf"
 
+// * Colors *
+#define LY_COLOR_RED                sf::Color(249, 65, 68, 255)     // #F94144
+#define LY_COLOR_ORANGE             sf::Color(243, 114, 44, 255)    // #F3722C
+#define LY_COLOR_LIGHT_ORANGE       sf::Color(248, 150, 30, 255)    // #F8961E
+#define LY_COLOR_YELLOW             sf::Color(249, 199, 79, 255)    // #F9C74F   
+#define LY_COLOR_LIME               sf::Color(144, 190, 109, 255)   // #90BE6D
+#define LY_COLOR_LIGHT_BLUE         sf::Color(67, 170, 139, 255)    // #43AA8B
+#define LY_COLOR_BLUE               sf::Color(87, 117, 144, 255)    // #577590
+#define LY_COLOR_WHITE              sf::Color::White
+#define LY_COLOR_BLACK              sf::Color::Black
+#define LY_COLOR_GRAY               sf::Color(49, 57, 60, 255)      // #31393C
+
 // * Window *
-#define LY_SCENE_CLEAR_BACKGROUND   sf::Color(158, 222, 232, 255)   // light blue
+#define LY_MAIN_CLEAR_COLOR         LY_COLOR_GRAY
+#define LY_SCENE_CLEAR_COLOR        LY_COLOR_GRAY
+#define LY_SPLASHSCREEN_CLEAR_COLOR LY_COLOR_GRAY
 
 #define LY_WINDOW_SIZE_X            1920
 #define LY_WINDOW_SIZE_Y            1080
-
-#define LY_CAMERA_SIZE_X            1920.0f
-#define LY_CAMERA_SIZE_Y            1080.0f
 
 #define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
 
-#define LY_IMGUI_INSTALL_CALLBACKS  true

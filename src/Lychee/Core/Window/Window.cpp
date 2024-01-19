@@ -31,29 +31,32 @@ namespace Lychee {
 	}
 
 	void Window::Init() {
-		LY_CORE_INFO("Initializing window: {0} ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
-
-		LY_CORE_INFO("Initializing SFML Window");
+		LY_CORE_INFO("Window: Initializing");
+		LY_CORE_INFO("Window: \\---- [{0}] ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
+		LY_CORE_INFO("Window: \\---- Initializing SFML Window");
         m_Window.create(sf::VideoMode(m_sWindowData.width, m_sWindowData.height), m_sWindowData.title);
 
 		// Set window ico
 		auto windowIcon = sf::Image();
 		if (!windowIcon.loadFromFile(LY_ICON_PNG)) {
-			LY_CORE_WARN("Could not load window icon at [{0}]", LY_ICON_PNG);
+			LY_CORE_WARN("Window: Could not load window icon at [{0}]", LY_ICON_PNG);
 		}
 		else {
 			m_Window.setIcon(windowIcon.getSize().x, windowIcon.getSize().y, windowIcon.getPixelsPtr());
 		}
 		
-        LY_CORE_INFO("Setting vsync to {0}", LY_VSYNC_DEFAULT);
+        LY_CORE_INFO("Window: Setting vsync to {0}", LY_VSYNC_DEFAULT);
 		SetVSync(LY_VSYNC_DEFAULT);
 
 
-		LY_CORE_INFO("Setting up CORE events");
+		LY_CORE_INFO("Window: Setting up CORE events");
+		// NOTE (flex): callbacks may be added here
+		//m_EventManager.addEventCallback(sf::Event::EventType::Closed, [&](const sf::Event&) { Close(); });
+        //m_EventManager.addKeyPressedCallback(sf::Keyboard::Key::Escape, [&](const sf::Event&) {Close(); });
 	}
 
 	void Window::Terminate() {
-        LY_CORE_INFO("Terminating window");
+        LY_CORE_INFO("Window: Terminating");
 		m_Window.close();
 	}
 
@@ -79,7 +82,7 @@ namespace Lychee {
 				m_elapsedTimeFps = 0;
 			}
 		#endif
-		m_Window.clear(LY_SCENE_CLEAR_BACKGROUND);
+		m_Window.clear(LY_MAIN_CLEAR_COLOR);
 	}
 
 	void Window::SetVSync(bool enabled) {

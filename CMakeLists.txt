@@ -60,6 +60,11 @@ find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/lib/vendor/imgui/)
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/imgui-sfml/)
 
+#--------YAML--------
+set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
+set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
+set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
+add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/yaml-cpp/)
 
 ### STBIMAGE ###
 set(STBIMAGE_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/stb_image)
@@ -71,13 +76,15 @@ add_library(stb_image
 #				      INCLUDE DIRS
 #----------------------------------------------------
 include_directories(
-	"${CMAKE_SOURCE_DIR}/src"
+	${CMAKE_SOURCE_DIR}/src
 	#SFML
-	"${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include"
+	${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include
+	#EnTT
+	${CMAKE_SOURCE_DIR}/lib/entt
 	# spdlog
-	"${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include"
+	${CMAKE_SOURCE_DIR}/lib/vendor/spdlog/include
 	# stb_image
-	"${CMAKE_SOURCE_DIR}/lib/vendor/stb_image"	
+	${CMAKE_SOURCE_DIR}/lib/vendor/stb_image
 )
 
 
@@ -93,6 +100,7 @@ set(LIBS 	sfml-window
 			sfml-audio
 			sfml-network
 			ImGui-SFML
+			yaml-cpp
 			stb_image)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})

@@ -29,7 +29,7 @@ namespace Lychee {
 		virtual void OnDetach() {}
 		virtual void OnUpdate(DeltaTime dt) {}
 		virtual void OnImGuiRender() {}
-		virtual void OnEvent(sf::Event &e) {}
+		virtual void OnEvent(sf::Event& e) {}
 
 		const std::string& GetName() const { return m_DebugName; }
 	protected:

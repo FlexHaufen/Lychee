@@ -13,10 +13,17 @@
 // *** INCLUDES ***
 // ** Main app **
 #include "Lychee/Core/Core.h"
+#include "Lychee/Scene/Scene.h"
+#include "Lychee/Scene/Entity/Entity.h"
+#include "Lychee/Scene/Camera/Camera.h"
+
+#include "Lychee/Core/Time/Deltatime.h"
+
+#include "Lychee/Helper/Convert.h"
+
 // ** Logger **
 #include "Lychee/Core/Log.h"        
 
-#include "Lychee/Core/Time/Deltatime.h"
 
 
 // *** DEFINES ***

@@ -13,10 +13,7 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-//** Events **
 #include "Lychee/Events/EventManager.h"
-
-//** Time **
 #include "Lychee/Core/Time/Deltatime.h"
 
 // *** DEFIENS ***
@@ -65,7 +62,7 @@ namespace Lychee {
 		 * @brief Window clear function
 		 * 
 		 */
-		void Clear() { m_Window.clear(LY_SCENE_CLEAR_BACKGROUND); }
+		void Clear() { m_Window.clear(LY_MAIN_CLEAR_COLOR); }
 
 		/**
 		 * @brief Get the Width
@@ -100,9 +97,10 @@ namespace Lychee {
 		 * 
 		 */
 		void Terminate();
+		
 	private:
 
-        //** Members **
+        // ** Members **
 		sf::RenderWindow m_Window; // SFML Window
 		
 		/**

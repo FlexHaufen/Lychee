@@ -46,6 +46,6 @@ namespace Lychee {
 		void SetStyle();
 	private:
 		sf::RenderWindow& m_Window;
-		bool m_BlockEvents = true;
+		bool m_BlockEvents = false;
 	};
 }

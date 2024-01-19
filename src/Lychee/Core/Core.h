@@ -13,19 +13,11 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-// ** Window **
+#include "Lychee/Core/Layer/LayerStack.h"
+#include "Lychee/Core/Time/Deltatime.h"
 #include "Lychee/Core/Window/Window.h"
 
-//** Events **
 #include "Lychee/Events/EventManager.h"
-
-//** Time **
-#include "Lychee/Core/Time/Deltatime.h"
-
-//** Layers **
-#include "Lychee/Core/Layer/LayerStack.h"
-
-//** ImGui **
 #include "Lychee/ImGui/ImGuiLayer.h"
 
 // *** DEFINES ***
@@ -45,8 +37,9 @@ namespace Lychee {
         /**
          * @brief Construct a new Core object
          * 
+         * @param isSplashScreenEnabled     true enable splash screen
          */
-        Core();
+        Core(b8 isSplashScreenEnabled = false);
 
         /**
          * @brief Destroy the Core object
@@ -98,19 +91,20 @@ namespace Lychee {
         Window& GetWindow() { return *m_Window; }
 
     private:
-        bool OnWindowClose(sf::Event& e);
-	    bool OnWindowResize(sf::Event& e);
+        b8 OnWindowClose(sf::Event& e);
+	    b8 OnWindowResize(sf::Event& e);
+
+        void OnSplashScreenDisplay();
 
     private:
-        // *** MEMBERS ***7
+        // ** Members **
         static Core* s_Instance;    // Instance of core - for external usage
         
         bool m_isRunning = true;    // True when app is running
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
-        DeltaTime m_deltaTime;
-        f32 m_lastFrameTime = 0.0f; // Last frame time
+        DeltaTime m_dt;             // delta time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui
