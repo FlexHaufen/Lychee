@@ -69,7 +69,7 @@
     #define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    
     #define LY_IMPLOT_SHOW_DEMO     // Demo window
-    //#define LY_ENABLE_SPLASH_SCREEN
+    #define LY_ENABLE_SPLASH_SCREEN
 
     // #define LY_LOG_EVENTS
 #else
