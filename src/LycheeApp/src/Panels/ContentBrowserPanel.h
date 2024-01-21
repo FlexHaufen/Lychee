@@ -31,6 +31,9 @@ namespace Lychee {
 	private:
 		//void DrawEntityNode(Entity& entity);
 		void DrawComponents(Entity& entity);
+
+		void PopUp(std::string title, std::string msg);
+
 	private:
 		Ref<Scene> m_Context;
 		Entity m_SelectionContext = { } ;

@@ -62,21 +62,20 @@ namespace Lychee {
         // TODO (flex): Serialize gravity
         m_PhysicsWorld = new b2World(b2Vec2(0.0f, -9.8f));
     
-        m_Registry.view<Component::RigitBody, Component::Transform>().each([&](auto e, auto& rigitBody, auto& transform) {
+        m_Registry.view<Component::RigidBody, Component::Transform>().each([&](auto e, auto& rigidBody, auto& transform) {
             Entity entity = {e, this};
 
-            b2BodyDef bodyDef;
-            bodyDef.position = b2Vec2(transform.pos.x / LY_DEG_PER_RAD, transform.pos.y / LY_DEG_PER_RAD);
-            bodyDef.angle = transform.rotation / LY_PPM;
+            rigidBody.bodyDef.position = b2Vec2(transform.pos.x / LY_DEG_PER_RAD, transform.pos.y / LY_DEG_PER_RAD);
+            rigidBody.bodyDef.angle = transform.rotation / LY_PPM;
 
-            rigitBody.body = m_PhysicsWorld->CreateBody(&bodyDef);
-            rigitBody.body->SetFixedRotation(true);
+            rigidBody.runtimeBody= m_PhysicsWorld->CreateBody(&rigidBody.bodyDef);
+            rigidBody.runtimeBody->SetFixedRotation(true);
 
             // Add collider
             if (entity.HasComponent<Component::Collider>()) {
 				auto& collider = entity.GetComponent<Component::Collider>();
                 collider.fixture.shape = &collider.shape;
-				rigitBody.body->CreateFixture(&collider.fixture);
+				rigidBody.runtimeBody->CreateFixture(&collider.fixture);
 			}
         });
     }

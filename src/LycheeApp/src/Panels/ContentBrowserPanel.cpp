@@ -77,6 +77,19 @@ namespace Lychee {
                                 if (!m_SelectionContext.HasComponent<Component::RectShape>())
                                 m_SelectionContext.AddComponent<Component::RectShape>();
                                 break;
+                            case 1:
+                                if (!m_SelectionContext.HasComponent<Component::RigidBody>())
+                                m_SelectionContext.AddComponent<Component::RigidBody>();
+                                break;
+                            case 2:
+                                if (!m_SelectionContext.HasComponent<Component::RigidBody>()) {
+                                    // TODO (flex): Add error message popup
+                                }
+                                else {
+                                    if (!m_SelectionContext.HasComponent<Component::Collider>())
+                                    m_SelectionContext.AddComponent<Component::Collider>();
+                                }
+                                break;
                             default:
                                 LY_WARN("Componet was selected but could not be added");
                                 break;
@@ -150,5 +163,36 @@ namespace Lychee {
             ImGui::ColorEdit4("color", f2);
             rectShape.color = Conv::ImColor_to_sfColor(ImVec4(f2[0], f2[1], f2[2], f2[3]));
         }
+
+        if (entity.HasComponent<Component::RigidBody>() && ImGui::CollapsingHeader("RigidBody")) {
+            auto &rigidBody = entity.GetComponent<Component::RigidBody>();
+
+            const char* items[] = {"static", "kinematic", "dynamic"};
+            s32 item_current = (s32)rigidBody.bodyDef.type;
+            ImGui::Combo("Body type", &item_current, items, IM_ARRAYSIZE(items));
+            rigidBody.bodyDef.type = (b2BodyType)item_current;
+
+        }
+
+        if (entity.HasComponent<Component::Collider>() && ImGui::CollapsingHeader("Collider")) {
+            auto &collider = entity.GetComponent<Component::Collider>();
+
+        }
     }
+
+    void ContentBrowserPanel::PopUp(std::string title, std::string msg) {
+        ImGui::OpenPopup(title.c_str());
+
+        // Always center this window when appearing
+        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        if (ImGui::BeginPopupModal(title.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+            ImGui::Text(msg.c_str());
+            if (ImGui::Button("Got it", ImVec2(120, 0))) { 
+                ImGui::CloseCurrentPopup(); 
+            }
+            ImGui::EndPopup();
+        }
+    }
+
 }

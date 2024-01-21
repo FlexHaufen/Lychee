@@ -26,7 +26,7 @@ namespace Lychee {
      */
     namespace Component {
 
-        static const char* availableComponents[] = {"RectShape"};
+        static const char* availableComponents[] = {"RectShape", "RigidBody", "Collider"};
   
         /**
          * @brief Tag Component
@@ -52,8 +52,10 @@ namespace Lychee {
         };
 
 
-        struct RigitBody {
-            b2Body *body = nullptr;
+        struct RigidBody {
+
+            b2BodyDef bodyDef;
+            b2Body *runtimeBody = nullptr;
 
         };
 
