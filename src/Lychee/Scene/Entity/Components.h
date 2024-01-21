@@ -45,16 +45,16 @@ namespace Lychee {
          *  
          */
         struct Transform {
-            s8 renderLayer  = 0;                // Order in the renderer [0..LY_MAX_RENDERLAYERS]
-            v2f pos         = {0, 0};           // Position [px]
-            v2f scale       = {1, 1};           // Scale [1].
-            f32 rotation    = 0.f;              // Rotation
+            s8 renderLayer      = 0;            // Order in the renderer [0..LY_MAX_RENDERLAYERS]
+            sf::Vector2f pos    = {0, 0};       // Position [px]
+            sf::Vector2f scale  = {1, 1};       // Scale [1].
+            f32 rotation        = 0.f;          // Rotation
         };
 
 
         struct RectShape {
-            v2f size        = {10, 10};
-            sf::Color color = LY_COLOR_ORANGE;
+            sf::Vector2f size   = {10, 10};
+            sf::Color color     = LY_COLOR_ORANGE;
         };
     };
 }

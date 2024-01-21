@@ -80,8 +80,8 @@ namespace Lychee {
 
         m_Registry.view<Component::RectShape, Component::Transform>().each([&](auto e, auto &rectShape, auto &transform) {
             Entity entity = {e, this};
-            sf::RectangleShape rs(sf::Vector2f(rectShape.size.x, rectShape.size.y));
-            rs.setPosition(transform.pos.x, transform.pos.y);
+            sf::RectangleShape rs(rectShape.size);
+            rs.setPosition(transform.pos);
             rs.setFillColor(rectShape.color);
             m_RenderTexture.draw(rs);
         });

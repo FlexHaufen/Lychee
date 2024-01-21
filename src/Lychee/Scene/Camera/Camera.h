@@ -23,8 +23,8 @@ namespace Lychee {
     class Camera {
    
     public:
-        Camera(v2f size) {
-            m_View.setSize(sf::Vector2f(size.x, size.y));
+        Camera(sf::Vector2f size) {
+            m_View.setSize(size);
         }
 
         /**
@@ -44,22 +44,22 @@ namespace Lychee {
         }
 
 
-        void Move(f32 x = 0, f32 y = 0) { m_Pos += v2f(x, y); }
+        void Move(f32 x = 0, f32 y = 0) { m_Pos += sf::Vector2f(x, y); }
+
         void Zoom(f32 zoom) {  
             m_View.zoom(zoom); 
         }
    
         const sf::View& GetView() const { return m_View; }
 
-        void SetSize(v2f size) { m_View.setSize(size.x , size.y); }
+        void SetSize(sf::Vector2f size) { m_View.setSize(size); }
 
 
     private:
 
         // ** Members **
-        sf::View    m_View;             // Current view
-        
-        v2f     m_Pos = {0, 0};         // Camera Pos
+        sf::View         m_View;             // Current view
+        sf::Vector2f     m_Pos = {0, 0};     // Camera Pos
         
         const f32 m_SmoothSpeed = 5;    // smoothening speed
     };
