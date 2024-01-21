@@ -127,11 +127,11 @@ namespace Lychee {
 
             ImGui::SliderInt("render layer", (s32*)&transform.renderLayer, 0, 9);
 
-            static f32 f1[2] = {transform.pos.x, transform.pos.y};
+            f32 f1[2] = {transform.pos.x, transform.pos.y};
             ImGui::InputFloat2("pos", f1);
             transform.pos = {f1[0], f1[1]};
 
-            static f32 f2[2] = {transform.scale.x, transform.scale.y};
+            f32 f2[2] = {transform.scale.x, transform.scale.y};
             ImGui::InputFloat2("Scale", f2);
             transform.scale = {f2[0], f2[1]};
 
@@ -141,12 +141,12 @@ namespace Lychee {
         if (entity.HasComponent<Component::RectShape>() && ImGui::CollapsingHeader("RectShape")) {
             auto &rectShape = entity.GetComponent<Component::RectShape>();
 
-            static f32 f1[2] = {rectShape.size.x, rectShape.size.y};
+            f32 f1[2] = {rectShape.size.x, rectShape.size.y};
             ImGui::InputFloat2("size", f1);
             rectShape.size = {f1[0], f1[1]};
 
-            static ImVec4 color = Conv::sfColor_to_ImColor(rectShape.color);
-            static f32 f2[4] = {color.x, color.y, color.z, color.w};
+            ImVec4 color = Conv::sfColor_to_ImColor(rectShape.color);
+            f32 f2[4] = {color.x, color.y, color.z, color.w};
             ImGui::ColorEdit4("color", f2);
             rectShape.color = Conv::ImColor_to_sfColor(ImVec4(f2[0], f2[1], f2[2], f2[3]));
         }
