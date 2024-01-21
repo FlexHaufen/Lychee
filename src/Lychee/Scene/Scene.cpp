@@ -51,6 +51,53 @@ namespace Lychee {
         m_Registry.destroy(entity);
     }
 
+    // *** Scene Handling ***
+
+
+    void Scene::OnRuntimeStart() {
+        m_IsRuntimeRunning = true;
+
+
+        // Start physics
+        // TODO (flex): Serialize gravity
+        m_PhysicsWorld = new b2World(b2Vec2(0.0f, -9.8f));
+    
+        m_Registry.view<Component::RigitBody, Component::Transform>().each([&](auto e, auto& rigitBody, auto& transform) {
+            Entity entity = {e, this};
+
+            b2BodyDef bodyDef;
+            bodyDef.position = b2Vec2(transform.pos.x / LY_DEG_PER_RAD, transform.pos.y / LY_DEG_PER_RAD);
+            bodyDef.angle = transform.rotation / LY_PPM;
+
+            rigitBody.body = m_PhysicsWorld->CreateBody(&bodyDef);
+            rigitBody.body->SetFixedRotation(true);
+
+            // Add collider
+            if (entity.HasComponent<Component::Collider>()) {
+				auto& collider = entity.GetComponent<Component::Collider>();
+                collider.fixture.shape = &collider.shape;
+				rigitBody.body->CreateFixture(&collider.fixture);
+			}
+        });
+    }
+
+    void Scene::OnRuntimeStop() {
+        m_IsRuntimeRunning = false;
+    
+
+        // Stop physics
+        delete m_PhysicsWorld;
+        m_PhysicsWorld = nullptr;
+    }
+
+
+
+    void Scene::OnRuntimeUpdate(DeltaTime dt) {
+        const int32_t velocityIterations = 6;
+        const int32_t positionIterations = 2;
+        m_PhysicsWorld->Step(dt, velocityIterations, positionIterations);
+
+    }
 
 
     void Scene::OnUpdate(DeltaTime dt) {
@@ -70,7 +117,6 @@ namespace Lychee {
             //}
 
             // Dont draw if not in view of main camera
-            Entity entity = {e, this};
             sf::CircleShape c;
             c.setRadius(2);
             c.setFillColor(sf::Color::Red);
@@ -79,7 +125,6 @@ namespace Lychee {
         });
 
         m_Registry.view<Component::RectShape, Component::Transform>().each([&](auto e, auto &rectShape, auto &transform) {
-            Entity entity = {e, this};
             sf::RectangleShape rs(rectShape.size);
             rs.setPosition(transform.pos);
             rs.setFillColor(rectShape.color);

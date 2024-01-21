@@ -15,7 +15,7 @@
 //#include "Lychee/Scene/Entity/Entity.h"
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Scene/Camera/Camera.h"
-#include "Lychee/Core/Time/Deltatime.h"
+#include "Lychee/Core/Time/DeltaTime.h"
 
 //*** DEFINES ***
 #define LY_MAX_RENDERLAYERS     10
@@ -60,6 +60,16 @@ namespace Lychee {
          */
         void DestroyEntity(Entity &entity);
 
+
+        // ** Scene Handling **
+
+        void OnRuntimeStart();
+
+        void OnRuntimeStop();
+
+        void OnRuntimeUpdate(DeltaTime dt);
+
+
         /**
          * @brief Update function
          * 
@@ -76,6 +86,9 @@ namespace Lychee {
         // ** Members **
         sf::RenderTexture   m_RenderTexture;        // sf::RenderTexture
         entt::registry      m_Registry;             // entt Registry
+
+        b2World* m_PhysicsWorld = nullptr;          // Box2D World
+        b8 m_IsRuntimeRunning = false;              // true if runtime is running
 
 
         friend class Entity;                        // Entity class

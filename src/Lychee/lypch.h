@@ -122,3 +122,6 @@
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
 
+// * Math *
+#define LY_PPM                      30          // px/m     [SFML -> BOX2D]
+#define LY_DEG_PER_RAD              57.295795F  // deg/rad  [SFML -> BOX2D]

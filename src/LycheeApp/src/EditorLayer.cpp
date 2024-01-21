@@ -122,7 +122,6 @@ namespace Lychee {
 		ImGui::PopStyleVar();
 		ImGui::End();
 
-
 		// ** Panels **
 		m_ContentBrowserPanel.OnImGuiRender();
 

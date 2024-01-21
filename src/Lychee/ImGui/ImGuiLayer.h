@@ -20,7 +20,7 @@
 //#include "Lychee/Events/KeyEvent.h"
 //#include "Lychee/Events/MouseEvent.h"
 
-#include "Lychee/Core/Time/Deltatime.h"
+#include "Lychee/Core/Time/DeltaTime.h"
 
 #include "Lychee/Core/Layer/LayerStack.h"
 

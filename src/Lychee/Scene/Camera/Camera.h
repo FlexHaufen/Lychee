@@ -12,7 +12,7 @@
 
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
-#include "Lychee/Core/Time/Deltatime.h"
+#include "Lychee/Core/Time/DeltaTime.h"
 
 //*** DEFINES ***
 

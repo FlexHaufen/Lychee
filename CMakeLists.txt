@@ -58,7 +58,7 @@ find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network
 
 #---------BOX2D---------
 # FIXME (flex): only debug build possible
-set(BOX2D_LIB ${CMAKE_SOURCE_DIR}/lib/box2d/lib/bin/Release/box2d.lib)
+set(BOX2D_LIB ${CMAKE_SOURCE_DIR}/lib/box2d/lib/bin/Debug/box2d.lib)
 
 
 #-----IMGUI-SFML-------
@@ -104,7 +104,7 @@ set(LIBS 	sfml-window
 			yaml-cpp
 			${BOX2D_LIB})
 
-target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 
 
 ### PCH ###
