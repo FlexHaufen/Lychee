@@ -87,7 +87,6 @@ namespace Lychee {
         sf::RenderTexture   m_RenderTexture;        // sf::RenderTexture
         entt::registry      m_Registry;             // entt Registry
 
-        b2World* m_PhysicsWorld = nullptr;          // Box2D World
         b8 m_IsRuntimeRunning = false;              // true if runtime is running
 
 

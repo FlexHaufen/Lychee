@@ -57,7 +57,9 @@ namespace Lychee {
         ImGui::Begin("Properties");
         if (m_SelectionContext) {
 
+            // TODO (flex): Rework if more components are added
 
+            /*
             // Simple selection popup (if you want to show the current selection inside the Button itself,
             // you may want to build a string using the "###" operator to preserve a constant ID with a variable label)
             s8 selectedComponent = -1;
@@ -68,14 +70,13 @@ namespace Lychee {
             ImGui::TextUnformatted(selectedComponent == -1 ? "" : Component::availableComponents[selectedComponent]);
             if (ImGui::BeginPopup("popup_Components")) {
                 ImGui::SeparatorText("Components");
+                
                 for (int i = 0; i < IM_ARRAYSIZE(Component::availableComponents); i++) {
                     if (ImGui::Selectable(Component::availableComponents[i])) {
                         selectedComponent = i;
                     
                         switch(selectedComponent) {
                             case 0:
-                                if (!m_SelectionContext.HasComponent<Component::RectShape>())
-                                m_SelectionContext.AddComponent<Component::RectShape>();
                                 break;
                             default:
                                 LY_WARN("Componet was selected but could not be added");
@@ -85,6 +86,7 @@ namespace Lychee {
                 }
                 ImGui::EndPopup();
             }
+            */
 
             ImGui::SeparatorText("Components");
 
@@ -136,19 +138,6 @@ namespace Lychee {
             transform.scale = {f2[0], f2[1]};
 
             ImGui::InputFloat("Rotation", &transform.rotation);
-        }
-
-        if (entity.HasComponent<Component::RectShape>() && ImGui::CollapsingHeader("RectShape")) {
-            auto &rectShape = entity.GetComponent<Component::RectShape>();
-
-            f32 f1[2] = {rectShape.size.x, rectShape.size.y};
-            ImGui::InputFloat2("size", f1);
-            rectShape.size = {f1[0], f1[1]};
-
-            ImVec4 color = Conv::sfColor_to_ImColor(rectShape.color);
-            f32 f2[4] = {color.x, color.y, color.z, color.w};
-            ImGui::ColorEdit4("color", f2);
-            rectShape.color = Conv::ImColor_to_sfColor(ImVec4(f2[0], f2[1], f2[2], f2[3]));
         }
     }
 }

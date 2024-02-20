@@ -56,47 +56,15 @@ namespace Lychee {
 
     void Scene::OnRuntimeStart() {
         m_IsRuntimeRunning = true;
-
-
-        // Start physics
-        // TODO (flex): Serialize gravity
-        m_PhysicsWorld = new b2World(b2Vec2(0.0f, -9.8f));
-    
-        m_Registry.view<Component::RigitBody, Component::Transform>().each([&](auto e, auto& rigitBody, auto& transform) {
-            Entity entity = {e, this};
-
-            b2BodyDef bodyDef;
-            bodyDef.position = b2Vec2(transform.pos.x / LY_DEG_PER_RAD, transform.pos.y / LY_DEG_PER_RAD);
-            bodyDef.angle = transform.rotation / LY_PPM;
-
-            rigitBody.body = m_PhysicsWorld->CreateBody(&bodyDef);
-            rigitBody.body->SetFixedRotation(true);
-
-            // Add collider
-            if (entity.HasComponent<Component::Collider>()) {
-				auto& collider = entity.GetComponent<Component::Collider>();
-                collider.fixture.shape = &collider.shape;
-				rigitBody.body->CreateFixture(&collider.fixture);
-			}
-        });
     }
 
     void Scene::OnRuntimeStop() {
         m_IsRuntimeRunning = false;
-    
-
-        // Stop physics
-        delete m_PhysicsWorld;
-        m_PhysicsWorld = nullptr;
     }
 
 
 
     void Scene::OnRuntimeUpdate(DeltaTime dt) {
-        const int32_t velocityIterations = 6;
-        const int32_t positionIterations = 2;
-        m_PhysicsWorld->Step(dt, velocityIterations, positionIterations);
-
     }
 
 
@@ -110,26 +78,6 @@ namespace Lychee {
 
         // ------ RENDER HERE -------
         
-        // Render Transform origin
-        m_Registry.view<Component::Tag, Component::Transform>().each([&]( auto e, auto &tag, auto &transform) {
-            //if (transform.renderLayer != i) {
-            //    return;
-            //}
-
-            // Dont draw if not in view of main camera
-            sf::CircleShape c;
-            c.setRadius(2);
-            c.setFillColor(sf::Color::Red);
-            c.setPosition(sf::Vector2f(transform.pos.x - 2, transform.pos.y - 2));
-            m_RenderTexture.draw(c);
-        });
-
-        m_Registry.view<Component::RectShape, Component::Transform>().each([&](auto e, auto &rectShape, auto &transform) {
-            sf::RectangleShape rs(rectShape.size);
-            rs.setPosition(transform.pos);
-            rs.setFillColor(rectShape.color);
-            m_RenderTexture.draw(rs);
-        });
 
 		// --------------------------
 

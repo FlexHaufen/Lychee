@@ -39,10 +39,5 @@ namespace Lychee {
          * @return sf::Color sf::Color
          */
         inline sf::Color ImColor_to_sfColor(ImVec4 c) { return sf::Color((u8)(c.x * 255), (u8)(c.y * 255), (u8)(c.z * 255), (u8)(c.w * 255)); }
-
-        inline b2Vec2 b2Vec2_to_sfVector2f(sf::Vector2f vec) { return b2Vec2(vec.x, vec.y); }
-
-        inline sf::Vector2f sfVector2f_to_b2Vec2(b2Vec2 vec) { return sf::Vector2f(vec.x, vec.y); }
-
     }
 }

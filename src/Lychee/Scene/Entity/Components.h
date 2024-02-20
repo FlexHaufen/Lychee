@@ -26,8 +26,6 @@ namespace Lychee {
      */
     namespace Component {
 
-        static const char* availableComponents[] = {"RectShape"};
-  
         /**
          * @brief Tag Component
          * 
@@ -50,22 +48,5 @@ namespace Lychee {
             sf::Vector2f scale  = {1, 1};       // Scale [1].
             f32 rotation        = 0.f;          // Rotation
         };
-
-
-        struct RigitBody {
-            b2Body *body = nullptr;
-
-        };
-
-        struct Collider {
-            b2PolygonShape  shape;
-            b2FixtureDef    fixture;
-        };
-
-
-        struct RectShape {
-            sf::Vector2f size   = {10, 10};
-            sf::Color color     = LY_COLOR_ORANGE;
-        };
-    };
+    }
 }

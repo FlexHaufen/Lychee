@@ -34,14 +34,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/OpenGL.hpp>
 
 // ImGui
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui-SFML.h"
 #include "imgui.h"
-
-// Box2D
-#include <box2d/box2d.h>
 
 // EnTT
 #include "entt.hpp"
