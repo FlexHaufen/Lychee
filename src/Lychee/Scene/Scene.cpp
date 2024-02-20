@@ -78,7 +78,6 @@ namespace Lychee {
 
         // ------ RENDER HERE -------
         
-
 		// --------------------------
 
         m_RenderTexture.setView(editorCamera.GetView());

@@ -34,7 +34,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/OpenGL.hpp>
+
+// glad
+#include <glad/glad.h>
 
 // ImGui
 #define IMGUI_DEFINE_MATH_OPERATORS

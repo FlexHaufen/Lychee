@@ -89,7 +89,6 @@ namespace Lychee {
 
         b8 m_IsRuntimeRunning = false;              // true if runtime is running
 
-
         friend class Entity;                        // Entity class
     };
 }

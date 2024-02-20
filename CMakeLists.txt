@@ -55,6 +55,13 @@ set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/lib/cmake/SFML)
 find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network)
 
+
+#--------glad----------
+add_library(glad 
+			${CMAKE_SOURCE_DIR}/lib/glad/include/glad/glad.h
+			${CMAKE_SOURCE_DIR}/lib/glad/src/glad.c)
+
+
 #-----IMGUI-SFML-------
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/lib/vendor/imgui/)
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/imgui-sfml/)
@@ -72,6 +79,8 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 	#SFML
 	${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include
+	# glad
+	${CMAKE_SOURCE_DIR}/lib/glad/include
 	#EnTT
 	${CMAKE_SOURCE_DIR}/lib/entt
 	# spdlog
@@ -92,8 +101,10 @@ set(LIBS 	sfml-window
 			sfml-graphics
 			sfml-audio
 			sfml-network
+			glad
 			ImGui-SFML
-			yaml-cpp)
+			yaml-cpp
+			${GLEW_LIB})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 
