@@ -16,6 +16,9 @@
 //#include "Lychee/Renderer/OrthographicCamera.h"
 //#include "Lychee/Renderer/Shader.h"
 
+#include "Lychee/Renderer/VertexArray.h"
+#include "Lychee/Renderer/Buffer.h"
+#include "Lychee/Renderer/Shader.h"
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -26,17 +29,20 @@ namespace Lychee {
 	 */
 	class Renderer {
 	public:
-		static void Init();
-		static void Shutdown();
+		void Init();
+		void Shutdown();
 		
-		//static void OnWindowResize(u32 width, u32 height);
-		
-		//static void BeginScene(OrthographicCamera& camera);
-		//static void EndScene();
+		void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 
-		//static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
+		void OnWindowResize(u32 width, u32 height);
 
-		//static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+		void Clear();
+
+
+		void BeginScene();
+		void EndScene();
+		void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
+
 	private:
 		//struct SceneData {
 		//	glm::mat4 ViewProjectionMatrix;

@@ -46,7 +46,17 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
-		m_EditorCamera.OnUpdate(dt);
+		//m_EditorCamera.OnUpdate(dt);
+		
+		// TODO (flex): Render here?
+		// Maby only update camera here, and do render and draw calls in core or scene
+		
+		//m_Renderer.Clear();
+		//m_Renderer.Draw();
+
+
+
+
 		m_ActiveScene->OnUpdate(dt);
 	}
 

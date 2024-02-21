@@ -54,11 +54,6 @@ namespace Lychee {
 		//m_EventManager.addEventCallback(sf::Event::EventType::Closed, [&](const sf::Event&) { Close(); });
         //m_EventManager.addKeyPressedCallback(sf::Keyboard::Key::Escape, [&](const sf::Event&) {Close(); });
 
-
-		LY_CORE_INFO("Window: Setting up OpenGL v{0}", GL_VERSION);
-		glClearColor(0.f, 0.f, 0.f, 1.f);
-		glEnable(GL_DEPTH_TEST);
-
 	}
 
 	void Window::Terminate() {

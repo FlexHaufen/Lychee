@@ -111,11 +111,12 @@ namespace Lychee {
 
 		void SetData(const void* data, u32 size);
 
-		const BufferLayout& GetLayout();
+		const BufferLayout& GetLayout() { return m_Layout; }
 		void SetLayout(const BufferLayout& layout);
 
 	private:
 		u32 m_RendererID;
+		BufferLayout m_Layout;
 	};
 
 	class IndexBuffer {
@@ -126,7 +127,8 @@ namespace Lychee {
 		void Bind() const;
 		void Unbind() const;
 
-		u32 GetCount();
+		u32 GetCount() const { return m_Count; }
+
 	private:
 		u32 m_RendererID;
 		u32 m_Count;
