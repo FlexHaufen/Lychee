@@ -18,20 +18,25 @@
 namespace Lychee {
     Core* Core::s_Instance = nullptr;
 
-    Core::Core() {
+    Core::Core(b8 isSplashScreenEnabled) {
         s_Instance = this;
 
         Lychee::Log::Init();
-        LY_CORE_INFO("Initializing Core");
-
+        LY_CORE_INFO("Initializing");
         std::filesystem::current_path(LY_DEFAULT_PATH);
-        LY_CORE_INFO("Running in: {0}",std::filesystem::current_path());
-
+        LY_CORE_INFO("\\---- Path: {0}",std::filesystem::current_path());
 
         #ifdef LY_PROFILE
             LY_CORE_WARN("Profiler is enabled and may use unnecessary recources");
         #endif
         LY_PROFILE_BEGIN_SESSION("Profile", "LycheeProfile.json");
+
+        #ifdef LY_ENABLE_SPLASH_SCREEN
+            LY_CORE_INFO("Displaying Splashscreen");
+            if (isSplashScreenEnabled) {
+                OnSplashScreenDisplay();
+            }
+        #endif
 
         #ifdef LY_DEBUG
             LY_CORE_WARN("Running in DEBUG mode");
@@ -52,12 +57,8 @@ namespace Lychee {
     }
 
     Core::~Core() {
-        LY_PROFILE_FUNCTION();
-
-        // delet m_Window -> doesn't matter becose aplication will
-        // terminate anyway
-	    LY_PROFILE_END_SESSION();
-        LY_CORE_INFO("Core is going down for Shutdown NOW!");
+        delete m_Window;
+        LY_CORE_INFO("Terminating");
     }
 
     void Core::Run() {
@@ -65,14 +66,14 @@ namespace Lychee {
 
         while (m_isRunning) {
 
-            m_deltaTime.OnUpdate();
+            m_dt.OnUpdate();
 
             if (!m_isMinimized) {
                 // ---------- Update ----------
-                m_Window->OnUpdate(m_deltaTime);
-                m_ImGuiLayer->OnSfmlUpdate(m_deltaTime);
+                m_Window->OnUpdate(m_dt);
+                m_ImGuiLayer->OnSfmlUpdate(m_dt);
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate(m_deltaTime);
+					layer->OnUpdate(m_dt);
                 }
 
                 // ---------- Render ----------
@@ -116,7 +117,7 @@ namespace Lychee {
                 break;
         }
 
-        for (auto i : m_LayerStack) {
+        for (auto& i : m_LayerStack) {
             i->OnEvent(e);
         }
 
@@ -125,12 +126,12 @@ namespace Lychee {
         #endif
     }
 
-    bool Core::OnWindowClose(sf::Event& e) {
+    b8 Core::OnWindowClose(sf::Event& e) {
         m_isRunning = false;
         return true;
     }
 
-	bool Core::OnWindowResize(sf::Event& e) {
+	b8 Core::OnWindowResize(sf::Event& e) {
 		if (e.size.width == 0 || e.size.width == 0) {
 			m_isMinimized = true;
 			return true;
@@ -138,5 +139,73 @@ namespace Lychee {
 		m_isMinimized = false;
 		return false;
 	}
+
+
+
+    void Core::OnSplashScreenDisplay() {
+        sf::RenderWindow splashScreen;
+
+        const u32 sizeX = 700;
+        const u32 sizeY = 400;
+
+        splashScreen.create(sf::VideoMode(sizeX, sizeY), LY_WINDOW_NAME, sf::Style::None);
+        splashScreen.clear(LY_COLOR_BLACK);
+        
+        sf::Texture tex_MainIcon;
+        if (!tex_MainIcon.loadFromFile(LY_ICON_PNG)) {
+            LY_CORE_WARN("Could not load window icon at [{0}]", LY_ICON_PNG);
+            splashScreen.close();
+            return;
+        }
+
+        sf::Font main_font;
+        if (!main_font.loadFromFile(LY_FONT_REGULAR)) {
+            LY_CORE_WARN("Could not load font at [{0}]", LY_FONT_REGULAR);
+            splashScreen.close();
+            return;
+        }
+        
+
+        // Main Icon
+        sf::Sprite sp_MainIcon;
+        sp_MainIcon.setTexture(tex_MainIcon);
+        sp_MainIcon.setOrigin(tex_MainIcon.getSize() / 2);
+        sp_MainIcon.setPosition(sizeX / 2 - 5, sizeY / 2 - 30); // -5 to center correctly / -30 for vertical offset
+        sp_MainIcon.setScale(0.1f, 0.1f);
+        splashScreen.draw(sp_MainIcon);
+
+        // Main Text
+        sf::Text title(LY_PROJECT_NAME, main_font, 34);
+        title.setFillColor(LY_COLOR_RED);
+        sf::FloatRect titleBounds = title.getLocalBounds();
+        title.setOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+        title.setPosition(sizeX / 2, sizeY / 2 + 50); 
+        splashScreen.draw(title);
+
+        // Version Text
+        sf::Text versionText(LY_VERSION_STR, main_font, 15);
+        versionText.setFillColor(LY_COLOR_RED);
+        sf::FloatRect versionTextBounds = versionText.getLocalBounds();
+        versionText.setOrigin(versionTextBounds.left + versionTextBounds.width / 2.0f, versionTextBounds.top + versionTextBounds.height / 2.0f);
+        versionText.setPosition(sizeX / 2, sizeY / 2 + 80); 
+        splashScreen.draw(versionText);
+
+
+        // startup Text
+        sf::Text startup("starting...", main_font, 15);
+        startup.setFillColor(LY_COLOR_WHITE);
+        sf::FloatRect startupBounds = startup.getLocalBounds();
+        startup.setOrigin(startupBounds.left + startupBounds.width / 2.0f, startupBounds.top + startupBounds.height / 2.0f);
+        startup.setPosition(sizeX / 2, sizeY / 2 + 120); 
+        splashScreen.draw(startup);
+
+
+
+
+        splashScreen.display();
+        sf::sleep(sf::seconds(5));
+        splashScreen.close();
+    }
+
     
 }

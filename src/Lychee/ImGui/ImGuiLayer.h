@@ -20,7 +20,7 @@
 //#include "Lychee/Events/KeyEvent.h"
 //#include "Lychee/Events/MouseEvent.h"
 
-#include "Lychee/Core/Time/Deltatime.h"
+#include "Lychee/Core/Time/DeltaTime.h"
 
 #include "Lychee/Core/Layer/LayerStack.h"
 
@@ -46,6 +46,6 @@ namespace Lychee {
 		void SetStyle();
 	private:
 		sf::RenderWindow& m_Window;
-		bool m_BlockEvents = true;
+		bool m_BlockEvents = false;
 	};
 }

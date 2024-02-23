@@ -1,18 +1,25 @@
 # Lychee  
-A **simple**, **fast** & **lightweight** game engine.
+A **simple**, **fast** & **lightweight** voxel engine.
 
 <img src="resource/images/Lychee.svg" height="100">
 
-## Intention
-- Lychee should be a free (unless i decide else)
-- It should be easy to use and should have a simple user-interface
-- It should run on every patato
+> [!IMPORTANT]  
+> Lychee is currently in the early alpha stage of development.  
+> There is no guarantee the engine will run.   
+
+
+## Description
+- Lychee is at the moment free to use under the **GNU GENERAL PUBLIC LICENSE**
+
 
 ## Dependencies
-- [SFML](https://www.sfml-dev.org/index.php) 
-- [spdlog](https://github.com/gabime/spdlog)
+- [EnTT](https://github.com/skypjack/entt)
 - [ImGui](https://github.com/ocornut/imgui)
 - [ImGUi-SFML](https://github.com/SFML/imgui-sfml)
+- [SFML](https://www.sfml-dev.org/index.php) 
+- [spdlog](https://github.com/gabime/spdlog)
+- [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+
 
 ## Setup
 ### Requirements
@@ -32,6 +39,8 @@ A **simple**, **fast** & **lightweight** game engine.
     ```shell
     git submodule update --recursive --remote
     ```
+
+    ImGui Has to be on docking branch
 
 4. Configure Cmake
     - In VScode press F1 - Type Cmake Configure - Press Enter
@@ -80,3 +89,4 @@ To Run the .exe file via F5 you first need to configure a ```launch.json``` in y
 ## Acknowledgements
  - [Hazel Engine](https://github.com/TheCherno/Hazel)
  - [Game Engine Series](https://www.youtube.com/watch?v=JxIZbV_XjAs&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
+ - [ImGui Theme by @Trippasch](https://github.com/Trippasch)

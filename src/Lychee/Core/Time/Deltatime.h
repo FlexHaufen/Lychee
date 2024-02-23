@@ -30,6 +30,7 @@ namespace Lychee {
         f32 GetMillisecons() const { return (f32)m_time.asMilliseconds();}
 
         operator sf::Time() {return m_time;}
+        operator float() const { return m_time.asSeconds(); }
 
     private:
         //** Members **

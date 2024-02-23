@@ -13,7 +13,7 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 #include "Lychee/Events/EventManager.h"
-#include "Lychee/Core/Time/Deltatime.h"
+#include "Lychee/Core/Time/DeltaTime.h"
 
 // *** DEFINES ***
 
@@ -29,7 +29,7 @@ namespace Lychee {
 		virtual void OnDetach() {}
 		virtual void OnUpdate(DeltaTime dt) {}
 		virtual void OnImGuiRender() {}
-		virtual void OnEvent(sf::Event &e) {}
+		virtual void OnEvent(sf::Event& e) {}
 
 		const std::string& GetName() const { return m_DebugName; }
 	protected:

@@ -22,9 +22,9 @@ namespace Lychee {
     void Instrumentor::BeginSession(const std::string& name, const std::string& filepath) {
         std::lock_guard lock(m_Mutex);
 
-        LY_CORE_INFO("Begining Profile-Session");
-        LY_CORE_INFO("  Name: {0}", name);
-        LY_CORE_INFO("  Path: {0}", filepath);
+        LY_CORE_INFO("Instrumentor: Begining Profile-Session");
+        LY_CORE_INFO("Instrumentor: \\---- Name: {0}", name);
+        LY_CORE_INFO("Instrumentor: \\---- Path: {0}", filepath);
 
 
         if (m_CurrentSession) {
@@ -41,13 +41,13 @@ namespace Lychee {
         }
         else {
             if (Log::GetCoreLogger()) {
-                LY_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath);
+                LY_CORE_ERROR("Instrumentor: Could not open results file '{0}'.", filepath);
             }
         }
     }
 
     void Instrumentor::EndSession() {
-        LY_CORE_INFO("Ending Profile-Session");
+        LY_CORE_INFO("Instrumentor: Ending Profile-Session");
         
         std::lock_guard lock(m_Mutex);
         InternalEndSession();
