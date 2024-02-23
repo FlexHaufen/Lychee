@@ -48,7 +48,7 @@ namespace Lychee {
 	
 		Camera m_EditorCamera;						// Current Scene Camera
 
-        Renderer    m_Renderer;
+        //Renderer    m_Renderer;
 
 
 		enum class SceneState {

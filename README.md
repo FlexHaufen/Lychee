@@ -1,12 +1,16 @@
 # Lychee  
-A **simple**, **fast** & **lightweight** game engine.
+A **simple**, **fast** & **lightweight** voxel engine.
 
 <img src="resource/images/Lychee.svg" height="100">
 
-## Intention
-- Lychee should be a free (unless i decide else)
-- It should be easy to use and should have a simple user-interface
-- It should run on every patato
+> [!IMPORTANT]  
+> Lychee is currently in the early alpha stage of development.  
+> There is no guarantee the engine will run.   
+
+
+## Description
+- Lychee is at the moment free to use under the **GNU GENERAL PUBLIC LICENSE**
+
 
 ## Dependencies
 - [EnTT](https://github.com/skypjack/entt)
