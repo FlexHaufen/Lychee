@@ -31,12 +31,12 @@ namespace Lychee {
 
 		virtual void OnUpdate(DeltaTime dt) override;
 		virtual void OnImGuiRender() override;
-		virtual void OnEvent(sf::Event& e) override;
+		void OnEvent(Event& e) override;
 	private:
 
 
-		//bool OnKeyPressed(KeyPressedEvent& e);
-		//bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 		void OnMenuBarRender();
 
@@ -44,13 +44,8 @@ namespace Lychee {
 
 		// ** Members **
 		Ref<Scene> m_ActiveScene;					// Current active Scene
-		sf::Vector2f m_ViewportSize;				// Current ViewPortSize
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 	
-		Camera m_EditorCamera;						// Current Scene Camera
-
-        //Renderer    m_Renderer;
-
-
 		enum class SceneState {
 			Edit = 0, Play = 1, Simulate = 2
 		};

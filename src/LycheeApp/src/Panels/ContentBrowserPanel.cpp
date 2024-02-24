@@ -117,11 +117,11 @@ namespace Lychee {
             // TODO (flex): Use LableText instead
             ImGui::Text("UUID: ");
             ImGui::SameLine();
-            ImGui::TextColored(Conv::sfColor_to_ImColor(LY_COLOR_LIME), std::to_string(uuid).c_str());
+            ImGui::TextColored((LY_COLOR_LIME), std::to_string(uuid).c_str());
 
             ImGui::Text("Index: ");
             ImGui::SameLine();
-            ImGui::TextColored(Conv::sfColor_to_ImColor(LY_COLOR_LIME), std::to_string((u32)entity).c_str());
+            ImGui::TextColored((LY_COLOR_LIME), std::to_string((u32)entity).c_str());
         }
 
         if (entity.HasComponent<Component::Transform>() && ImGui::CollapsingHeader("Transform")) {

@@ -6,7 +6,7 @@ namespace Lychee {
 	class LycheeApp : public Core {
 	public:
 		LycheeApp()
-			: Core(true) {
+			: Core() {
             
 			LY_INFO("Starting Lychee App");
 			PushLayer(new EditorLayer());

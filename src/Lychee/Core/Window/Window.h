@@ -13,15 +13,18 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-#include "Lychee/Events/EventManager.h"
+#include "Lychee/Events/Event.h"
+#include "Lychee/Events/MouseEvent.h"
+
 #include "Lychee/Core/Time/DeltaTime.h"
+#include "Lychee/Renderer/GraphicsContext.h"
 
 // *** DEFIENS ***
 
 // *** NAMESPACE ***
 namespace Lychee {
 
-    using EventCallbackFn = std::function<void(sf::Event&)>;
+    using EventCallbackFn = std::function<void(Event&)>;
 
 
     /**
@@ -53,18 +56,6 @@ namespace Lychee {
 		void OnUpdate(DeltaTime dt);
 
 		/**
-		 * @brief Window display function
-		 * 
-		 */
-		void Display() { m_Window.display(); }
-
-		/**
-		 * @brief Window clear function
-		 * 
-		 */
-		void Clear() { m_Window.clear(LY_MAIN_CLEAR_COLOR); }
-
-		/**
 		 * @brief Get the Width
 		 * 
 		 * @return u32 width
@@ -83,7 +74,7 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		sf::RenderWindow& GetNativeWindow() { return m_Window; }
+		GLFWwindow* GetNativeWindow() { return m_glfwWindow; }
 	private:
 
 		/**
@@ -100,8 +91,8 @@ namespace Lychee {
 		
 	private:
 
-        // ** Members **
-		sf::RenderWindow m_Window; // SFML Window
+       	//** Members **
+		GLFWwindow* m_glfwWindow; // GLFW Window
 		
 		/**
 		 * @brief Data of window
@@ -117,10 +108,9 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
-		EventManager m_EventManager;
+        Scope<GraphicsContext> m_Context;
 
 		f32 m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		u16 m_frameCounterFps = 0;		// Frames since last fps update
 	};
-
 }

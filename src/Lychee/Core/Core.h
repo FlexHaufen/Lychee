@@ -16,8 +16,10 @@
 #include "Lychee/Core/Layer/LayerStack.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Core/Window/Window.h"
+#include "Lychee/Renderer/Renderer.h"
 
-#include "Lychee/Events/EventManager.h"
+#include "Lychee/Events/KeyEvent.h"
+#include "Lychee/Events/ApplicationEvent.h"
 #include "Lychee/ImGui/ImGuiLayer.h"
 
 // *** DEFINES ***
@@ -37,9 +39,8 @@ namespace Lychee {
         /**
          * @brief Construct a new Core object
          * 
-         * @param isSplashScreenEnabled     true enable splash screen
          */
-        Core(b8 isSplashScreenEnabled = false);
+        Core();
 
         /**
          * @brief Destroy the Core object
@@ -63,7 +64,7 @@ namespace Lychee {
          * @brief Event Handling
          * 
          */
-        void OnEvent(sf::Event& e);
+        void OnEvent(Event& e);
 
 
         void PushLayer(Layer* layer);
@@ -91,10 +92,24 @@ namespace Lychee {
         Window& GetWindow() { return *m_Window; }
 
     private:
-        b8 OnWindowClose(sf::Event& e);
-	    b8 OnWindowResize(sf::Event& e);
+        /**
+         * @brief Window close event
+         * 
+         * @param e Event
+         * @return true if window is closed
+         */
+        bool OnWindowClose(WindowCloseEvent& e);
 
-        void OnSplashScreenDisplay();
+        /**
+         * @brief Window resize event
+         * 
+         * @param e Event
+         * @return true if window is rezised 
+         */
+        bool OnWindowResize(WindowResizeEvent& e);
+
+        // TODO (flex): setup splashscreen
+        //void OnSplashScreenDisplay();
 
     private:
         // ** Members **
@@ -104,7 +119,7 @@ namespace Lychee {
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
-        DeltaTime m_dt;             // delta time
+        f32 m_lastFrameTime;        // delta time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui

@@ -38,10 +38,21 @@
 // glad
 #include <glad/glad.h>
 
+// GLFW
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
+// glm
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 // ImGui
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include "imgui-SFML.h"
-#include "imgui.h"
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+#include <imgui.h>
+#include <imconfig.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 
 // EnTT
 #include "entt.hpp"
@@ -92,6 +103,9 @@
 #define LY_PROJECT_NAME             "Lychee"
 #define LY_VERSION_STR              "v1.0.1b"
 
+#define LY_OPENGL_VERSION           "#version 410"
+#define LY_IMGUI_INSTALL_CALLBACKS  true
+
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
 #define LY_ICON_PNG                 "./resource/images/Lychee.png"
@@ -99,16 +113,17 @@
 #define LY_FONT_REGULAR             "./resource/fonts/Rilu-Regular.ttf"
 
 // * Colors *
-#define LY_COLOR_RED                sf::Color(249, 65, 68, 255)     // #F94144
-#define LY_COLOR_ORANGE             sf::Color(243, 114, 44, 255)    // #F3722C
-#define LY_COLOR_LIGHT_ORANGE       sf::Color(248, 150, 30, 255)    // #F8961E
-#define LY_COLOR_YELLOW             sf::Color(249, 199, 79, 255)    // #F9C74F   
-#define LY_COLOR_LIME               sf::Color(144, 190, 109, 255)   // #90BE6D
-#define LY_COLOR_LIGHT_BLUE         sf::Color(67, 170, 139, 255)    // #43AA8B
-#define LY_COLOR_BLUE               sf::Color(87, 117, 144, 255)    // #577590
-#define LY_COLOR_WHITE              sf::Color::White
-#define LY_COLOR_BLACK              sf::Color::Black
-#define LY_COLOR_GRAY               sf::Color(49, 57, 60, 255)      // #31393C
+// TODO (flex): convert
+#define LY_COLOR_RED                ImVec4(249 / 255.f, 65 / 255.f, 68 / 255.f, 255)     // #F94144
+#define LY_COLOR_ORANGE             ImVec4(243 / 255.f, 114 / 255.f, 44 / 255.f, 255)    // #F3722C
+#define LY_COLOR_LIGHT_ORANGE       ImVec4(248 / 255.f, 150 / 255.f, 30 / 255.f, 255)    // #F8961E
+#define LY_COLOR_YELLOW             ImVec4(249 / 255.f, 199 / 255.f, 79 / 255.f, 255)    // #F9C74F   
+#define LY_COLOR_LIME               ImVec4(144 / 255.f, 190 / 255.f, 109 / 255.f, 255)   // #90BE6D
+#define LY_COLOR_LIGHT_BLUE         ImVec4(67 / 255.f, 170 / 255.f, 139 / 255.f, 255)    // #43AA8B
+#define LY_COLOR_BLUE               ImVec4(87 / 255.f, 117 / 255.f, 144 / 255.f, 255)    // #577590
+#define LY_COLOR_WHITE              ImVec4(0 / 255.f,0 / 255.f,0 / 255.f,255)
+#define LY_COLOR_BLACK              ImVec4(255 / 255.f,255 / 255.f,255 / 255.f,255)
+#define LY_COLOR_GRAY               ImVec4(49 / 255.f, 57 / 255.f, 60 / 255.f, 255)      // #31393C
 
 // * Window *
 #define LY_MAIN_CLEAR_COLOR         LY_COLOR_GRAY

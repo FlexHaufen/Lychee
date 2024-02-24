@@ -77,7 +77,7 @@ namespace Lychee {
          */
         void OnUpdate(DeltaTime dt);
 
-        sf::RenderTexture& OnRender(Camera& editorCamera);
+        //void OnRender(Camera& editorCamera);
 
 		entt::registry& GetRegistry() { return m_Registry; }
 
