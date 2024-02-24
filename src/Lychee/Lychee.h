@@ -15,7 +15,13 @@
 #include "Lychee/Core/Core.h"
 #include "Lychee/Scene/Scene.h"
 #include "Lychee/Scene/Entity/Entity.h"
-#include "Lychee/Scene/Camera/Camera.h"
+
+#include "Lychee/Core/Input/Input.h"
+#include "Lychee/Helper/KeyCodes.h"
+#include "Lychee/Helper/MouseCodes.h"
+#include "Lychee/Helper/Types.h"
+
+#include "Lychee/Events/Event.h"
 
 #include "Lychee/Core/Time/DeltaTime.h"
 

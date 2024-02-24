@@ -50,11 +50,12 @@ add_executable(${PROJECT_NAME} ${SRC_FILES}
 #				    	LIBS
 #----------------------------------------------------
 
-#---------SFML---------
-set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/lib/cmake/SFML)
-find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network)
-
+#--------GLFW----------
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+#set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORE)
+add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/GLFW)
 
 #--------glad----------
 add_library(glad 
@@ -63,8 +64,25 @@ add_library(glad
 
 
 #-----IMGUI-SFML-------
-set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/lib/vendor/imgui/)
-add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/imgui-sfml/)
+set(IMGUI_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/imgui)
+add_library(imgui 
+			${IMGUI_PATH}/imconfig.h
+			${IMGUI_PATH}/imgui.h
+			${IMGUI_PATH}/imgui.cpp
+			${IMGUI_PATH}/imgui_draw.cpp
+			${IMGUI_PATH}/imgui_internal.h
+			${IMGUI_PATH}/imgui_tables.cpp
+			${IMGUI_PATH}/imgui_widgets.cpp
+			${IMGUI_PATH}/imstb_rectpack.h
+			${IMGUI_PATH}/imstb_textedit.h
+			${IMGUI_PATH}/imstb_truetype.h
+			${IMGUI_PATH}/imgui_demo.cpp
+			${IMGUI_PATH}/backends/imgui_impl_glfw.h
+			${IMGUI_PATH}/backends/imgui_impl_glfw.cpp
+			${IMGUI_PATH}/backends/imgui_impl_opengl3_loader.h 
+			${IMGUI_PATH}/backends/imgui_impl_opengl3.h 
+			${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp) 
+
 
 #--------YAML---------
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
@@ -72,15 +90,25 @@ set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/yaml-cpp/)
 
+#------STBIMAGE-------
+set(STBIMAGE_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/stb_image)
+add_library(stb_image 
+			${STBIMAGE_PATH}/stb_image.h
+			${STBIMAGE_PATH}/stb_image.cpp)
+
 #----------------------------------------------------
 #				      INCLUDE DIRS
 #----------------------------------------------------
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
-	#SFML
-	${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include
+	#imgui
+	${CMAKE_SOURCE_DIR}/lib/vendor/imgui
+	# GLFW
+	${CMAKE_SOURCE_DIR}/lib/vendor/GLFW/include
 	# glad
 	${CMAKE_SOURCE_DIR}/lib/glad/include
+	#glm
+	${CMAKE_SOURCE_DIR}/lib/vendor/glm
 	#EnTT
 	${CMAKE_SOURCE_DIR}/lib/entt
 	# spdlog
@@ -96,15 +124,11 @@ include_directories(
 #----------------------------------------------------
 
 #Put all libraries into a variable
-set(LIBS 	sfml-window
-			sfml-system
-			sfml-graphics
-			sfml-audio
-			sfml-network
+set(LIBS 	glfw
 			glad
-			ImGui-SFML
+			imgui
 			yaml-cpp
-			${GLEW_LIB})
+			stb_image)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 

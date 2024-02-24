@@ -21,7 +21,6 @@ namespace Lychee {
 
     Scene::Scene(){
         LY_CORE_INFO("Scene: Initializing");
-		m_RenderTexture.create(LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y);
     }
 
     Scene::~Scene() {
@@ -72,7 +71,8 @@ namespace Lychee {
         
     }
 
-
+    // TODO (flex): implement
+    /*
     sf::RenderTexture& Scene::OnRender(Camera& editorCamera) {
 		m_RenderTexture.clear(LY_SCENE_CLEAR_COLOR);
 
@@ -86,4 +86,5 @@ namespace Lychee {
 
         return m_RenderTexture;
     }
+    */
 }

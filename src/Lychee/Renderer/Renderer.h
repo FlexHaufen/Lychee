@@ -29,19 +29,18 @@ namespace Lychee {
 	 */
 	class Renderer {
 	public:
-		void Init();
-		void Shutdown();
+		static void Init();
+		static void Shutdown();
 		
-		void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 
-		void OnWindowResize(u32 width, u32 height);
+		static void OnWindowResize(u32 width, u32 height);
 
-		void Clear();
+		static void Clear();
 
 
-		void BeginScene();
-		void EndScene();
-		void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
+		static void BeginScene();
+		static void EndScene();
+		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
 
 	private:
 		//struct SceneData {

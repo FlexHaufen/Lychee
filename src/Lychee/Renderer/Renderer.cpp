@@ -45,17 +45,9 @@ namespace Lychee {
         LY_CORE_INFO("Renderer: Terminating");
 	}
 
-	void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const {
-		va.Bind();
-		ib.Bind();
-		shader.Bind();
-		glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	void Renderer::OnWindowResize(u32 width, u32 height) {
+		glViewport(0, 0, width, height);
 	}
-
-
-	//void Renderer::OnWindowResize(u32 width, u32 height) {
-	//	glViewport(x, y, width, height);
-	//}
 
 	void Renderer::BeginScene() {
 		//m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();

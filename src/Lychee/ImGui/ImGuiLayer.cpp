@@ -23,18 +23,13 @@
 namespace Lychee {
 
 	ImGuiLayer::ImGuiLayer()
-		: Layer("ImGuiLayer")
-		, m_Window(Core::Get().GetWindow().GetNativeWindow()) {
+		: Layer("ImGuiLayer") {
 		LY_CORE_INFO("ImGuiLayer: Initializing");
 
 	}
 
 	void ImGuiLayer::OnAttach()	{
-
-
-
 		// Setup Dear ImGui context
-		ImGui::SFML::Init(m_Window);
 		IMGUI_CHECKVERSION();
 
 		LY_CORE_INFO("ImGuiLayer: Setting up context");
@@ -54,27 +49,54 @@ namespace Lychee {
 
 		// Setup Dear ImGui style
 		SetStyle();
+
+		Core& app = Core::Get();
+		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+
+		// Setup Platform/Renderer bindings
+		ImGui_ImplGlfw_InitForOpenGL(window, LY_IMGUI_INSTALL_CALLBACKS);
+		ImGui_ImplOpenGL3_Init(LY_OPENGL_VERSION);
 	}
 
 	void ImGuiLayer::OnDetach() {
 		LY_CORE_INFO("ImGuiLayer: Terminating");
-		ImGui::SFML::Shutdown();
+		//ImPlot::DestroyContext();
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnEvent(sf::Event& e) {
-		// FIXME (flex)
-		//if (!m_BlockEvents) {
-			ImGui::SFML::ProcessEvent(e);
-		//}
+	void ImGuiLayer::OnEvent(Event& e) {
+		if (m_BlockEvents) {
+			ImGuiIO& io = ImGui::GetIO();
+			e.m_isHandled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			e.m_isHandled |= e.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
 	}
 	
-	void ImGuiLayer::OnSfmlUpdate(DeltaTime dt) {
-		ImGui::SFML::Update(m_Window, dt);
+	void ImGuiLayer::Begin() {
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 	}
 
-	void ImGuiLayer::OnSfmlRender() {
-		ImGui::SFML::Render(m_Window);
+	void ImGuiLayer::End() {
+		ImGuiIO& io = ImGui::GetIO();
+		Core& app = Core::Get();
+		io.DisplaySize = ImVec2((f32)app.GetWindow().GetWidth(), (f32)app.GetWindow().GetHeight());
+
+		// Rendering
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
 	}
+
 
 	void ImGuiLayer::SetStyle() {
 		LY_CORE_INFO("ImGuiLayer: Applying style");
@@ -82,8 +104,7 @@ namespace Lychee {
 		ImGuiIO &io = ImGui::GetIO();
 
 		io.FontDefault = io.Fonts->AddFontFromFileTTF(LY_FONT_REGULAR, LY_FONT_SIZE);
-		ImGui::SFML::UpdateFontTexture();
-				
+		ImGuiStyle* style = &ImGui::GetStyle();
 
 		/**
 		 * @brief ImGui Style by https://github.com/Trippasch
@@ -143,7 +164,7 @@ namespace Lychee {
 		// Docking
 		colors[ImGuiCol_DockingPreview] 	= ImVec4{0.44f, 0.37f, 0.61f, 1.0f};
 
-		auto &style = ImGui::GetStyle();
+		/*
 		style.TabRounding = 4;
 		style.ScrollbarRounding = 9;
 		style.WindowRounding = 7;
@@ -151,5 +172,6 @@ namespace Lychee {
 		style.FrameRounding = 3;
 		style.PopupRounding = 4;
 		style.ChildRounding = 4;
+		*/
 	}
 }

@@ -18,7 +18,7 @@
 namespace Lychee {
     Core* Core::s_Instance = nullptr;
 
-    Core::Core(b8 isSplashScreenEnabled) {
+    Core::Core() {
         s_Instance = this;
 
         Lychee::Log::Init();
@@ -50,40 +50,42 @@ namespace Lychee {
 		#endif
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
-
+        LY_CORE_INFO("\\---- Initializing renderer");
+        Renderer::Init();
 
         m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
     }
 
     Core::~Core() {
+        Renderer::Shutdown();
         delete m_Window;
         LY_CORE_INFO("Terminating");
     }
 
     void Core::Run() {
-        LY_PROFILE_FUNCTION();
+        //LY_PROFILE_FUNCTION();
 
         while (m_isRunning) {
 
-            m_dt.OnUpdate();
+            f32 time = (f32)glfwGetTime();
+            DeltaTime deltaTime = time - m_lastFrameTime;
+            m_lastFrameTime = time;
 
             if (!m_isMinimized) {
-                // ---------- Update ----------
-                m_Window->OnUpdate(m_dt);
-                m_ImGuiLayer->OnSfmlUpdate(m_dt);
                 for (Layer* layer : m_LayerStack) {
-					layer->OnUpdate(m_dt);
+					layer->OnUpdate(deltaTime);
                 }
-
-                // ---------- Render ----------
-                m_Window->Clear();
+               
+                m_ImGuiLayer->Begin();
+                
                 for (Layer* layer : m_LayerStack) {
-					layer->OnImGuiRender();
+                    layer->OnImGuiRender();
                 }
-                m_ImGuiLayer->OnSfmlRender();
-                m_Window->Display();
+            
+                m_ImGuiLayer->End();
             }
+            m_Window->OnUpdate(deltaTime);
         }
     }
 
@@ -103,45 +105,41 @@ namespace Lychee {
 	}
 
     // ** EVENTS **
-    void Core::OnEvent(sf::Event& e) {
-        LY_PROFILE_FUNCTION();
+    void Core::OnEvent(Event& e) {
+        //LY_PROFILE_FUNCTION();
 
-        switch(e.type) {
-            case sf::Event::Closed:
-                OnWindowClose(e);
-                break;
-            case sf::Event::Resized:
-                OnWindowResize(e);
-                break;
-            default:
-                break;
-        }
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
 
-        for (auto& i : m_LayerStack) {
-            i->OnEvent(e);
-        }
-
+        for (auto i = m_LayerStack.rbegin(); i != m_LayerStack.rend(); ++i) {
+			if (e.m_isHandled) 
+				break;
+			(*i)->OnEvent(e);
+		}
         #ifdef LY_LOG_EVENTS
-            LY_CORE_TRACE(e.type);
+            LY_CORE_TRACE(e);
         #endif
     }
 
-    b8 Core::OnWindowClose(sf::Event& e) {
+    b8 Core::OnWindowClose(WindowCloseEvent& e) {
         m_isRunning = false;
         return true;
     }
 
-	b8 Core::OnWindowResize(sf::Event& e) {
-		if (e.size.width == 0 || e.size.width == 0) {
+	b8 Core::OnWindowResize(WindowResizeEvent& e) {
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_isMinimized = true;
 			return true;
 		}
+
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		m_isMinimized = false;
 		return false;
 	}
 
 
-
+    /*
     void Core::OnSplashScreenDisplay() {
         sf::RenderWindow splashScreen;
 
@@ -206,6 +204,6 @@ namespace Lychee {
         sf::sleep(sf::seconds(5));
         splashScreen.close();
     }
-
+    */
     
 }
