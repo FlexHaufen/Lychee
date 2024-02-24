@@ -21,7 +21,6 @@ namespace Lychee {
 
     Scene::Scene(){
         LY_CORE_INFO("Scene: Initializing");
-		m_RenderTexture.create(LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y);
     }
 
     Scene::~Scene() {

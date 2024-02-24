@@ -50,11 +50,6 @@ add_executable(${PROJECT_NAME} ${SRC_FILES}
 #				    	LIBS
 #----------------------------------------------------
 
-#---------SFML---------
-set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR ${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/lib/cmake/SFML)
-find_package(SFML 2.5.1 REQUIRED COMPONENTS window system graphics audio network)
-
 #--------GLFW----------
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -100,8 +95,6 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/yaml-cpp/)
 #----------------------------------------------------
 include_directories(
 	${CMAKE_SOURCE_DIR}/src
-	#SFML
-	${CMAKE_SOURCE_DIR}/lib/SFML-2.5.1/include
 	#imgui
 	${CMAKE_SOURCE_DIR}/lib/vendor/imgui
 	# GLFW
@@ -125,12 +118,7 @@ include_directories(
 #----------------------------------------------------
 
 #Put all libraries into a variable
-set(LIBS 	sfml-window
-			sfml-system
-			sfml-graphics
-			sfml-audio
-			sfml-network
-			glfw
+set(LIBS 	glfw
 			glad
 			imgui
 			yaml-cpp

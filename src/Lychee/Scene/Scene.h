@@ -14,7 +14,6 @@
 #include "Lychee/lypch.h"
 //#include "Lychee/Scene/Entity/Entity.h"
 #include "Lychee/Scene/Entity/Components.h"
-#include "Lychee/Scene/Camera/Camera.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 
 //*** DEFINES ***
@@ -84,7 +83,6 @@ namespace Lychee {
     private:
 
         // ** Members **
-        sf::RenderTexture   m_RenderTexture;        // sf::RenderTexture
         entt::registry      m_Registry;             // entt Registry
 
         b8 m_IsRuntimeRunning = false;              // true if runtime is running

@@ -44,8 +44,8 @@ namespace Lychee {
          */
         struct Transform {
             s8 renderLayer      = 0;            // Order in the renderer [0..LY_MAX_RENDERLAYERS]
-            sf::Vector2f pos    = {0, 0};       // Position [px]
-            sf::Vector2f scale  = {1, 1};       // Scale [1].
+            glm::vec2 pos       = {0, 0};       // Position [px]
+            glm::vec2 scale     = {1, 1};       // Scale [1].
             f32 rotation        = 0.f;          // Rotation
         };
     }

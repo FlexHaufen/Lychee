@@ -27,7 +27,7 @@ namespace Lychee {
 		LY_INFO("Initializing Editor");
 
 		LY_INFO("Getting Current scene");
-		//m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene = CreateRef<Scene>();
 		//m_ViewportPos = m_ActiveScene->m_View.getCenter();
 	
 	
@@ -54,7 +54,7 @@ namespace Lychee {
 
 
 
-		//m_ActiveScene->OnUpdate(dt);
+		m_ActiveScene->OnUpdate(dt);
 	}
 
 	void EditorLayer::OnImGuiRender() {
