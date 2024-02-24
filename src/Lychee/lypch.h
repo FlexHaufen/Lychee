@@ -30,11 +30,6 @@
 #include <vector>
 #include <Windows.h>
 
-// SFML
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-
 // glad
 #include <glad/glad.h>
 
@@ -136,7 +131,3 @@
 #define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
-
-// * Math *
-#define LY_PPM                      30          // px/m     [SFML -> BOX2D]
-#define LY_DEG_PER_RAD              57.295795F  // deg/rad  [SFML -> BOX2D]
