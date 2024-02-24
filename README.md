@@ -1,5 +1,5 @@
 # Lychee  
-A **simple**, **fast** & **lightweight** voxel engine.
+A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
 
 <img src="resource/images/Lychee.svg" height="100">
 
@@ -13,10 +13,11 @@ A **simple**, **fast** & **lightweight** voxel engine.
 
 
 ## Dependencies
-- [EnTT](https://github.com/skypjack/entt)
+- [glad](https://glad.dav1d.de/)
+- [GLFW](https://github.com/glfw/glfw)
+- [glm](https://github.com/g-truc/glm)
 - [ImGui](https://github.com/ocornut/imgui)
-- [ImGUi-SFML](https://github.com/SFML/imgui-sfml)
-- [SFML](https://www.sfml-dev.org/index.php) 
+- [EnTT](https://github.com/skypjack/entt)
 - [spdlog](https://github.com/gabime/spdlog)
 - [yaml-cpp](https://github.com/jbeder/yaml-cpp)
 

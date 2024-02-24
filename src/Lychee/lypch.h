@@ -52,6 +52,10 @@
 // EnTT
 #include "entt.hpp"
 
+
+// Stb image
+#include <stb_image.h>
+
 // * yaml-cpp *
 #include "yaml-cpp/yaml.h"
 
@@ -96,7 +100,7 @@
 #define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
 
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION_STR              "v1.0.1b"
+#define LY_VERSION_STR              "v2.0.0a"
 
 #define LY_OPENGL_VERSION           "#version 410"
 #define LY_IMGUI_INSTALL_CALLBACKS  true

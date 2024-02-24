@@ -90,6 +90,12 @@ set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 add_subdirectory(${CMAKE_SOURCE_DIR}/lib/vendor/yaml-cpp/)
 
+#------STBIMAGE-------
+set(STBIMAGE_PATH ${CMAKE_SOURCE_DIR}/lib/vendor/stb_image)
+add_library(stb_image 
+			${STBIMAGE_PATH}/stb_image.h
+			${STBIMAGE_PATH}/stb_image.cpp)
+
 #----------------------------------------------------
 #				      INCLUDE DIRS
 #----------------------------------------------------
@@ -122,7 +128,7 @@ set(LIBS 	glfw
 			glad
 			imgui
 			yaml-cpp
-			${GLEW_LIB})
+			stb_image)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
 
