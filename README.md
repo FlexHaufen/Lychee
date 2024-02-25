@@ -37,10 +37,6 @@ A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
     ```shell
     git submodule update --init --recursive
     ```
-    ```shell
-    git submodule update --recursive --remote
-    ```
-
     ImGui Has to be on docking branch
 
 4. Configure Cmake
