@@ -59,7 +59,6 @@ namespace Lychee {
 
     Core::~Core() {
         Renderer::Shutdown();
-        delete m_Window;
         LY_CORE_INFO("Terminating");
     }
 
