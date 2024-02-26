@@ -67,24 +67,11 @@ namespace Lychee {
     }
 
 
-    void Scene::OnUpdate(DeltaTime dt) {
-        
+    void Scene::OnEditorUpdate(DeltaTime dt, EditorCamera& camera) {
+        Renderer::BeginScene(camera);
+
+        // TODO: Render Here
+
+        Renderer::EndScene();
     }
-
-    // TODO (flex): implement
-    /*
-    sf::RenderTexture& Scene::OnRender(Camera& editorCamera) {
-		m_RenderTexture.clear(LY_SCENE_CLEAR_COLOR);
-
-        // ------ RENDER HERE -------
-        
-		// --------------------------
-
-        m_RenderTexture.setView(editorCamera.GetView());
-		m_RenderTexture.display();
-
-
-        return m_RenderTexture;
-    }
-    */
 }

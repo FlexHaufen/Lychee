@@ -20,6 +20,9 @@
 #include "Lychee/Renderer/Buffer.h"
 #include "Lychee/Renderer/Shader.h"
 
+#include "Lychee/Renderer/EditorCamera.h"
+#include "Lychee/Scene/SceneCamera.h"
+
 // *** NAMESPACE ***
 namespace Lychee {
 
@@ -38,15 +41,21 @@ namespace Lychee {
 		static void Clear();
 
 
-		static void BeginScene();
+		//static void BeginScene();
+		static void BeginScene(const EditorCamera& camera);
+		//static void BeginScene(const SceneCamera& camera);
+
+		static void SetClearColor(const glm::vec4& color);
+
+
 		static void EndScene();
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray);
 
 	private:
-		//struct SceneData {
-		//	glm::mat4 ViewProjectionMatrix;
-		//};
-
-		//static Scope<SceneData> m_SceneData;
+		struct SceneData {
+			glm::mat4 ViewProjectionMatrix;
+		};
+		
+		static Scope<SceneData> m_SceneData;
 	};
 }

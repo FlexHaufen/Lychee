@@ -28,9 +28,13 @@ namespace Lychee {
 
 		LY_INFO("Getting Current scene");
 		m_ActiveScene = CreateRef<Scene>();
-		//m_ViewportPos = m_ActiveScene->m_View.getCenter();
-	
-	
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+
+		sFramebufferSpecification fbSpec;
+		fbSpec.Attachments = { eFramebufferTextureFormat::RGBA8, eFramebufferTextureFormat::RED_INTEGER, eFramebufferTextureFormat::Depth };
+		fbSpec.Width = 1280;
+		fbSpec.Height = 720;
+		m_Framebuffer = CreateRef<Framebuffer>(fbSpec);
 	
 		m_ContentBrowserPanel.SetContext(m_ActiveScene);
 	}
@@ -43,18 +47,40 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
-		//m_EditorCamera.OnUpdate(dt);
+		// TODO (flex): in case of scene camera, resize here
+		//m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+
+		// Resize
+		if (sFramebufferSpecification spec = m_Framebuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)) {
+			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+		}
+
+		// Render
+		m_Framebuffer->Bind();
+		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		Renderer::Clear();
+
+		// Clear our entity ID attachment to -1
+		m_Framebuffer->ClearAttachment(1, -1);
+
+
+
+		m_EditorCamera.OnUpdate(dt);
 		
 		// TODO (flex): Render here?
 		// Maby only update camera here, and do render and draw calls in core or scene
+
+		// TODO (flex): Decide here between runtime and editor
 		
-		//m_Renderer.Clear();
-		//m_Renderer.Draw();
+		m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
 
 
-
-
-		m_ActiveScene->OnUpdate(dt);
+		m_Framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender() {
@@ -118,17 +144,28 @@ namespace Lychee {
 		OnMenuBarRender();
 
 		// ** Viewport **
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});		
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
-		m_ViewportFocused = ImGui::IsWindowFocused();
-		// Disable event blocking
-		Core::Get().GetImGuiLayer()->BlockEvents(!ImGui::IsWindowFocused());
-        //ImGui::Image(m_ActiveScene->OnRender(m_EditorCamera));
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
-		ImGui::End();
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+
+		Core::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
+
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
 		ImGui::PopStyleVar();
 		ImGui::End();
-
+		ImGui::End();
 		// ** Panels **
 		m_ContentBrowserPanel.OnImGuiRender();
 
@@ -137,8 +174,11 @@ namespace Lychee {
 
 	void EditorLayer::OnEvent(Event& e)	{
 		if (m_ViewportFocused) {
-			
-			//m_CameraController.OnEvent(e);
+
+			if (m_SceneState == SceneState::Edit) {
+				m_EditorCamera.OnEvent(e);
+			}
+
 
 			#ifdef LY_LOG_KEY_EVENT
 				if (e.GetEventType() == Lychee::eEventType::KeyPressed) {

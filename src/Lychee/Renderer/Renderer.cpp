@@ -15,6 +15,8 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
+	Scope<Renderer::SceneData> Renderer::m_SceneData = CreateScope<Renderer::SceneData>();
+
 	void Renderer::Init() {
         LY_CORE_INFO("Renderer: Initializing");
 
@@ -49,13 +51,19 @@ namespace Lychee {
 		glViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene() {
-		//m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+	void Renderer::BeginScene(const EditorCamera& camera) {
+		m_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
 	}
+
+	//void Renderer::BeginScene(const SceneCamera& camera) {
+	//	
+	//}
 
 	void Renderer::EndScene() {
 	
 	}
+
+	//void Renderer::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.2f, 0.8f, 0.3f, 1.0f });
 
 
 	
@@ -69,10 +77,9 @@ namespace Lychee {
 	}
 	
 
-	// TODO (flex): Add to renderer Class
-	//void SetClearColor(const glm::vec4& color) {
-	//	glClearColor(color.r, color.g, color.b, color.a);
-	//}
+	void Renderer::SetClearColor(const glm::vec4& color) {
+		glClearColor(color.r, color.g, color.b, color.a);
+	}
 
 	void Renderer::Clear() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

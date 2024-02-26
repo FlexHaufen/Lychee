@@ -16,6 +16,9 @@
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 
+#include "Lychee/Renderer/Renderer.h"
+#include "Lychee/Renderer/EditorCamera.h"
+
 //*** DEFINES ***
 #define LY_MAX_RENDERLAYERS     10
 
@@ -68,15 +71,7 @@ namespace Lychee {
 
         void OnRuntimeUpdate(DeltaTime dt);
 
-
-        /**
-         * @brief Update function
-         * 
-         * @param dt delta time
-         */
-        void OnUpdate(DeltaTime dt);
-
-        //void OnRender(Camera& editorCamera);
+        void OnEditorUpdate(DeltaTime dt, EditorCamera& camera);
 
 		entt::registry& GetRegistry() { return m_Registry; }
 
