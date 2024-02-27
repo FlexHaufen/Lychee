@@ -66,7 +66,7 @@ namespace Lychee {
 		Ref<IndexBuffer> quadIB = CreateRef<IndexBuffer>(quadIndices, voxelIndicesSize);
 		s_Data.VoxelVertexArray->SetIndexBuffer(quadIB);
 
-		s_Data.VoxelShader = CreateRef<Shader>("src/Lychee/Renderer/shaders/BasicShader.glsl");
+		s_Data.VoxelShader = CreateRef<Shader>("src/Lychee/Renderer/shaders/VoxelShader.glsl");
 		s_Data.VoxelVertexPositions[0] = { -1.0, -1.0,  1.0, 1.0 };
 		s_Data.VoxelVertexPositions[1] = {  1.0, -1.0,  1.0, 1.0 };
 		s_Data.VoxelVertexPositions[2] = {  1.0,  1.0,  1.0, 1.0 };
