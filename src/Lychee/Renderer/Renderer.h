@@ -35,17 +35,12 @@ namespace Lychee {
 		static void Init();
 		static void Shutdown();
 		
-
 		static void OnWindowResize(u32 width, u32 height);
-
+		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
 
-
-		//static void BeginScene();
 		static void BeginScene(const EditorCamera& camera);
 		//static void BeginScene(const SceneCamera& camera);
-
-		static void SetClearColor(const glm::vec4& color);
 
 
 		static void EndScene();

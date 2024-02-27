@@ -72,7 +72,7 @@ namespace Lychee {
 
 		void ClearAttachment(u32 attachmentIndex, s32 value);
 
-		u32 GetColorAttachmentRendererID(u32 index = 0) const { if (index < m_ColorAttachments.size()) LY_CORE_ERROR("FrameBuffer: index < color"); return m_ColorAttachments[index]; }
+		u32 GetColorAttachmentRendererID(u32 index = 0) const { if (index >= m_ColorAttachments.size()) LY_CORE_ERROR("FrameBuffer: index >= color"); return m_ColorAttachments[index]; }
 
 		const sFramebufferSpecification& GetSpecification() const { return m_Specification; }
 

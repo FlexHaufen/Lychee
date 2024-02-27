@@ -70,7 +70,6 @@ namespace Lychee {
     void Scene::OnEditorUpdate(DeltaTime dt, EditorCamera& camera) {
         Renderer::BeginScene(camera);
 
-        // TODO: Render Here
 
         Renderer::EndScene();
     }

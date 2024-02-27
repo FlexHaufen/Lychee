@@ -175,9 +175,9 @@ namespace Lychee {
 	void EditorLayer::OnEvent(Event& e)	{
 		if (m_ViewportFocused) {
 
-			if (m_SceneState == SceneState::Edit) {
+			//if (m_SceneState == SceneState::Edit) {
 				m_EditorCamera.OnEvent(e);
-			}
+			//}
 
 
 			#ifdef LY_LOG_KEY_EVENT

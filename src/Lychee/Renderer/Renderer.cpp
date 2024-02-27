@@ -55,18 +55,10 @@ namespace Lychee {
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
 	}
 
-	//void Renderer::BeginScene(const SceneCamera& camera) {
-	//	
-	//}
-
 	void Renderer::EndScene() {
 	
 	}
 
-	//void Renderer::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.2f, 0.8f, 0.3f, 1.0f });
-
-
-	
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray) {
 		//shader->Bind();
 		//shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
@@ -76,6 +68,15 @@ namespace Lychee {
 		//DrawIndexed(vertexArray);
 	}
 	
+	void Renderer::DrawLines() {
+		//vertexArray->Bind();
+		//glDrawArrays(GL_LINES, 0, vertexCount);
+		Shader shader("src/Lychee/Renderer/shaders/BasicShader.glsl");
+
+		shader.Bind();
+		glDrawArrays(GL_TRIANGLES, 0 ,3);
+	}
+
 
 	void Renderer::SetClearColor(const glm::vec4& color) {
 		glClearColor(color.r, color.g, color.b, color.a);
@@ -85,17 +86,6 @@ namespace Lychee {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void DrawIndexed(const Ref<VertexArray>& vertexArray, u32 indexCount) {
-		vertexArray->Bind();
-		u32 count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
-		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
-	}
-
-	void DrawLines(const Ref<VertexArray>& vertexArray, u32 vertexCount) {
-		vertexArray->Bind();
-		glDrawArrays(GL_LINES, 0, vertexCount);
-	}
- 
 	void SetLineWidth(f32 width) {
 		glLineWidth(width);
 	}
