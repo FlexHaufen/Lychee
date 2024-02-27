@@ -101,14 +101,14 @@ namespace Lychee {
 
 	Framebuffer::~Framebuffer() {
 		glDeleteFramebuffers(1, &m_RendererID);
-		glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
+		glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
 	
 	void Framebuffer::Invalidate() {
 		if (m_RendererID) {
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
+			glDeleteTextures((GLsizei)m_ColorAttachments.size(), m_ColorAttachments.data());
 			glDeleteTextures(1, &m_DepthAttachment);
 			
 			m_ColorAttachments.clear();
@@ -151,7 +151,7 @@ namespace Lychee {
 		if (m_ColorAttachments.size() > 1) {
 			LY_CORE_ASSERT(m_ColorAttachments.size() <= 4);
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-			glDrawBuffers(m_ColorAttachments.size(), buffers);
+			glDrawBuffers((GLsizei)m_ColorAttachments.size(), buffers);
 		}
 		else if (m_ColorAttachments.empty()) {
 			// Only depth-pass

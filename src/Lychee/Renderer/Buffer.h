@@ -112,7 +112,7 @@ namespace Lychee {
 		void SetData(const void* data, u32 size);
 
 		const BufferLayout& GetLayout() { return m_Layout; }
-		void SetLayout(const BufferLayout& layout);
+		void SetLayout(const BufferLayout& layout) { m_Layout = layout; }
 
 	private:
 		u32 m_RendererID;
