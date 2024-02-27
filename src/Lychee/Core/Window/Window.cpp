@@ -54,8 +54,13 @@ namespace Lychee {
                                         nullptr, 
                                         nullptr);
 
-		m_Context = CreateScope<GraphicsContext>(static_cast<GLFWwindow*>(m_glfwWindow));
-		m_Context->Init();
+
+		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
+		s32 status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		
+		if(!status) {
+			LY_CORE_ERROR("Failed to initialize Glad!");
+		}
 
         // glad: load all OpenGL function pointers
 		LY_CORE_INFO("Window: \\---- Initializing glad");
@@ -177,7 +182,7 @@ namespace Lychee {
 		#endif
 
 		glfwPollEvents();
-		m_Context->SwapBuffers();
+		glfwSwapBuffers(static_cast<GLFWwindow*>(m_glfwWindow));
 	}
 
 	void Window::SetVSync(bool enabled) {
