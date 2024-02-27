@@ -123,7 +123,7 @@ namespace Lychee {
 		// Attachments
 		if (m_ColorAttachmentSpecifications.size()) {
 			m_ColorAttachments.resize(m_ColorAttachmentSpecifications.size());
-			Utils::CreateTextures(multisample, m_ColorAttachments.data(), m_ColorAttachments.size());
+			Utils::CreateTextures(multisample, m_ColorAttachments.data(), (u32)m_ColorAttachments.size());
 
 			for (size_t i = 0; i < m_ColorAttachments.size(); i++) {
 				Utils::BindTexture(multisample, m_ColorAttachments[i]);

@@ -13,12 +13,10 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-//#include "Lychee/Renderer/OrthographicCamera.h"
-//#include "Lychee/Renderer/Shader.h"
-
 #include "Lychee/Renderer/VertexArray.h"
 #include "Lychee/Renderer/Buffer.h"
 #include "Lychee/Renderer/Shader.h"
+#include "Lychee/Renderer/UniformBuffer.h"
 
 #include "Lychee/Renderer/Voxel.h"
 
@@ -51,7 +49,7 @@ namespace Lychee {
 			glm::mat4 ViewProjection;
 		};
 		CameraData CameraBuffer;
-		//Ref<UniformBuffer> CameraUniformBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
 

@@ -80,7 +80,7 @@ namespace Lychee {
 		s_Data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 
-		//s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(sRenderer2DData::CameraData), 0);
+		s_Data.CameraUniformBuffer = CreateRef<UniformBuffer>((u32)sizeof(sRenderer2DData::CameraData), 0);
 	}
 
 	void Renderer::Shutdown() {
@@ -94,7 +94,7 @@ namespace Lychee {
 
 	void Renderer::BeginScene(const EditorCamera& camera) {
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
-		//s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(sRenderer2DData::CameraData));
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(sRenderer2DData::CameraData));
 
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;

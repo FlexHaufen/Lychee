@@ -56,30 +56,19 @@ namespace Lychee {
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
 			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)) {
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
+
+		m_EditorCamera.OnUpdate(dt);
 
 		// Render
 		m_Framebuffer->Bind();
 		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Renderer::Clear();
-
 		// Clear our entity ID attachment to -1
 		m_Framebuffer->ClearAttachment(1, -1);
-
-
-
-		m_EditorCamera.OnUpdate(dt);
-		
-		// TODO (flex): Render here?
-		// Maby only update camera here, and do render and draw calls in core or scene
-
 		// TODO (flex): Decide here between runtime and editor
-		
 		m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
-
-
 		m_Framebuffer->Unbind();
 	}
 
@@ -183,7 +172,7 @@ namespace Lychee {
 			#ifdef LY_LOG_KEY_EVENT
 				if (e.GetEventType() == Lychee::eEventType::KeyPressed) {
 					Lychee::KeyPressedEvent& eKey = (Lychee::KeyPressedEvent&)e;
-					LY_TRACE("KEY PRESSED: {0}", (c)eKey.GetKeyCode());
+					LY_TRACE("KEY PRESSED: {0}", (char)eKey.GetKeyCode());
 				}	
 			#endif
 
