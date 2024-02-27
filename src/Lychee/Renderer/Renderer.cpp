@@ -42,50 +42,47 @@ namespace Lychee {
 		glEnable(GL_LINE_SMOOTH);
 
 
-		s_Data.QuadVertexArray = CreateRef<VertexArray>();
+		s_Data.VoxelVertexArray = CreateRef<VertexArray>();
 
-		s_Data.QuadVertexBuffer = CreateRef<VertexBuffer>(u32(s_Data.MaxVertices * sizeof(sVoxelVertex)));
-		s_Data.QuadVertexBuffer->SetLayout({
+		s_Data.VoxelVertexBuffer = CreateRef<VertexBuffer>(u32(s_Data.MaxVertices * sizeof(sVoxelVertex)));
+		s_Data.VoxelVertexBuffer->SetLayout({
 			{ eShaderDataType::Float3, "a_Position"     },
 			{ eShaderDataType::Float4, "a_Color"        }
 		});
-		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
+		s_Data.VoxelVertexArray->AddVertexBuffer(s_Data.VoxelVertexBuffer);
 
-		s_Data.QuadVertexBufferBase = new sVoxelVertex[s_Data.MaxVertices];
+		s_Data.VoxelVertexBufferBase = new sVoxelVertex[s_Data.MaxVertices];
 
-		u32* quadIndices = new u32[s_Data.MaxIndices];
+		const u32 voxelIndicesSize = 36;
+		u32 quadIndices[voxelIndicesSize] =  {
+			0, 1, 2, 2, 3, 0,
+			1, 5, 6, 6, 2, 1,
+			7, 6, 5, 5, 4, 7,
+			4, 0, 3, 3, 7, 4,
+			4, 5, 1, 1, 0, 4,
+			3, 2, 6, 6, 7, 3
+		};
 
-		u32 offset = 0;
-		for (u32 i = 0; i < s_Data.MaxIndices; i += 6) {
-			quadIndices[i + 0] = offset + 0;
-			quadIndices[i + 1] = offset + 1;
-			quadIndices[i + 2] = offset + 2;
+		Ref<IndexBuffer> quadIB = CreateRef<IndexBuffer>(quadIndices, voxelIndicesSize);
+		s_Data.VoxelVertexArray->SetIndexBuffer(quadIB);
 
-			quadIndices[i + 3] = offset + 2;
-			quadIndices[i + 4] = offset + 3;
-			quadIndices[i + 5] = offset + 0;
+		s_Data.VoxelShader = CreateRef<Shader>("src/Lychee/Renderer/shaders/BasicShader.glsl");
+		s_Data.VoxelVertexPositions[0] = { -1.0, -1.0,  1.0, 1.0 };
+		s_Data.VoxelVertexPositions[1] = {  1.0, -1.0,  1.0, 1.0 };
+		s_Data.VoxelVertexPositions[2] = {  1.0,  1.0,  1.0, 1.0 };
+		s_Data.VoxelVertexPositions[3] = { -1.0,  1.0,  1.0, 1.0 };
 
-			offset += 4;
-		}
-
-		Ref<IndexBuffer> quadIB = CreateRef<IndexBuffer>(quadIndices, s_Data.MaxIndices);
-		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
-		delete[] quadIndices;
-
-
-		s_Data.QuadShader = CreateRef<Shader>("src/Lychee/Renderer/shaders/BasicShader.glsl");
-		// Set first texture slot to 0
-		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-		s_Data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-		s_Data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
-		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+		s_Data.VoxelVertexPositions[4] = { -1.0, -1.0, -1.0, 1.0 };
+		s_Data.VoxelVertexPositions[5] = {  1.0, -1.0, -1.0, 1.0 };
+		s_Data.VoxelVertexPositions[6] = {  1.0,  1.0, -1.0, 1.0 };
+		s_Data.VoxelVertexPositions[7] = { -1.0,  1.0, -1.0, 1.0 };
 
 		s_Data.CameraUniformBuffer = CreateRef<UniformBuffer>((u32)sizeof(sRenderer2DData::CameraData), 0);
 	}
 
 	void Renderer::Shutdown() {
         LY_CORE_INFO("Renderer: Terminating");
-		delete[] s_Data.QuadVertexBufferBase;
+		delete[] s_Data.VoxelVertexBufferBase;
 	}
 
 	void Renderer::OnWindowResize(u32 width, u32 height) {
@@ -96,21 +93,21 @@ namespace Lychee {
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(sRenderer2DData::CameraData));
 
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		s_Data.VoxelIndexCount = 0;
+		s_Data.VoxelVertexBufferPtr = s_Data.VoxelVertexBufferBase;
 	}
 
 	void Renderer::EndScene() {
 		// Flush
-		if (s_Data.QuadIndexCount) {
-			u32 dataSize = (u32)((u8*)s_Data.QuadVertexBufferPtr - (u8*)s_Data.QuadVertexBufferBase);
-			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+		if (s_Data.VoxelIndexCount) {
+			u32 dataSize = (u32)((u8*)s_Data.VoxelVertexBufferPtr - (u8*)s_Data.VoxelVertexBufferBase);
+			s_Data.VoxelVertexBuffer->SetData(s_Data.VoxelVertexBufferBase, dataSize);
 
-			s_Data.QuadShader->Bind();
+			s_Data.VoxelShader->Bind();
 
 			// Draw indexed
-			s_Data.QuadVertexArray->Bind();
-			u32 count = s_Data.QuadIndexCount ? s_Data.QuadIndexCount : s_Data.QuadVertexArray->GetIndexBuffer()->GetCount();
+			s_Data.VoxelVertexArray->Bind();
+			u32 count = s_Data.VoxelIndexCount ? s_Data.VoxelIndexCount : s_Data.VoxelVertexArray->GetIndexBuffer()->GetCount();
 			glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 		}
 	}
@@ -121,14 +118,15 @@ namespace Lychee {
 
 	void Renderer::RenderVoxel(const glm::vec3& position, const glm::vec4& color) {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position);
-		constexpr size_t quadVertexCount = 4;
+		constexpr size_t quadVertexCount = 8;
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = color;
-			s_Data.QuadVertexBufferPtr++;
+			s_Data.VoxelVertexBufferPtr->Position = transform * s_Data.VoxelVertexPositions[i];
+			s_Data.VoxelVertexBufferPtr->Color = color;
+			s_Data.VoxelVertexBufferPtr++;
 		}
-		s_Data.QuadIndexCount += 6;
+		// TODO (flex): remove magic number
+		s_Data.VoxelIndexCount += 36;
 	}
 
 	void Renderer::Clear() {

@@ -28,22 +28,24 @@ namespace Lychee {
 
 
 	struct sRenderer2DData {
+		// FIXME (flex) change later
 		static const u32 MaxQuads = 20000;
 		static const u32 MaxVertices = MaxQuads * 4;
 		static const u32 MaxIndices = MaxQuads * 6;
 		static const u32 MaxTextureSlots = 32;
 
-		Ref<VertexArray> 	QuadVertexArray;
-		Ref<VertexBuffer> 	QuadVertexBuffer;
-		Ref<Shader> 		QuadShader;
+		// Voxels
+		Ref<VertexArray> 	VoxelVertexArray;
+		Ref<VertexBuffer> 	VoxelVertexBuffer;
+		Ref<Shader> 		VoxelShader;
 
-		u32 QuadIndexCount = 0;
-		sVoxelVertex* QuadVertexBufferBase = nullptr;
-		sVoxelVertex* QuadVertexBufferPtr = nullptr;
+		u32 VoxelIndexCount = 0;
+		sVoxelVertex* VoxelVertexBufferBase = nullptr;
+		sVoxelVertex* VoxelVertexBufferPtr = nullptr;
+		glm::vec4 VoxelVertexPositions[8];
 
 		f32 LineWidth = 2.0f;
 
-		glm::vec4 QuadVertexPositions[4];
 
 		struct CameraData {
 			glm::mat4 ViewProjection;
