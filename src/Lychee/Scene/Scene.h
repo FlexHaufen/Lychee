@@ -17,6 +17,8 @@
 #include "Lychee/Core/Time/DeltaTime.h"
 
 #include "Lychee/Renderer/Renderer.h"
+#include "Lychee/Scene/Voxel/Chunk/VoxelChunk.h"
+
 #include "Lychee/Renderer/EditorCamera.h"
 
 //*** DEFINES ***
@@ -79,6 +81,9 @@ namespace Lychee {
 
         // ** Members **
         entt::registry      m_Registry;             // entt Registry
+
+
+        VoxelChunk m_Chunk;
 
         b8 m_IsRuntimeRunning = false;              // true if runtime is running
 

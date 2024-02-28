@@ -71,7 +71,8 @@ namespace Lychee {
         Renderer::BeginScene(camera);
 
         // you shall be a voxel one day
-        Renderer::RenderVoxel({ 0.0f, 0.0f, 0.0f}, { 0.8f, 0.2f, 0.3f, 1.0f });
+        Renderer::RenderVoxel({ 0.0f, 0.8f, 0.9f}, { 0.8f, 0.2f, 0.3f, 1.0f });
+        //m_Chunk.OnRender();
 
         Renderer::EndScene();
     }

@@ -17,6 +17,11 @@
 namespace Lychee {
 
 
+
+    /**
+     * @brief VoxelVertex used for rendering
+     * 
+     */
     struct sVoxelVertex {
         glm::vec3 Position;
 		glm::vec4 Color;

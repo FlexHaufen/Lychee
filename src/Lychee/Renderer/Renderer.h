@@ -18,7 +18,7 @@
 #include "Lychee/Renderer/Shader.h"
 #include "Lychee/Renderer/UniformBuffer.h"
 
-#include "Lychee/Renderer/Voxel.h"
+#include "Lychee/Scene/Voxel/Voxel.h"
 
 #include "Lychee/Renderer/EditorCamera.h"
 #include "Lychee/Scene/SceneCamera.h"
