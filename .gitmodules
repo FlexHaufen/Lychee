@@ -1,16 +1,16 @@
-[submodule "lib/vendor/imgui"]
-	path = lib/vendor/imgui
+[submodule "LycheeCore/lib/vendor/imgui"]
+	path = LycheeCore/lib/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
-[submodule "lib/vendor/yaml-cpp"]
-	path = lib/vendor/yaml-cpp
+[submodule "LycheeCore/lib/vendor/yaml-cpp"]
+	path = LycheeCore/lib/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
-[submodule "lib/vendor/spdlog"]
-	path = lib/vendor/spdlog
+[submodule "LycheeCore/lib/vendor/spdlog"]
+	path = LycheeCore/lib/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "lib/vendor/glfw"]
-	path = lib/vendor/glfw
+[submodule "LycheeCore/lib/vendor/glfw"]
+	path = LycheeCore/lib/vendor/glfw
 	url = git@github.com:glfw/glfw.git
-[submodule "lib/vendor/glm"]
+[submodule "LycheeCore/lib/vendor/glm"]
 	path = lib/vendor/glm
 	url = git@github.com:g-truc/glm.git
