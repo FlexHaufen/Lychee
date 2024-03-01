@@ -56,10 +56,6 @@ namespace Lychee {
         
         ImGui::Begin("Properties");
         if (m_SelectionContext) {
-
-            // TODO (flex): Rework if more components are added
-
-            /*
             // Simple selection popup (if you want to show the current selection inside the Button itself,
             // you may want to build a string using the "###" operator to preserve a constant ID with a variable label)
             s8 selectedComponent = -1;
@@ -77,6 +73,7 @@ namespace Lychee {
                     
                         switch(selectedComponent) {
                             case 0:
+                                m_SelectionContext.AddComponent<Component::Camera>();
                                 break;
                             default:
                                 LY_WARN("Componet was selected but could not be added");
@@ -86,7 +83,7 @@ namespace Lychee {
                 }
                 ImGui::EndPopup();
             }
-            */
+            
 
             ImGui::SeparatorText("Components");
 
@@ -138,6 +135,14 @@ namespace Lychee {
             transform.scale = {f2[0], f2[1]};
 
             ImGui::InputFloat("Rotation", &transform.rotation);
+        }
+
+        if (entity.HasComponent<Component::Camera>() && ImGui::CollapsingHeader("Camera")) {
+            auto &camera = entity.GetComponent<Component::Camera>();
+
+            b8* b1 = &camera.isPrimary;
+            ImGui::Checkbox("Is Primary", b1);
+            camera.isPrimary = *b1;
         }
     }
 }

@@ -64,6 +64,21 @@ namespace Lychee {
 
 
     void Scene::OnRuntimeUpdate(DeltaTime dt) {
+
+        Camera* mainCamera = nullptr;
+        glm::mat4 cameraTransform;
+        m_Registry.view<Component::Camera>().each([&](auto e, auto& camera) {
+            Entity entity = {e, this};
+            if (camera.isPrimary) {
+                mainCamera = &camera.camera;
+                cameraTransform = mainCamera->GetViewProjection();
+            }
+        });
+
+        if (mainCamera) {
+            Renderer::BeginScene(*mainCamera);
+            Renderer::EndScene();
+        }
     }
 
 

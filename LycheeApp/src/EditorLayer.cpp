@@ -59,7 +59,6 @@ namespace Lychee {
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
-		m_EditorCamera.OnUpdate(dt);
 
 		// Render
 		m_Framebuffer->Bind();
@@ -68,7 +67,22 @@ namespace Lychee {
 		// Clear our entity ID attachment to -1
 		m_Framebuffer->ClearAttachment(1, -1);
 		// TODO (flex): Decide here between runtime and editor
-		m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
+
+		switch (m_SceneState) {
+
+			case SceneState::Edit:
+				m_EditorCamera.OnUpdate(dt);
+				m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
+				break;
+
+			case SceneState::Play:
+				break;
+
+			default:
+				LY_ERROR("EditorLayer: SceneState was {0}. Revert to default", (u8)m_SceneState);		
+				m_SceneState = SceneState::Edit;		
+				break;
+		}
 		m_Framebuffer->Unbind();
 	}
 
@@ -164,9 +178,9 @@ namespace Lychee {
 	void EditorLayer::OnEvent(Event& e)	{
 		if (m_ViewportFocused) {
 
-			//if (m_SceneState == SceneState::Edit) {
+			if (m_SceneState == SceneState::Edit) {
 				m_EditorCamera.OnEvent(e);
-			//}
+			}
 
 
 			#ifdef LY_LOG_KEY_EVENT
@@ -204,14 +218,16 @@ namespace Lychee {
 				ImGui::Separator();
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("View")) {
-				if (ImGui::MenuItem("V1.1")) {}
-				if (ImGui::MenuItem("v1.2")) {}
+			if (ImGui::BeginMenu("Scene")) {
+				if (ImGui::MenuItem("Edit")) {
+					m_SceneState = SceneState::Edit;
+				}
+				if (ImGui::MenuItem("Play")) {
+					m_SceneState = SceneState::Play;
+				}
 
 				ImGui::Separator();
 
-				if (ImGui::MenuItem("V2.0")) {}
-				if (ImGui::MenuItem("V2.1")) {}
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Tools")) {

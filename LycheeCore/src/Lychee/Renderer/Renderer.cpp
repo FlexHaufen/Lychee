@@ -90,7 +90,7 @@ namespace Lychee {
 		glViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(const EditorCamera& camera) {
+	void Renderer::BeginScene(const Camera& camera) {
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(sRenderer2DData::CameraData));
 

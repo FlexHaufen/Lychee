@@ -29,8 +29,11 @@ namespace Lychee {
 		virtual ~Camera() = default;
 
 		const glm::mat4& GetProjection() const { return m_Projection; }
+		glm::mat4 GetViewProjection() const { return m_Projection * m_ViewMatrix; }
+
 	protected:
 		glm::mat4 m_Projection = glm::mat4(1.0f);
+		glm::mat4 m_ViewMatrix;
 	};
 
 }

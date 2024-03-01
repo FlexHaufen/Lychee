@@ -20,8 +20,7 @@
 
 #include "Lychee/Scene/Voxel/Voxel.h"
 
-#include "Lychee/Renderer/EditorCamera.h"
-#include "Lychee/Scene/SceneCamera.h"
+#include "Lychee/Renderer/Camera.h"
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -70,7 +69,7 @@ namespace Lychee {
 		static void SetClearColor(const glm::vec4& color);
 		static void Clear();
 
-		static void BeginScene(const EditorCamera& camera);
+		static void BeginScene(const Camera& camera);
 		//static void BeginScene(const SceneCamera& camera);
 
 		static void RenderVoxel(const glm::vec3& position, const glm::vec4& color);

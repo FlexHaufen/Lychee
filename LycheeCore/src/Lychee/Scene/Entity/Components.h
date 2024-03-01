@@ -14,6 +14,8 @@
 #include "Lychee/lypch.h"
 #include "Lychee/Helper/UUID/UUID.h"
 
+#include "Lychee/Scene/SceneCamera.h"
+
 //*** DEFINES ***
 
 
@@ -25,6 +27,9 @@ namespace Lychee {
      *        that an entity can have
      */
     namespace Component {
+
+
+        static const char* availableComponents[] {"Camera"};
 
         /**
          * @brief Tag Component
@@ -47,6 +52,17 @@ namespace Lychee {
             glm::vec2 pos       = {0, 0};       // Position [px]
             glm::vec2 scale     = {1, 1};       // Scale [1].
             f32 rotation        = 0.f;          // Rotation
+        };
+
+
+        /**
+         * @brief Camera Component
+         * 
+         */
+        struct Camera {
+            SceneCamera camera;
+
+            b8 isPrimary = true;
         };
     }
 }
