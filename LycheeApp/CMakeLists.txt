@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD 20)
 #----------------------------------------------------
 #				       RESOURCE
 #----------------------------------------------------
-set(LYCHEE_APP_ICO ${CMAKE_CURRENT_SOURCE_DIR}/resource/images/Lychee.rc)
+#set(LYCHEE_APP_ICO ${CMAKE_CURRENT_SOURCE_DIR}/resource/images/Lychee.rc)
 
 
 #----------------------------------------------------
@@ -32,8 +32,8 @@ file(GLOB_RECURSE SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*c
 
 ### APP ###
 add_executable(${PROJECT_NAME}     ${SRC_FILES} 
-							   	   ${HEADER_FILES}
-							   	   ${LYCHEE_APP_ICO})
+							   	   ${HEADER_FILES})
+							   	   #${LYCHEE_APP_ICO})
 
 
 #----------------------------------------------------

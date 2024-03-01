@@ -8,9 +8,7 @@ A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
 > There is no guarantee the engine will run.   
 
 
-## Description
-- Lychee is at the moment free to use under the **GNU GENERAL PUBLIC LICENSE**
-
+<img src="resource/screenshots/LycheeApp.png">
 
 ## Dependencies
 - [glad](https://glad.dav1d.de/)
@@ -59,23 +57,23 @@ To Run the .exe file via F5 you first need to configure a ```launch.json``` in y
             "name": "Release",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/release/Lychee.exe",
+            "program": "${workspaceFolder}/build/bin/release/LycheeApp.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "console": "externalTerminal"
+            "console": "internalConsole"
         },
         {
             "name": "Debug",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/debug/Lychee.exe",
+            "program": "${workspaceFolder}/build/bin/debug/LycheeApp.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "console": "externalTerminal"
+            "console": "internalConsole"
         }
     ]
 }

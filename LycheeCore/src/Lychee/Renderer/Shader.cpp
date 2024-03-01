@@ -34,10 +34,11 @@ namespace Lychee {
 			return "src/LycheeApp/src/assets/cache/shader/opengl";
 		}
 
+		// TODO (flex): Implement
 		static void CreateCacheDirectoryIfNeeded() {
-			std::string cacheDirectory = GetCacheDirectory();
-			if (!std::filesystem::exists(cacheDirectory))
-				std::filesystem::create_directories(cacheDirectory);
+			//std::string cacheDirectory = GetCacheDirectory();
+			//if (!std::filesystem::exists(cacheDirectory))
+			//	std::filesystem::create_directories(cacheDirectory);
 		}
 	}
 
