@@ -12,5 +12,5 @@
 	path = LycheeCore/lib/vendor/glfw
 	url = git@github.com:glfw/glfw.git
 [submodule "LycheeCore/lib/vendor/glm"]
-	path = lib/vendor/glm
+	path = LycheeCore/lib/vendor/glm
 	url = git@github.com:g-truc/glm.git
