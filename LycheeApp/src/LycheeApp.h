@@ -1,4 +1,5 @@
 #include <Lychee/Lychee.h>
+
 #include "EditorLayer.h"
 
 namespace Lychee {
@@ -12,10 +13,4 @@ namespace Lychee {
 			PushLayer(new EditorLayer());
 		}   
 	};
-
-	Core* CreateApplication() {
-		LY_INFO("Initializing Lychee Application");
-		return new LycheeApp();
-	}
-
 }

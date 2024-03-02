@@ -1,11 +1,11 @@
 /**
- * @file EditorLayer.h
+ * @file RuntimeLayer.h
  * @author flexhaufen
- * @brief ImGui Main
+ * @brief 
  * @version 0.1
- * @date 2022-09-28
+ * @date 2024-03-02
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright (c) 2024
  * 
  */
 #pragma once
@@ -13,23 +13,20 @@
 // *** INCLUDES ***
 #include <Lychee/Lychee.h>
 
-#include "Panels/ContentBrowserPanel.h"
-
 // *** DEFINES ***
 
 // *** NAMESPACE ***
 namespace Lychee {
 
-	class EditorLayer : public Layer {
+	class RuntimeLayer : public Layer {
 	public:
-		EditorLayer();
-		~EditorLayer() = default;
+		RuntimeLayer();
+		~RuntimeLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
 		virtual void OnUpdate(DeltaTime dt) override;
-		virtual void OnImGuiRender() override;
 		void OnEvent(Event& e) override;
 	private:
 
@@ -43,11 +40,6 @@ namespace Lychee {
 
 		// ** Members **
 		Ref<Scene> m_ActiveScene;					// Current active Scene
-		enum class SceneState {
-			Edit = 0, Play = 1, Simulate = 2
-		};
-		SceneState m_SceneState = SceneState::Edit;
-
 		Ref<Framebuffer> m_Framebuffer;
 
 		b8 m_ViewportFocused = false;				// True if viewport is focused
@@ -57,7 +49,6 @@ namespace Lychee {
 		EditorCamera m_EditorCamera;
 
 		// Panels
-		ContentBrowserPanel m_ContentBrowserPanel;
 	};
 
 }
