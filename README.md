@@ -22,8 +22,8 @@ A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
 
 ## Setup
 ### Requirements
-- Cmake Version **Version 3.24.1** or higher
-- MSVC 19 or higher
+- Cmake Version **Version 3.28** or higher
+- **MSVC 19.39.33521.0** or higher
 
 ### Setup Repo
 1. Clone
