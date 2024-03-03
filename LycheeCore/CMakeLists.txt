@@ -31,8 +31,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW)
 
 #--------SPDLOG--------
-set(SPDLOG_BUILD_WARNINGS OFF CACHE BOOL "" FORCE)
-#set(SPDLOG_USE_STD_FORMAT ON)
+set(SPDLOG_BUILD_WARNINGS OFF)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/spdlog)
 
 #--------YAML---------
