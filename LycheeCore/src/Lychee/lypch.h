@@ -12,7 +12,7 @@
 
 // *** INCLUDES ***
 // ** External Files **
-
+#pragma warning(push, 0)  // Disable all warnings
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -60,6 +60,8 @@
 
 // * yaml-cpp *
 #include <yaml-cpp/yaml.h>
+
+#pragma warning(pop)  // Restore previous warning settings
 
 // ** Local Files **
 #include "Lychee/Core/Log.h"

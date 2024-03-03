@@ -21,11 +21,11 @@
 
 // This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
-    #include <spdlog/spdlog.h>
-    #include <spdlog/fmt/ostr.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+#include <filesystem>
 #pragma warning(pop)
 
-    #include <filesystem>
 
 // *** DEFINES ***
 #ifndef NLY_DEBUG

@@ -12,8 +12,10 @@
 // *** INCLUDES ***
 #include "Lychee/Core/Log.h"
 
+#pragma warning(push, 0)  // Disable all warnings
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#pragma warning(pop)  // Restore previous warning settings
 
 // *** DEFINE ***
 

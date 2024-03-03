@@ -30,6 +30,10 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 #set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW)
 
+#--------SPDLOG--------
+set(SPDLOG_BUILD_WARNINGS OFF CACHE BOOL "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/spdlog)
+
 #--------YAML---------
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
@@ -46,6 +50,7 @@ target_include_directories(stb_image PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/stb_image
 )
 
+#--------IMGUI---------
 set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/imgui)
 add_library(imgui STATIC 
 	${IMGUI_PATH}/imconfig.h
@@ -70,6 +75,7 @@ target_include_directories(imgui PRIVATE
 )
 target_link_libraries(imgui glfw)
 
+#--------GLAD---------
 set(GLAD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad)
 add_library(glad STATIC 
 				${GLAD_PATH}/include/glad/glad.h
