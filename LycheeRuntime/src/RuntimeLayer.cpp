@@ -25,13 +25,7 @@ namespace Lychee {
 
 		LY_INFO("Getting Current scene");
 		m_ActiveScene = CreateRef<Scene>();
-		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
-		sFramebufferSpecification fbSpec;
-		fbSpec.Attachments = { eFramebufferTextureFormat::RGBA8, eFramebufferTextureFormat::RED_INTEGER, eFramebufferTextureFormat::Depth };
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
-		m_Framebuffer = CreateRef<Framebuffer>(fbSpec);
 	}
 
 	void RuntimeLayer::OnAttach() {
@@ -46,32 +40,9 @@ namespace Lychee {
 		//m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
 
-		// Resize
-		if (sFramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
-			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)) {
-			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-		}
-
-
-		// Render
-		m_Framebuffer->Bind();
-		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		Renderer::Clear();
-		// Clear our entity ID attachment to -1
-		m_Framebuffer->ClearAttachment(1, -1);
-		// TODO (flex): Decide here between runtime and editor
-
-		m_EditorCamera.OnUpdate(dt);
-		m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
-
-
-		m_Framebuffer->Unbind();
 	}
 
 	void RuntimeLayer::OnEvent(Event& e)	{
-		m_EditorCamera.OnEvent(e);
 
 		#ifdef LY_LOG_KEY_EVENT
 			if (e.GetEventType() == Lychee::eEventType::KeyPressed) {

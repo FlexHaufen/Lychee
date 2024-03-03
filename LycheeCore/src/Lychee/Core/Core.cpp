@@ -51,14 +51,12 @@ namespace Lychee {
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
         LY_CORE_INFO("\\---- Initializing renderer");
-        Renderer::Init();
 
         m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
     }
 
     Core::~Core() {
-        Renderer::Shutdown();
         LY_CORE_INFO("Terminating");
     }
 
@@ -132,77 +130,8 @@ namespace Lychee {
 			return true;
 		}
 
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+        //Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		m_isMinimized = false;
 		return false;
 	}
-
-
-    /*
-    void Core::OnSplashScreenDisplay() {
-        sf::RenderWindow splashScreen;
-
-        const u32 sizeX = 700;
-        const u32 sizeY = 400;
-
-        splashScreen.create(sf::VideoMode(sizeX, sizeY), LY_WINDOW_NAME, sf::Style::None);
-        splashScreen.clear(LY_COLOR_BLACK);
-        
-        sf::Texture tex_MainIcon;
-        if (!tex_MainIcon.loadFromFile(LY_ICON_PNG)) {
-            LY_CORE_WARN("Could not load window icon at [{0}]", LY_ICON_PNG);
-            splashScreen.close();
-            return;
-        }
-
-        sf::Font main_font;
-        if (!main_font.loadFromFile(LY_FONT_REGULAR)) {
-            LY_CORE_WARN("Could not load font at [{0}]", LY_FONT_REGULAR);
-            splashScreen.close();
-            return;
-        }
-        
-
-        // Main Icon
-        sf::Sprite sp_MainIcon;
-        sp_MainIcon.setTexture(tex_MainIcon);
-        sp_MainIcon.setOrigin(tex_MainIcon.getSize() / 2);
-        sp_MainIcon.setPosition(sizeX / 2 - 5, sizeY / 2 - 30); // -5 to center correctly / -30 for vertical offset
-        sp_MainIcon.setScale(0.1f, 0.1f);
-        splashScreen.draw(sp_MainIcon);
-
-        // Main Text
-        sf::Text title(LY_PROJECT_NAME, main_font, 34);
-        title.setFillColor(LY_COLOR_RED);
-        sf::FloatRect titleBounds = title.getLocalBounds();
-        title.setOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
-        title.setPosition(sizeX / 2, sizeY / 2 + 50); 
-        splashScreen.draw(title);
-
-        // Version Text
-        sf::Text versionText(LY_VERSION_STR, main_font, 15);
-        versionText.setFillColor(LY_COLOR_RED);
-        sf::FloatRect versionTextBounds = versionText.getLocalBounds();
-        versionText.setOrigin(versionTextBounds.left + versionTextBounds.width / 2.0f, versionTextBounds.top + versionTextBounds.height / 2.0f);
-        versionText.setPosition(sizeX / 2, sizeY / 2 + 80); 
-        splashScreen.draw(versionText);
-
-
-        // startup Text
-        sf::Text startup("starting...", main_font, 15);
-        startup.setFillColor(LY_COLOR_WHITE);
-        sf::FloatRect startupBounds = startup.getLocalBounds();
-        startup.setOrigin(startupBounds.left + startupBounds.width / 2.0f, startupBounds.top + startupBounds.height / 2.0f);
-        startup.setPosition(sizeX / 2, sizeY / 2 + 120); 
-        splashScreen.draw(startup);
-
-
-
-
-        splashScreen.display();
-        sf::sleep(sf::seconds(5));
-        splashScreen.close();
-    }
-    */
-    
 }

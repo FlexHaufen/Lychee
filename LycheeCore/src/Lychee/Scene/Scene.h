@@ -16,10 +16,6 @@
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 
-#include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Scene/Voxel/Chunk/VoxelChunk.h"
-
-#include "Lychee/Renderer/EditorCamera.h"
 
 //*** DEFINES ***
 #define LY_MAX_RENDERLAYERS     10
@@ -73,7 +69,7 @@ namespace Lychee {
 
         void OnRuntimeUpdate(DeltaTime dt);
 
-        void OnEditorUpdate(DeltaTime dt, EditorCamera& camera);
+        void OnEditorUpdate(DeltaTime dt);
 
 		entt::registry& GetRegistry() { return m_Registry; }
 
@@ -81,9 +77,6 @@ namespace Lychee {
 
         // ** Members **
         entt::registry      m_Registry;             // entt Registry
-
-
-        VoxelChunk m_Chunk;
 
         b8 m_IsRuntimeRunning = false;              // true if runtime is running
 

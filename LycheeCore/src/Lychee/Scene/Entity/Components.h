@@ -14,8 +14,6 @@
 #include "Lychee/lypch.h"
 #include "Lychee/Helper/UUID/UUID.h"
 
-#include "Lychee/Scene/SceneCamera.h"
-
 //*** DEFINES ***
 
 
@@ -60,7 +58,7 @@ namespace Lychee {
          * 
          */
         struct Camera {
-            SceneCamera camera;
+            //SceneCamera camera;
 
             b8 isPrimary = true;
         };

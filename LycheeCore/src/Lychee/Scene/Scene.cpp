@@ -65,30 +65,10 @@ namespace Lychee {
 
     void Scene::OnRuntimeUpdate(DeltaTime dt) {
 
-        Camera* mainCamera = nullptr;
-        glm::mat4 cameraTransform;
-        m_Registry.view<Component::Camera>().each([&](auto e, auto& camera) {
-            Entity entity = {e, this};
-            if (camera.isPrimary) {
-                mainCamera = &camera.camera;
-                cameraTransform = mainCamera->GetViewProjection();
-            }
-        });
-
-        if (mainCamera) {
-            Renderer::BeginScene(*mainCamera);
-            Renderer::EndScene();
-        }
     }
 
 
-    void Scene::OnEditorUpdate(DeltaTime dt, EditorCamera& camera) {
-        Renderer::BeginScene(camera);
-
-        // you shall be a voxel one day
-        Renderer::RenderVoxel({ 0.0f, 0.8f, 0.9f}, { 0.8f, 0.2f, 0.3f, 1.0f });
-        //m_Chunk.OnRender();
-
-        Renderer::EndScene();
+    void Scene::OnEditorUpdate(DeltaTime dt) {
+        
     }
 }

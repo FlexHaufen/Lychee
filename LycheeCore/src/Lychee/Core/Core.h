@@ -16,7 +16,6 @@
 #include "Lychee/Core/Layer/LayerStack.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Core/Window/Window.h"
-#include "Lychee/Renderer/Renderer.h"
 
 #include "Lychee/Events/KeyEvent.h"
 #include "Lychee/Events/ApplicationEvent.h"

@@ -73,7 +73,7 @@ namespace Lychee {
                     
                         switch(selectedComponent) {
                             case 0:
-                                m_SelectionContext.AddComponent<Component::Camera>();
+                                //m_SelectionContext.AddComponent<Component::Camera>();
                                 break;
                             default:
                                 LY_WARN("Componet was selected but could not be added");
@@ -137,12 +137,11 @@ namespace Lychee {
             ImGui::InputFloat("Rotation", &transform.rotation);
         }
 
-        if (entity.HasComponent<Component::Camera>() && ImGui::CollapsingHeader("Camera")) {
-            auto &camera = entity.GetComponent<Component::Camera>();
-
-            b8* b1 = &camera.isPrimary;
-            ImGui::Checkbox("Is Primary", b1);
-            camera.isPrimary = *b1;
-        }
+        //if (entity.HasComponent<Component::Camera>() && ImGui::CollapsingHeader("Camera")) {
+        //    auto &camera = entity.GetComponent<Component::Camera>();
+        //    b8* b1 = &camera.isPrimary;
+        //    ImGui::Checkbox("Is Primary", b1);
+        //    camera.isPrimary = *b1;
+        //}
     }
 }

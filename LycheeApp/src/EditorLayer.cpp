@@ -30,12 +30,6 @@ namespace Lychee {
 		m_ActiveScene = CreateRef<Scene>();
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
-		sFramebufferSpecification fbSpec;
-		fbSpec.Attachments = { eFramebufferTextureFormat::RGBA8, eFramebufferTextureFormat::RED_INTEGER, eFramebufferTextureFormat::Depth };
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
-		m_Framebuffer = CreateRef<Framebuffer>(fbSpec);
-	
 		m_ContentBrowserPanel.SetContext(m_ActiveScene);
 	}
 
@@ -51,22 +45,6 @@ namespace Lychee {
 		//m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
 
-		// Resize
-		if (sFramebufferSpecification spec = m_Framebuffer->GetSpecification();
-			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
-			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)) {
-			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-		}
-
-
-		// Render
-		m_Framebuffer->Bind();
-		Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		Renderer::Clear();
-		// Clear our entity ID attachment to -1
-		m_Framebuffer->ClearAttachment(1, -1);
-		// TODO (flex): Decide here between runtime and editor
 
 		switch (m_SceneState) {
 
@@ -163,8 +141,8 @@ namespace Lychee {
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		//uint64_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+		//ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::PopStyleVar();
 		ImGui::End();

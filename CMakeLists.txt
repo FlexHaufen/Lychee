@@ -21,5 +21,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/release)
 #				      LINK & PCH
 #----------------------------------------------------
 add_subdirectory(LycheeCore)
-add_subdirectory(LycheeApp)
-#add_subdirectory(LycheeRuntime)
+#add_subdirectory(LycheeApp)
+add_subdirectory(LycheeRuntime)
