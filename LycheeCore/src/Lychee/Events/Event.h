@@ -15,7 +15,7 @@
 #include "Lychee/lypch.h"
 
 //*** DEFINES ***
-
+#define LY_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
 
 //*** NAMESPACE ***
 namespace Lychee {
@@ -48,7 +48,7 @@ namespace Lychee {
                                    virtual eEventType GetEventType() const override { return GetStaticType(); }\
                                    virtual const char* GetName() const override { return #type; }
 
-    #define EVENT_CLASS_CATEGORY(category) virtual s32 GetCategoryFlags() const override { return category; }
+    #define EVENT_CLASS_CATEGORY(category) virtual int32_t GetCategoryFlags() const override { return category; }
 
     /**
      * @brief Event class
@@ -60,7 +60,7 @@ namespace Lychee {
 
 		virtual eEventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
-		virtual s32 GetCategoryFlags() const = 0;
+		virtual int32_t GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
 		/**

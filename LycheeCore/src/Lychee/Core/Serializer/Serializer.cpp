@@ -17,7 +17,7 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-    Serializer::Serializer(const std::string& filepath, const std::string& filename, b8 forceCreation) {
+    Serializer::Serializer(const std::string& filepath, const std::string& filename, bool forceCreation) {
         if (std::filesystem::exists(filepath)) {
             m_FilePath = filepath;
             m_FileName = filename;
@@ -54,7 +54,7 @@ namespace Lychee {
     }
 
     template<typename T>
-    b8 Serializer::DeserializeValue(const std::string& key, T& value) const {
+    bool Serializer::DeserializeValue(const std::string& key, T& value) const {
         std::string yamlFile = m_FilePath + m_FileName;
         try {
             YAML::Node config = YAML::LoadFile(yamlFile);

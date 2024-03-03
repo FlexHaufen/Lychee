@@ -65,7 +65,7 @@ namespace Lychee {
 
         while (m_isRunning) {
 
-            f32 time = (f32)glfwGetTime();
+            float time = (float)glfwGetTime();
             DeltaTime deltaTime = time - m_lastFrameTime;
             m_lastFrameTime = time;
 
@@ -119,12 +119,12 @@ namespace Lychee {
         #endif
     }
 
-    b8 Core::OnWindowClose(WindowCloseEvent& e) {
+    bool Core::OnWindowClose(WindowCloseEvent& e) {
         m_isRunning = false;
         return true;
     }
 
-	b8 Core::OnWindowResize(WindowResizeEvent& e) {
+	bool Core::OnWindowResize(WindowResizeEvent& e) {
 		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_isMinimized = true;
 			return true;

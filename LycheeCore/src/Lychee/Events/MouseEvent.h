@@ -22,11 +22,11 @@ namespace Lychee {
 
 	class MouseMovedEvent : public Event {
 	public:
-		MouseMovedEvent(const f32 x, const f32 y)
+		MouseMovedEvent(const float x, const float y)
 			: m_MouseX(x), m_MouseY(y) {}
 
-		f32 GetX() const { return m_MouseX; }
-		f32 GetY() const { return m_MouseY; }
+		float GetX() const { return m_MouseX; }
+		float GetY() const { return m_MouseY; }
 
 		std::string ToString() const override
 		{
@@ -38,16 +38,16 @@ namespace Lychee {
 		EVENT_CLASS_TYPE(MouseMoved)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		f32 m_MouseX, m_MouseY;
+		float m_MouseX, m_MouseY;
 	};
 
 	class MouseScrolledEvent : public Event {
 	public:
-		MouseScrolledEvent(const f32 xOffset, const f32 yOffset)
+		MouseScrolledEvent(const float xOffset, const float yOffset)
 			: m_XOffset(xOffset), m_YOffset(yOffset) {}
 
-		f32 GetXOffset() const { return m_XOffset; }
-		f32 GetYOffset() const { return m_YOffset; }
+		float GetXOffset() const { return m_XOffset; }
+		float GetYOffset() const { return m_YOffset; }
 
 		std::string ToString() const override
 		{
@@ -59,7 +59,7 @@ namespace Lychee {
 		EVENT_CLASS_TYPE(MouseScrolled)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		f32 m_XOffset, m_YOffset;
+		float m_XOffset, m_YOffset;
 	};
 
 	class MouseButtonEvent : public Event {

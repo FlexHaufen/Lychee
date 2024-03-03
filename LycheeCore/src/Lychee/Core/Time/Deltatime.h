@@ -24,15 +24,15 @@ namespace Lychee {
      */
     class DeltaTime {
     public:
-        DeltaTime(f32 time = 0.0f)
+        DeltaTime(float time = 0.0f)
         :   m_time(time) {}
 
-        f32 GetSeconds() const { return m_time; }
-        f32 GetMillisecons() const { return m_time * 1000.0f;}
+        float GetSeconds() const { return m_time; }
+        float GetMillisecons() const { return m_time * 1000.0f;}
 
-        operator f32() const {return m_time;}
+        operator float() const {return m_time;}
     private:
         //** Members **
-        f32 m_time;
+        float m_time;
     };
 }

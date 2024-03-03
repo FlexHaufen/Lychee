@@ -32,7 +32,7 @@ namespace Lychee {
          * @param filename      filename
          * @param forceCreation true: filepath will be created if it does not exist
          */
-        Serializer(const std::string& filepath, const std::string& filename, b8 forceCreation = true);
+        Serializer(const std::string& filepath, const std::string& filename, bool forceCreation = true);
 
         /**
          * @brief Serialize a value to YAML-File
@@ -53,7 +53,7 @@ namespace Lychee {
          * @return b8   true: successful, false: error
          */
         template<typename T>
-        b8 DeserializeValue(const std::string& key, T& value) const;
+        bool DeserializeValue(const std::string& key, T& value) const;
 
     private:
 

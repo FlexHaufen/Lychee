@@ -118,7 +118,7 @@ namespace Lychee {
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
-        f32 m_lastFrameTime;        // delta time
+        float m_lastFrameTime;        // delta time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui

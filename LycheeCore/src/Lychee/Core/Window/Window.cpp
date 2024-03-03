@@ -21,14 +21,14 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-	static u8 s_GLFWWindowCount = 0;
+	static uint8_t s_GLFWWindowCount = 0;
 
-	static void GLFWErrorCallback(s32 error, const char* description) {
+	static void GLFWErrorCallback(int32_t error, const char* description) {
 		LY_CORE_ERROR("Window: GLFW Error ({0}): {1}", error, description);
 	}
 
 
-	Window::Window(std::string title, u32 width, u32 height) {
+	Window::Window(std::string title, uint32_t width, uint32_t height) {
 		m_sWindowData.title = title;
 		m_sWindowData.width = width;
 		m_sWindowData.height = height;
@@ -48,15 +48,15 @@ namespace Lychee {
         }
         glfwSetErrorCallback(GLFWErrorCallback);
 
-		m_glfwWindow = glfwCreateWindow((s32)m_sWindowData.width, 
-                                        (s32)m_sWindowData.height, 
+		m_glfwWindow = glfwCreateWindow((int32_t)m_sWindowData.width, 
+                                        (int32_t)m_sWindowData.height, 
                                         m_sWindowData.title.c_str(), 
                                         nullptr, 
                                         nullptr);
 
 
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
-		s32 status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		int32_t status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		
 		if(!status) {
 			LY_CORE_ERROR("Failed to initialize Glad!");
@@ -81,7 +81,7 @@ namespace Lychee {
 
 		//** Callbacks **
 		//* Window Resize *
-		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, s32 width, s32 height) {
+		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, int32_t width, int32_t height) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			data.width = width;
 			data.height = height;
@@ -97,7 +97,7 @@ namespace Lychee {
 		});
 
 		//* Keys *
-		glfwSetKeyCallback(m_glfwWindow, [](GLFWwindow* window, s32 key, s32 scancode, s32 action, s32 mods) {
+		glfwSetKeyCallback(m_glfwWindow, [](GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			switch (action) {
 				case GLFW_PRESS: {
@@ -119,14 +119,14 @@ namespace Lychee {
 		});
 
 		//* Char *
-		glfwSetCharCallback(m_glfwWindow, [](GLFWwindow* window, u32 keycode) {
+		glfwSetCharCallback(m_glfwWindow, [](GLFWwindow* window, uint32_t keycode) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			KeyTypedEvent event(keycode);
 			data.eventCallback(event);
 		});
 
 		//* Mouse Button *
-		glfwSetMouseButtonCallback(m_glfwWindow, [](GLFWwindow* window, s32 button, s32 action, s32 mods) {
+		glfwSetMouseButtonCallback(m_glfwWindow, [](GLFWwindow* window, int32_t button, int32_t action, int32_t mods) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
@@ -144,18 +144,18 @@ namespace Lychee {
 		});
 
 		//* Mouse Scroll *
-		glfwSetScrollCallback(m_glfwWindow, [](GLFWwindow* window, f64 xOffset, f64 yOffset) {
+		glfwSetScrollCallback(m_glfwWindow, [](GLFWwindow* window, double xOffset, double yOffset) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent event((f32)xOffset, (f32)yOffset);
+			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.eventCallback(event);
 		});
 
 		//* Mous Pos *
-		glfwSetCursorPosCallback(m_glfwWindow, [](GLFWwindow* window, f64 xPos, f64 yPos) {
+		glfwSetCursorPosCallback(m_glfwWindow, [](GLFWwindow* window, double xPos, double yPos) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 
-			MouseMovedEvent event((f32)xPos, (f32)yPos);
+			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.eventCallback(event);
 		});
 	}
@@ -187,7 +187,7 @@ namespace Lychee {
 	}
 
 	void Window::SetVSync(bool enabled) {
-        glfwSwapInterval(s32(enabled));
+        glfwSwapInterval(int32_t(enabled));
 		m_sWindowData.isVSyncOn = enabled;
 	}
 

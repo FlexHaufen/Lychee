@@ -78,7 +78,7 @@ namespace Lychee {
         // ** Members **
         entt::registry      m_Registry;             // entt Registry
 
-        b8 m_IsRuntimeRunning = false;              // true if runtime is running
+        bool m_IsRuntimeRunning = false;              // true if runtime is running
 
         friend class Entity;                        // Entity class
     };

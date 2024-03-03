@@ -18,7 +18,7 @@
 
 // *** NAMESPACE ***
 
-using MouseCode = u16;
+using MouseCode = uint16_t;
 
 namespace Mouse
 {

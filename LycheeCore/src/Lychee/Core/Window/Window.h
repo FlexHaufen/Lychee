@@ -40,7 +40,7 @@ namespace Lychee {
 		 * @param with 	Window width (px)
 		 * @param height Window height (px)
 		 */
-		Window(std::string title, u32 with, u32 height);
+		Window(std::string title, uint32_t with, uint32_t height);
 
 		/**
 		 * @brief Destroy the Window object
@@ -59,14 +59,14 @@ namespace Lychee {
 		 * 
 		 * @return u32 width
 		 */
-		u32 GetWidth() const { return m_sWindowData.width; }
+		uint32_t GetWidth() const { return m_sWindowData.width; }
 
 		/**
 		 * @brief Get the Height
 		 * 
 		 * @return u32 height
 		 */
-		u32 GetHeight() const { return m_sWindowData.height; }
+		uint32_t GetHeight() const { return m_sWindowData.height; }
 
 		// Window attributes
 		void SetEventCallback(const EventCallbackFn& callback) { m_sWindowData.eventCallback = callback; }
@@ -99,7 +99,7 @@ namespace Lychee {
 		 */
 		struct sWindowData {
 			std::string title;
-			u32 width, height;
+			uint32_t width, height;
 			bool isVSyncOn;
 
 			EventCallbackFn eventCallback;
@@ -107,7 +107,7 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
-		f32 m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
-		u16 m_frameCounterFps = 0;		// Frames since last fps update
+		float m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
+		uint16_t m_frameCounterFps = 0;		// Frames since last fps update
 	};
 }

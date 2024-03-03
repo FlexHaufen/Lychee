@@ -31,8 +31,8 @@ namespace Lychee {
 	private:
 
 
-		b8 OnKeyPressed(KeyPressedEvent& e);
-		b8 OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 		void OnMenuBarRender();
 
@@ -41,8 +41,8 @@ namespace Lychee {
 		// ** Members **
 		Ref<Scene> m_ActiveScene;					// Current active Scene
 
-		b8 m_ViewportFocused = false;				// True if viewport is focused
-		b8 m_ViewportHovered = false;
+		bool m_ViewportFocused = false;				// True if viewport is focused
+		bool m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		glm::vec2 m_ViewportBounds[2];
 

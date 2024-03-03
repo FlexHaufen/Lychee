@@ -28,14 +28,14 @@ namespace Lychee {
     class UUID {
     public:
         UUID();
-        UUID(u64 uuid);
+        UUID(uint64_t uuid);
 
 
-        operator u64() const { return m_UUID; }
+        operator uint64_t() const { return m_UUID; }
 
     private:
         // ** Members **
-        u64 m_UUID;         // UUID
+        uint64_t m_UUID;         // UUID
     };
 }
 
@@ -46,7 +46,7 @@ namespace std {
 	template<>
 	struct hash<Lychee::UUID>{
 		std::size_t operator()(const Lychee::UUID& uuid) const {
-			return (u64)uuid;
+			return (uint64_t)uuid;
 		}
 	};
 }

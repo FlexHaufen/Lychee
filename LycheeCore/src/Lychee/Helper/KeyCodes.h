@@ -17,7 +17,7 @@
 
 
 // *** NAMESPACE ***
-using KeyCode = u16;
+using KeyCode = uint16_t;
 
 namespace Key {
     enum : KeyCode {
