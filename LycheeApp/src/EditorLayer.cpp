@@ -28,7 +28,7 @@ namespace Lychee {
 
 		LY_INFO("Getting Current scene");
 		m_ActiveScene = CreateRef<Scene>();
-		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+		//m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		m_ContentBrowserPanel.SetContext(m_ActiveScene);
 	}
@@ -49,19 +49,19 @@ namespace Lychee {
 		switch (m_SceneState) {
 
 			case SceneState::Edit:
-				m_EditorCamera.OnUpdate(dt);
-				m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
+				//m_EditorCamera.OnUpdate(dt);
+				//m_ActiveScene->OnEditorUpdate(dt, m_EditorCamera);
 				break;
 
 			case SceneState::Play:
 				break;
 
 			default:
-				LY_ERROR("EditorLayer: SceneState was {0}. Revert to default", (u8)m_SceneState);		
+				LY_ERROR("EditorLayer: SceneState was {0}. Revert to default", (uint8_t)m_SceneState);		
 				m_SceneState = SceneState::Edit;		
 				break;
 		}
-		m_Framebuffer->Unbind();
+		//m_Framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender() {
@@ -157,7 +157,7 @@ namespace Lychee {
 		if (m_ViewportFocused) {
 
 			if (m_SceneState == SceneState::Edit) {
-				m_EditorCamera.OnEvent(e);
+				//Sm_EditorCamera.OnEvent(e);
 			}
 
 

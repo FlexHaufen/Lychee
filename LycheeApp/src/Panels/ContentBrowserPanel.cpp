@@ -118,7 +118,7 @@ namespace Lychee {
 
             ImGui::Text("Index: ");
             ImGui::SameLine();
-            ImGui::TextColored((LY_COLOR_LIME), std::to_string((uint32_t32)entity).c_str());
+            ImGui::TextColored((LY_COLOR_LIME), std::to_string((uint32_t)entity).c_str());
         }
 
         if (entity.HasComponent<Component::Transform>() && ImGui::CollapsingHeader("Transform")) {
