@@ -19,7 +19,8 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-    Scene::Scene(){
+    Scene::Scene()
+    : m_Camera(glm::radians(60.0f), 1920.0f / 1080.0f, 0.1f, 1000.0f) {
         LY_CORE_INFO("Scene: Initializing");
     }
 
@@ -55,6 +56,8 @@ namespace Lychee {
 
     void Scene::OnRuntimeStart() {
         m_IsRuntimeRunning = true;
+    
+        m_Renderer.Init();
     }
 
     void Scene::OnRuntimeStop() {
@@ -64,9 +67,10 @@ namespace Lychee {
 
 
     void Scene::OnRuntimeUpdate(DeltaTime dt) {
-
+        m_Camera.OnUpdate(dt);
+        m_Renderer.Clear();
+        m_Renderer.Render(m_Camera.GetViewProjectionMatrix());
     }
-
 
     void Scene::OnEditorUpdate(DeltaTime dt) {
         

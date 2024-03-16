@@ -12,6 +12,8 @@
 // *** INCLUDES ***
 #include "Lychee/Core/Core.h"
 
+#include "Lychee/Renderer/Renderer.h"
+
 // *** DEFINE ***
 
 // *** NAMESPACE ***
@@ -129,8 +131,6 @@ namespace Lychee {
 			m_isMinimized = true;
 			return true;
 		}
-
-        //Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		m_isMinimized = false;
 		return false;
 	}
