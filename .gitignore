@@ -3,7 +3,7 @@ build/
 .vscode/
 
 # Doc
-.obsidian/
+doc/
 
 # Log files
 *.log
