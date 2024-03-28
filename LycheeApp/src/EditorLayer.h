@@ -36,9 +36,6 @@ namespace Lychee {
 
 		bool OnKeyPressed(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
-
-		void OnMenuBarRender();
-
 	private:
 
 		// ** Members **
