@@ -16,7 +16,6 @@
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Renderer/Camera.h"
 #include "Lychee/Events/Event.h"
 
 //*** DEFINES ***
@@ -65,7 +64,7 @@ namespace Lychee {
 
         // ** Scene Handling **
 
-		void OnViewportResize(uint32_t width, uint32_t height) { m_Renderer.OnWindowResize(width, height); m_Camera.UpdateViewPort(width, height); };
+		void OnViewportResize(uint32_t width, uint32_t height) {  };
 
         void OnRuntimeStart();
 
@@ -85,7 +84,6 @@ namespace Lychee {
         bool m_IsRuntimeRunning = false;            // true if runtime is running
 
         Renderer m_Renderer;
-        Camera m_Camera;
 
         friend class Entity;                        // Entity class
     };

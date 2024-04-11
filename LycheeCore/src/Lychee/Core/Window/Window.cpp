@@ -16,6 +16,8 @@
 #include "Lychee/Events/MouseEvent.h"
 #include "Lychee/Events/ApplicationEvent.h"
 
+#include "Lychee/Core/Window/vkInstance.h"
+
 // *** DEFINES ***
 
 // *** NAMESPACE ***
@@ -46,6 +48,11 @@ namespace Lychee {
         if(!glfwInit()){
             LY_CORE_ERROR("Window:       \\---- Failed to initialize GLFW!");
         }
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);	// Disable OpenGL default client
+		// TODO: Implement
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);		// Disable window resizeable for now
+
         glfwSetErrorCallback(GLFWErrorCallback);
 
 		m_glfwWindow = glfwCreateWindow((int32_t)m_sWindowData.width, 
@@ -54,21 +61,27 @@ namespace Lychee {
                                         nullptr, 
                                         nullptr);
 
-
-		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
-		int32_t status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		
-		if(!status) {
-			LY_CORE_ERROR("Failed to initialize Glad!");
+		LY_CORE_INFO("Window: \\---- Initializing Vulkan");
+		if (!glfwVulkanSupported()) {
+			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
 
-        // glad: load all OpenGL function pointers
-		LY_CORE_INFO("Window: \\---- Initializing glad");
-	    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		    LY_CORE_ERROR("Window:       \\---- Failed to initalize GLAD!");
-		    return;
-	    }
+		vk::CreateVkInstance(m_sWindowData.title.c_str(), m_vkInstance);
+
+		if (m_instance == nullptr) {
+			LY_CORE_ERROR("Window:       \\---- Failed initializing Vulkan!");
+		}
+
+		//VkResult vkErr = glfwCreateWindowSurface(m_gl)
+
+
+		/*
+		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
+	
 		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
+
+
+
 
 		// TODO (flex): Implement window icon
 		// Set window ico
@@ -158,10 +171,12 @@ namespace Lychee {
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.eventCallback(event);
 		});
+		*/
 	}
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
+		vk::DestroyInstance(m_vkInstance);
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}

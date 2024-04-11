@@ -30,12 +30,13 @@
 #include <vector>
 #include <Windows.h>
 
-// glad
-#include <glad/glad.h>
 
 // GLFW
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
+
+// Vulkan
+#include <vulkan/vulkan.h>
 
 // glm
 #include <glm/glm.hpp>

@@ -107,6 +107,8 @@ namespace Lychee {
 
 		sWindowData m_sWindowData;	  // Window data
 
+		VkInstance m_vkInstance;
+
 		float m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		uint16_t m_frameCounterFps = 0;		// Frames since last fps update
 	};
