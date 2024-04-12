@@ -68,16 +68,18 @@ namespace Lychee {
 		}
 
 		m_vkInstance = vkIntern::CreateInstance(m_sWindowData.title.c_str());
-
 		if (m_vkInstance == nullptr) {
 			LY_CORE_ERROR("Window:       \\---- Failed initializing Vulkan!");
 		}
 
 		m_vkDispatchLoaderD = vk::DispatchLoaderDynamic(m_vkInstance, vkGetInstanceProcAddr);
-
 		#ifdef LY_DEBUG
 			m_vkDebugMessenger = vkIntern::CreateDebugMessenger(m_vkInstance, m_vkDispatchLoaderD);
 		#endif
+
+		// Device Setup
+		m_vkPhysicalDevice = vkIntern::CreatePhysicalDevice(m_vkInstance);
+
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 	
