@@ -114,6 +114,8 @@ namespace Lychee {
         vk::DebugUtilsMessengerEXT m_vkDebugMessenger = nullptr;
         vk::DispatchLoaderDynamic m_vkDispatchLoaderD;
 		vk::PhysicalDevice m_vkPhysicalDevice = nullptr;
+		vk::Device m_vkLogicalDevice = nullptr;
+		vk::Queue m_vkGraphicsQueue = nullptr;
 
 		float m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		uint16_t m_frameCounterFps = 0;		// Frames since last fps update

@@ -128,43 +128,5 @@ namespace Lychee {
             }
         }
  
- 
-        vk::PhysicalDevice CreatePhysicalDevice(vk::Instance& instance) {
-            
-            LY_CORE_INFO("VULKAN: Choosing physical device");
-
-            std::vector<vk::PhysicalDevice> availablePhysicalDevices = instance.enumeratePhysicalDevices();
-            for (vk::PhysicalDevice d : availablePhysicalDevices) {
-                #ifdef LY_DEBUG
-                    vk::PhysicalDeviceProperties properties = d.getProperties();
-                    LY_CORE_INFO("VULKAN: Device name: {0}", properties.deviceName);
-                    switch (properties.deviceType) {
-                        case (vk::PhysicalDeviceType::eCpu):            LY_CORE_INFO("VULKAN: Device Type [CPU]"); break;
-                        case (vk::PhysicalDeviceType::eDiscreteGpu):    LY_CORE_INFO("VULKAN: Device Type [Discrete GPU]"); break;
-                        case (vk::PhysicalDeviceType::eIntegratedGpu):  LY_CORE_INFO("VULKAN: Device Type [Integrated GPU]"); break;
-                        case (vk::PhysicalDeviceType::eVirtualGpu):     LY_CORE_INFO("VULKAN: Device Type [Virtual GPU]"); break;
-                        default: LY_CORE_INFO("VULKAN: Device Type [other]");
-                    }
-                #endif
-                
-                const std::vector<const char*> requestedExtensions = { 
-                    VK_KHR_SWAPCHAIN_EXTENSION_NAME 
-                };
-                std::set<std::string> extentions(requestedExtensions.begin(), requestedExtensions.end());
-
-                for (vk::ExtensionProperties& extension : d.enumerateDeviceExtensionProperties()) {
-                    //remove this from the list of required extensions (set checks for equality automatically)
-                    extentions.erase(extension.extensionName);
-                }
-
-                //if the set is empty then all requirements have been satisfied
-                if (extentions.empty()) {
-                    LY_CORE_INFO("VULKAN: Device can support the requested extensions");
-                    return d;
-                }
-                LY_CORE_INFO("VULKAN: Device cannot support the requested extensions");
-            }
-            return nullptr;
-        }
     }
 }

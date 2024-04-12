@@ -18,6 +18,7 @@
 
 #include "Lychee/Core/Vulkan/vkDebug.h"
 #include "Lychee/Core/Vulkan/vkInstance.h"
+#include "Lychee/Core/Vulkan/vkDevice.h"
 
 // *** DEFINES ***
 
@@ -79,6 +80,8 @@ namespace Lychee {
 
 		// Device Setup
 		m_vkPhysicalDevice = vkIntern::CreatePhysicalDevice(m_vkInstance);
+		m_vkLogicalDevice = vkIntern::CreateLogicalDevice(m_vkPhysicalDevice);
+		m_vkGraphicsQueue = vkIntern::GetQueue(m_vkPhysicalDevice, m_vkLogicalDevice);
 
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
@@ -179,6 +182,7 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
+		m_vkLogicalDevice.destroy();
 		m_vkInstance.destroyDebugUtilsMessengerEXT(m_vkDebugMessenger, nullptr, m_vkDispatchLoaderD);
 		m_vkInstance.destroy();
 		glfwDestroyWindow(m_glfwWindow);	
