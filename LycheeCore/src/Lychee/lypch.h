@@ -28,6 +28,8 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
+
+#define NOMINMAX        // Else std::min / max do not work
 #include <Windows.h>
 
 
@@ -36,7 +38,7 @@
 #include <GLFW/glfw3native.h>
 
 // Vulkan
-#include <vulkan/vulkan.h>
+#include <vulkan/vulkan.hpp>
 
 // glm
 #include <glm/glm.hpp>

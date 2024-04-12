@@ -16,7 +16,8 @@
 #include "Lychee/Events/MouseEvent.h"
 #include "Lychee/Events/ApplicationEvent.h"
 
-#include "Lychee/Core/Window/vkInstance.h"
+#include "Lychee/Core/Vulkan/vkDebug.h"
+#include "Lychee/Core/Vulkan/vkInstance.h"
 
 // *** DEFINES ***
 
@@ -50,7 +51,7 @@ namespace Lychee {
         }
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);	// Disable OpenGL default client
-		// TODO: Implement
+		// TODO: Implement resize
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);		// Disable window resizeable for now
 
         glfwSetErrorCallback(GLFWErrorCallback);
@@ -66,21 +67,21 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
 
-		vk::CreateVkInstance(m_sWindowData.title.c_str(), m_vkInstance);
+		m_vkInstance = vkIntern::CreateInstance(m_sWindowData.title.c_str());
 
-		if (m_instance == nullptr) {
+		if (m_vkInstance == nullptr) {
 			LY_CORE_ERROR("Window:       \\---- Failed initializing Vulkan!");
 		}
 
-		//VkResult vkErr = glfwCreateWindowSurface(m_gl)
+		m_vkDispatchLoaderD = vk::DispatchLoaderDynamic(m_vkInstance, vkGetInstanceProcAddr);
 
-
+		#ifdef LY_DEBUG
+			m_vkDebugMessenger = vkIntern::CreateDebugMessenger(m_vkInstance, m_vkDispatchLoaderD);
+		#endif
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 	
 		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
-
-
 
 
 		// TODO (flex): Implement window icon
@@ -176,7 +177,8 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
-		vk::DestroyInstance(m_vkInstance);
+		m_vkInstance.destroyDebugUtilsMessengerEXT(m_vkDebugMessenger, nullptr, m_vkDispatchLoaderD);
+		m_vkInstance.destroy();
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}
