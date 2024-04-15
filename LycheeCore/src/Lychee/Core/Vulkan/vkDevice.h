@@ -80,7 +80,7 @@ namespace Lychee {
             return nullptr;
         }
  
-        sQueueFamilyIndices FindQueueFamilies(const vk::PhysicalDevice& device) {
+        sQueueFamilyIndices FindQueueFamilies(const vk::PhysicalDevice& device, const vk::SurfaceKHR& surface) {
             sQueueFamilyIndices indices;
 
             std::vector<vk::QueueFamilyProperties> queueFamilies = device.getQueueFamilyProperties();
@@ -92,8 +92,12 @@ namespace Lychee {
             for (vk::QueueFamilyProperties queueFamily : queueFamilies) {
                 if (queueFamily.queueFlags & vk::QueueFlagBits::eGraphics) {
                     indices.graphicsFamily = i;
+                    LY_CORE_INFO("VULKAN: Queue Family [{0}] is suitable for graphics", i);
+                }
+
+                if (device.getSurfaceSupportKHR(i, surface)) {
                     indices.presentFamily = i;
-                    LY_CORE_INFO("VULKAN: Queue Family [{0}] is suitable for graphics and presenting", i);
+                    LY_CORE_INFO("VULKAN: Queue Family [{0}] is suitable for presenting", i);
                 }
 
                 if (indices.IsComplete()) { break; }
@@ -102,17 +106,28 @@ namespace Lychee {
             return indices;
         }
 
-        vk::Device CreateLogicalDevice(const vk::PhysicalDevice& physicalDevice) {
+        vk::Device CreateLogicalDevice(const vk::PhysicalDevice& physicalDevice, const vk::SurfaceKHR& surface) {
             LY_CORE_INFO("VULKAN: Creating logical device");
-            sQueueFamilyIndices indices = FindQueueFamilies(physicalDevice);
+            sQueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
+
+            std::vector<uint32_t> uniqueIndices;
+            uniqueIndices.push_back(indices.graphicsFamily.value());
+            if (indices.graphicsFamily.value() != indices.presentFamily.value()) {
+                uniqueIndices.push_back(indices.presentFamily.value());
+            }
             float queuePriority = 1.0f;
         
-            vk::DeviceQueueCreateInfo queueCreateInfo = vk::DeviceQueueCreateInfo(
-                vk::DeviceQueueCreateFlags(),
-                indices.graphicsFamily.value(),
-                1,
-                &queuePriority
-            );
+            std::vector<vk::DeviceQueueCreateInfo> queueCreateInfo;
+            for (uint32_t queueFamilyIndex : uniqueIndices) {
+                queueCreateInfo.push_back(
+                    vk::DeviceQueueCreateInfo(
+                        vk::DeviceQueueCreateFlags(),
+                        queueFamilyIndex,
+                        1,
+                        &queuePriority
+                    )
+                );
+            }
 
             vk::PhysicalDeviceFeatures deviceFeatures = vk::PhysicalDeviceFeatures();
 
@@ -126,8 +141,8 @@ namespace Lychee {
             // FIXME (flex): results in vulkan error
             vk::DeviceCreateInfo deviceInfo = vk::DeviceCreateInfo(
                 vk::DeviceCreateFlags(), 
-                1, 
-                &queueCreateInfo,
+                queueCreateInfo.size(), 
+                queueCreateInfo.data(),
                 enabledLayers.size(), 
                 enabledLayers.data(),
                 0, 
@@ -148,9 +163,12 @@ namespace Lychee {
         }
     
 
-        vk::Queue GetQueue(const vk::PhysicalDevice& physicalDevice, const vk::Device& device) {
-            sQueueFamilyIndices indices = FindQueueFamilies(physicalDevice);
-            return device.getQueue(indices.graphicsFamily.value(), 0);
+        std::array<vk::Queue, 2> GetQueues(const vk::PhysicalDevice& physicalDevice,const vk::SurfaceKHR& surface, const vk::Device& device) {
+            sQueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
+            return  {
+                device.getQueue(indices.graphicsFamily.value(), 0),
+                device.getQueue(indices.presentFamily.value(), 0)
+            };
         }
     }
 }

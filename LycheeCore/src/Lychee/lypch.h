@@ -12,6 +12,8 @@
 
 // *** INCLUDES ***
 // ** External Files **
+#define _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING       // Disable C4996 warning inn xutility
+
 #pragma warning(push, 0)  // Disable all warnings
 #include <algorithm>
 #include <array>
@@ -34,6 +36,7 @@
 
 
 // GLFW
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 

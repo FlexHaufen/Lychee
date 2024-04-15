@@ -78,11 +78,23 @@ namespace Lychee {
 			m_vkDebugMessenger = vkIntern::CreateDebugMessenger(m_vkInstance, m_vkDispatchLoaderD);
 		#endif
 
+
+		LY_CORE_INFO("Window: \\---- Creating Vulkan window surface");
+		VkSurfaceKHR c_style_surface;
+		if (glfwCreateWindowSurface(m_vkInstance, m_glfwWindow, nullptr, &c_style_surface) != VK_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Failed to Create vulkan window surface");
+		}
+		m_vkSurface = c_style_surface;
+
 		// Device Setup
 		m_vkPhysicalDevice = vkIntern::CreatePhysicalDevice(m_vkInstance);
-		m_vkLogicalDevice = vkIntern::CreateLogicalDevice(m_vkPhysicalDevice);
-		m_vkGraphicsQueue = vkIntern::GetQueue(m_vkPhysicalDevice, m_vkLogicalDevice);
+		m_vkLogicalDevice = vkIntern::CreateLogicalDevice(m_vkPhysicalDevice, m_vkSurface);
 
+		std::array<vk::Queue, 2> vkQueues = vkIntern::GetQueues(m_vkPhysicalDevice, m_vkSurface, m_vkLogicalDevice);
+		m_vkGraphicsQueue = vkQueues[0];
+		m_vkPresentQueue = vkQueues[1];
+
+	
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 	
@@ -182,6 +194,8 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
+
+		m_vkInstance.destroySurfaceKHR(m_vkSurface);
 		m_vkLogicalDevice.destroy();
 		m_vkInstance.destroyDebugUtilsMessengerEXT(m_vkDebugMessenger, nullptr, m_vkDispatchLoaderD);
 		m_vkInstance.destroy();
