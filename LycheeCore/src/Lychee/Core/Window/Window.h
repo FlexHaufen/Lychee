@@ -27,6 +27,24 @@ namespace Lychee {
 
     using EventCallbackFn = std::function<void(Event&)>;
 
+	/**
+	 * @brief Vulkan window struct
+	 * 
+	 */
+	struct sVkWindow {
+		// Instance related
+		vk::Instance Instance = nullptr;
+		vk::DebugUtilsMessengerEXT DebugMessenger = nullptr;
+		vk::DispatchLoaderDynamic DispatchLoaderD;
+		vk::SurfaceKHR Surface;
+
+		// Device related
+		vk::PhysicalDevice PhysicalDevice = nullptr;
+		vk::Device LogicalDevice = nullptr;
+		vk::Queue GraphicsQueue = nullptr;
+		vk::Queue PresentQueue = nullptr;
+	} m_vkWindow;
+
 
     /**
      * @brief Window Class
@@ -61,21 +79,23 @@ namespace Lychee {
 		 * 
 		 * @return u32 width
 		 */
-		uint32_t GetWidth() const { return m_sWindowData.width; }
+		uint32_t GetWidth() const { return m_WindowData.width; }
 
 		/**
 		 * @brief Get the Height
 		 * 
 		 * @return u32 height
 		 */
-		uint32_t GetHeight() const { return m_sWindowData.height; }
+		uint32_t GetHeight() const { return m_WindowData.height; }
 
 		// Window attributes
-		void SetEventCallback(const EventCallbackFn& callback) { m_sWindowData.eventCallback = callback; }
+		void SetEventCallback(const EventCallbackFn& callback) { m_WindowData.eventCallback = callback; }
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		GLFWwindow* GetNativeWindow() { return m_glfwWindow; }
+		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
+		sVkWindow& GetNativeVkWindow() { return m_vkWindow; }
+
 	private:
 
 		/**
@@ -105,22 +125,7 @@ namespace Lychee {
 			bool isVSyncOn;
 
 			EventCallbackFn eventCallback;
-		};
-
-		sWindowData m_sWindowData;	  // Window data
-
-		// Vulkan
-		// Instance related
-		vk::Instance m_vkInstance = nullptr;
-        vk::DebugUtilsMessengerEXT m_vkDebugMessenger = nullptr;
-        vk::DispatchLoaderDynamic m_vkDispatchLoaderD;
-		vk::SurfaceKHR m_vkSurface;
-
-		// Device related
-		vk::PhysicalDevice m_vkPhysicalDevice = nullptr;
-		vk::Device m_vkLogicalDevice = nullptr;
-		vk::Queue m_vkGraphicsQueue = nullptr;
-		vk::Queue m_vkPresentQueue = nullptr;
+		} m_WindowData;
 
 		float m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		uint16_t m_frameCounterFps = 0;		// Frames since last fps update

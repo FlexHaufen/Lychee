@@ -33,9 +33,9 @@ namespace Lychee {
 
 
 	Window::Window(std::string title, uint32_t width, uint32_t height) {
-		m_sWindowData.title = title;
-		m_sWindowData.width = width;
-		m_sWindowData.height = height;
+		m_WindowData.title = title;
+		m_WindowData.width = width;
+		m_WindowData.height = height;
         Init();
 	}
 
@@ -45,7 +45,7 @@ namespace Lychee {
 
 	void Window::Init() {
 		LY_CORE_INFO("Window: Initializing");
-		LY_CORE_INFO("Window: \\---- [{0}] ({1}, {2})", m_sWindowData.title, m_sWindowData.width, m_sWindowData.height);
+		LY_CORE_INFO("Window: \\---- [{0}] ({1}, {2})", m_WindowData.title, m_WindowData.width, m_WindowData.height);
 		LY_CORE_INFO("Window: \\---- Initializing GLFW Window");
         if(!glfwInit()){
             LY_CORE_ERROR("Window:       \\---- Failed to initialize GLFW!");
@@ -57,9 +57,9 @@ namespace Lychee {
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
-		m_glfwWindow = glfwCreateWindow((int32_t)m_sWindowData.width, 
-                                        (int32_t)m_sWindowData.height, 
-                                        m_sWindowData.title.c_str(), 
+		m_glfwWindow = glfwCreateWindow((int32_t)m_WindowData.width, 
+                                        (int32_t)m_WindowData.height, 
+                                        m_WindowData.title.c_str(), 
                                         nullptr, 
                                         nullptr);
 
@@ -68,37 +68,36 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
 
-		m_vkInstance = vkIntern::CreateInstance(m_sWindowData.title.c_str());
-		if (m_vkInstance == nullptr) {
+		m_vkWindow.Instance = vkIntern::CreateInstance(m_WindowData.title.c_str());
+		if (m_vkWindow.Instance == nullptr) {
 			LY_CORE_ERROR("Window:       \\---- Failed initializing Vulkan!");
 		}
 
-		m_vkDispatchLoaderD = vk::DispatchLoaderDynamic(m_vkInstance, vkGetInstanceProcAddr);
+		m_vkWindow.DispatchLoaderD = vk::DispatchLoaderDynamic(m_vkWindow.Instance, vkGetInstanceProcAddr);
 		#ifdef LY_DEBUG
-			m_vkDebugMessenger = vkIntern::CreateDebugMessenger(m_vkInstance, m_vkDispatchLoaderD);
+			m_vkWindow.DebugMessenger = vkIntern::CreateDebugMessenger(m_vkWindow.Instance, m_vkWindow.DispatchLoaderD);
 		#endif
 
 
 		LY_CORE_INFO("Window: \\---- Creating Vulkan window surface");
 		VkSurfaceKHR c_style_surface;
-		if (glfwCreateWindowSurface(m_vkInstance, m_glfwWindow, nullptr, &c_style_surface) != VK_SUCCESS) {
+		if (glfwCreateWindowSurface(m_vkWindow.Instance, m_glfwWindow, nullptr, &c_style_surface) != VK_SUCCESS) {
 			LY_CORE_ERROR("Window:       \\---- Failed to Create vulkan window surface");
 		}
-		m_vkSurface = c_style_surface;
+		m_vkWindow.Surface = c_style_surface;
 
 		// Device Setup
-		m_vkPhysicalDevice = vkIntern::CreatePhysicalDevice(m_vkInstance);
-		m_vkLogicalDevice = vkIntern::CreateLogicalDevice(m_vkPhysicalDevice, m_vkSurface);
+		m_vkWindow.PhysicalDevice = vkIntern::CreatePhysicalDevice(m_vkWindow.Instance);
+		m_vkWindow.LogicalDevice = vkIntern::CreateLogicalDevice(m_vkWindow.PhysicalDevice, m_vkWindow.Surface);
 
-		std::array<vk::Queue, 2> vkQueues = vkIntern::GetQueues(m_vkPhysicalDevice, m_vkSurface, m_vkLogicalDevice);
-		m_vkGraphicsQueue = vkQueues[0];
-		m_vkPresentQueue = vkQueues[1];
-
+		std::array<vk::Queue, 2> vkQueues = vkIntern::GetQueues(m_vkWindow.PhysicalDevice, m_vkWindow.Surface, m_vkWindow.LogicalDevice);
+		m_vkWindow.GraphicsQueue = vkQueues[0];
+		m_vkWindow.PresentQueue = vkQueues[1];
 	
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 	
-		glfwSetWindowUserPointer(m_glfwWindow, &m_sWindowData);
+		glfwSetWindowUserPointer(m_glfwWindow, &m_WindowData);
 
 
 		// TODO (flex): Implement window icon
@@ -195,10 +194,10 @@ namespace Lychee {
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
 
-		m_vkInstance.destroySurfaceKHR(m_vkSurface);
-		m_vkLogicalDevice.destroy();
-		m_vkInstance.destroyDebugUtilsMessengerEXT(m_vkDebugMessenger, nullptr, m_vkDispatchLoaderD);
-		m_vkInstance.destroy();
+		m_vkWindow.Instance.destroySurfaceKHR(m_vkWindow.Surface);
+		m_vkWindow.LogicalDevice.destroy();
+		m_vkWindow.Instance.destroyDebugUtilsMessengerEXT(m_vkWindow.DebugMessenger, nullptr, m_vkWindow.DispatchLoaderD);
+		m_vkWindow.Instance.destroy();
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}
@@ -212,7 +211,7 @@ namespace Lychee {
 			m_frameCounterFps++;
 
 			if (m_elapsedTimeFps >= 1.0f) {
-				std::string title =  m_sWindowData.title + " FPS:  " + std::to_string(m_frameCounterFps);
+				std::string title =  m_WindowData.title + " FPS:  " + std::to_string(m_frameCounterFps);
 				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
 				m_frameCounterFps = 0;
 				m_elapsedTimeFps = 0;
@@ -225,11 +224,11 @@ namespace Lychee {
 
 	void Window::SetVSync(bool enabled) {
         glfwSwapInterval(int32_t(enabled));
-		m_sWindowData.isVSyncOn = enabled;
+		m_WindowData.isVSyncOn = enabled;
 	}
 
 	bool Window::IsVSync() const {
-		return m_sWindowData.isVSyncOn;
+		return m_WindowData.isVSyncOn;
 	}
 
 }

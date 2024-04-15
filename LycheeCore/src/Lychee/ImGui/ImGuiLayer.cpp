@@ -51,11 +51,12 @@ namespace Lychee {
 		SetStyle();
 
 		Core& app = Core::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeGlfwWindow());
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(window, LY_IMGUI_INSTALL_CALLBACKS);
-		ImGui_ImplOpenGL3_Init(LY_OPENGL_VERSION);
+		ImGui_ImplGlfw_InitForVulkan(window, LY_IMGUI_INSTALL_CALLBACKS);
+
+		// I
 	}
 
 	void ImGuiLayer::OnDetach() {
