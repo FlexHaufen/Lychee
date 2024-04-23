@@ -27,6 +27,7 @@ namespace Lychee {
 
     using EventCallbackFn = std::function<void(Event&)>;
 
+
 	/**
 	 * @brief Vulkan window struct
 	 * 
@@ -43,7 +44,7 @@ namespace Lychee {
 		vk::Device LogicalDevice = nullptr;
 		vk::Queue GraphicsQueue = nullptr;
 		vk::Queue PresentQueue = nullptr;
-	} m_vkWindow;
+	};
 
 
     /**
@@ -126,6 +127,8 @@ namespace Lychee {
 
 			EventCallbackFn eventCallback;
 		} m_WindowData;
+
+		sVkWindow m_vkWindow;
 
 		float m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		uint16_t m_frameCounterFps = 0;		// Frames since last fps update
