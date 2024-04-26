@@ -76,6 +76,14 @@
 
 // *** DEFINES ***
 // ** Debug **
+
+#ifndef NLY_DEBUG
+    #define LY_DEBUG
+#else
+    #undef LY_DEBUG
+#endif
+
+
 #ifdef LY_DEBUG
     #define LY_RENDER_IMGUI 		
     #define LY_IMGUI_SHOW_DEMO      // Demo window    

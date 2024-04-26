@@ -94,6 +94,12 @@ namespace Lychee {
 		m_vkWindow.GraphicsQueue = vkQueues[0];
 		m_vkWindow.PresentQueue = vkQueues[1];
 	
+		LY_CORE_INFO("Window: \\---- Creating Vulkan Swapchain");
+		vkIntern::sSwapChainBundle bundle = vkIntern::CreateSwapchain(m_vkWindow.LogicalDevice, m_vkWindow.PhysicalDevice, m_vkWindow.Surface, LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y);
+		m_vkWindow.Swapchain 		= bundle.swapchain;
+		m_vkWindow.SwapchainImages 	= bundle.images;
+		m_vkWindow.SwapchainFormat	= bundle.format;
+		m_vkWindow.SwapchainExtent 	= bundle.extent;
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 	
@@ -194,8 +200,10 @@ namespace Lychee {
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
 
-		m_vkWindow.Instance.destroySurfaceKHR(m_vkWindow.Surface);
+		m_vkWindow.LogicalDevice.destroySwapchainKHR(m_vkWindow.Swapchain);
 		m_vkWindow.LogicalDevice.destroy();
+
+		m_vkWindow.Instance.destroySurfaceKHR(m_vkWindow.Surface);
 		m_vkWindow.Instance.destroyDebugUtilsMessengerEXT(m_vkWindow.DebugMessenger, nullptr, m_vkWindow.DispatchLoaderD);
 		m_vkWindow.Instance.destroy();
 		glfwDestroyWindow(m_glfwWindow);	

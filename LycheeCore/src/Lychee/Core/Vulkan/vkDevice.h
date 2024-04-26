@@ -40,6 +40,28 @@ namespace Lychee {
         };
 
 
+        /**
+         * @brief Holds properties of the swapchain
+		 *        capabilities: no. of images and supported sizes
+		 *        formats: eg. supported pixel formats
+		 *        present modes: available presentation modes (eg. double buffer, fifo, mailbox)
+         */
+        struct sSwapChainSupportDetails {
+            vk::SurfaceCapabilitiesKHR capabilities;
+            std::vector<vk::SurfaceFormatKHR> formats;
+            std::vector<vk::PresentModeKHR> presentModes;
+        };
+
+        /**
+         * @brief Various data structures associated with the swapchain.
+         * 
+         */
+        struct sSwapChainBundle {
+            vk::SwapchainKHR swapchain;
+            std::vector<vk::Image> images;
+            vk::Format format;
+            vk::Extent2D extent;
+        };
 
 
         vk::PhysicalDevice CreatePhysicalDevice(vk::Instance& instance) {
@@ -129,6 +151,10 @@ namespace Lychee {
                 );
             }
 
+            std::vector<const char* > deviceExtentions = {
+                VK_KHR_SWAPCHAIN_EXTENSION_NAME
+            };
+
             vk::PhysicalDeviceFeatures deviceFeatures = vk::PhysicalDeviceFeatures();
 
             std::vector<const char*> enabledLayers;
@@ -145,18 +171,18 @@ namespace Lychee {
                 queueCreateInfo.data(),
                 enabledLayers.size(), 
                 enabledLayers.data(),
-                0, 
-                nullptr,
+                deviceExtentions.size(), 
+                deviceExtentions.data(),
                 &deviceFeatures
             );
 
             try {
                 vk::Device device = physicalDevice.createDevice(deviceInfo);
-                LY_CORE_INFO("GPU has been successfully abstracted");
+                LY_CORE_INFO("VULKAN: GPU has been successfully abstracted");
                 return device;
             }
             catch (vk::SystemError err) {
-                LY_CORE_ERROR("Logical device creation failed");
+                LY_CORE_ERROR("VULKAN: Logical device creation failed");
                 return nullptr;
             }
             return nullptr;
@@ -170,5 +196,183 @@ namespace Lychee {
                 device.getQueue(indices.presentFamily.value(), 0)
             };
         }
+    
+        sSwapChainSupportDetails QuerySwapchainSupport(const vk::PhysicalDevice& device, const vk::SurfaceKHR& surface) {
+		    sSwapChainSupportDetails support;
+
+		    support.capabilities = device.getSurfaceCapabilitiesKHR(surface);
+
+            #ifdef LY_DEBUG
+                LY_CORE_INFO("VULKAN: Swapchain can support the following surface capabilities:");
+                LY_CORE_INFO("VULKAN: - min. image count: {0}", support.capabilities.minImageCount);
+                LY_CORE_INFO("VULKAN: - max. image count: {0}", support.capabilities.maxImageCount);
+                LY_CORE_INFO("VULKAN: - current extent:        [{0}, {1}]", support.capabilities.currentExtent.width, support.capabilities.currentExtent.height);
+                LY_CORE_INFO("VULKAN: - min. supported extent: [{0}, {1}]", support.capabilities.minImageExtent.width, support.capabilities.minImageExtent.height);
+                LY_CORE_INFO("VULKAN: - max. supported extent: [{0}, {1}]",support.capabilities.maxImageExtent.width, support.capabilities.maxImageExtent.height);
+                LY_CORE_INFO("VULKAN: - max. image array layers: {0}", support.capabilities.maxImageArrayLayers);
+                
+                LY_CORE_INFO("VULKAN: - supported transforms:");
+                std::vector<std::string> stringList = LogTransformBits(support.capabilities.supportedTransforms);
+                for (auto& line : stringList) {
+                    LY_CORE_INFO("VULKAN:   - {0}", line);
+                }
+
+                LY_CORE_INFO("VULKAN: - current transform:");
+                stringList = LogTransformBits(support.capabilities.currentTransform);
+                for (auto& line : stringList) {
+                    LY_CORE_INFO("VULKAN:   - {0}", line);
+                }
+
+                LY_CORE_INFO("VULKAN: - supported alpha operations:");
+                stringList = LogAlphaCompositeBits(support.capabilities.supportedCompositeAlpha);
+                for (std::string line : stringList) {
+                    LY_CORE_INFO("VULKAN:   - {0}", line);
+                }
+
+                LY_CORE_INFO("VULKAN: - supported image usage:");
+                stringList = LogImageUsageBits(support.capabilities.supportedUsageFlags);
+                for (std::string line : stringList) {
+                    LY_CORE_INFO("VULKAN:   - {0}", line);
+                }
+            #endif
+
+            support.formats = device.getSurfaceFormatsKHR(surface);
+
+            #ifdef LY_DEBUG
+                for (vk::SurfaceFormatKHR supportedFormat : support.formats) {
+                    LY_CORE_INFO("VULKAN supported pixel format: {0}", vk::to_string(supportedFormat.format));
+                    LY_CORE_INFO("VULKAN supported color space: {0}", vk::to_string(supportedFormat.colorSpace));
+                }
+            #endif
+
+            support.presentModes = device.getSurfacePresentModesKHR(surface);
+            #ifdef LY_DEBUG
+                for (vk::PresentModeKHR presentMode : support.presentModes) {
+                    LY_CORE_INFO("VULKAN Present mode:\t {0}", LogPresentMode(presentMode));
+                }
+            #endif
+
+            return support;
+        }
+	
+        /**
+         * @brief Choose a surface format for the swapchain
+         * 
+         * @param formats a vector of surface formats supported by the device
+         * @return vk::SurfaceFormatKHR 
+         */
+        vk::SurfaceFormatKHR ChooseSwapchainSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& formats) {
+            for (vk::SurfaceFormatKHR format : formats) {
+                if (format.format == vk::Format::eB8G8R8A8Unorm && format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear) {
+                    return format;
+                }
+            }
+            return formats[0];
+        }
+
+        /**
+         * @brief Choose a present mode.
+         * 
+         * @param presentModes a vector of present modes supported by the device
+         * @return vk::PresentModeKHR 
+         */
+        vk::PresentModeKHR ChooseSwapchainPresentMode(const std::vector<vk::PresentModeKHR>& presentModes) {
+            for (vk::PresentModeKHR presentMode : presentModes) {
+                if (presentMode == vk::PresentModeKHR::eMailbox) {
+                    return presentMode;
+                }
+            }
+            return vk::PresentModeKHR::eFifo;
+        }
+
+        /**
+         * @brief Choose an extent for the swapchain.
+         * 
+         * @param width the requested width
+         * @param height the requested height
+         * @param capabilities a struct describing the supported capabilities of the device
+         * @return vk::Extent2D chosen extent
+         */
+        vk::Extent2D ChooseSwapchainExtent(uint32_t width, uint32_t height, const vk::SurfaceCapabilitiesKHR& capabilities) {
+
+            if (capabilities.currentExtent.width != UINT32_MAX) {
+                return capabilities.currentExtent;
+            }
+            else {
+                vk::Extent2D extent = { width, height };
+
+                extent.width = std::min(
+                    capabilities.maxImageExtent.width, 
+                    std::max(capabilities.minImageExtent.width, extent.width)
+                );
+
+                extent.height = std::min(
+                    capabilities.maxImageExtent.height,
+                    std::max(capabilities.minImageExtent.height, extent.height)
+                );
+
+                return extent;
+            }
+        }
+
+        /**
+         * @brief Create a Swapchain
+         * 
+         * @param logicalDevice the logical device
+         * @param physicalDevice the physical device
+         * @param surface the window surface to use the swapchain with
+         * @param width the requested width
+         * @param height the requested height
+         * @return SwapChainBundle 
+         */
+        sSwapChainBundle CreateSwapchain(const vk::Device& logicalDevice, const vk::PhysicalDevice& physicalDevice, const vk::SurfaceKHR& surface, int width, int height) {
+
+            sSwapChainSupportDetails support = QuerySwapchainSupport(physicalDevice, surface);
+            vk::SurfaceFormatKHR format = ChooseSwapchainSurfaceFormat(support.formats);
+            vk::PresentModeKHR presentMode = ChooseSwapchainPresentMode(support.presentModes);
+            vk::Extent2D extent = ChooseSwapchainExtent(width, height, support.capabilities);
+
+            uint32_t imageCount = std::min(
+                support.capabilities.maxImageCount,
+                support.capabilities.minImageCount + 1
+            );
+
+            vk::SwapchainCreateInfoKHR createInfo = vk::SwapchainCreateInfoKHR(
+                vk::SwapchainCreateFlagsKHR(), surface, imageCount, format.format, format.colorSpace,
+                extent, 1, vk::ImageUsageFlagBits::eColorAttachment
+            );
+
+            sQueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
+            uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
+
+            if (indices.graphicsFamily != indices.presentFamily) {
+                createInfo.imageSharingMode = vk::SharingMode::eConcurrent;
+                createInfo.queueFamilyIndexCount = 2;
+                createInfo.pQueueFamilyIndices = queueFamilyIndices;
+            }
+            else {
+                createInfo.imageSharingMode = vk::SharingMode::eExclusive;
+            }
+
+            createInfo.preTransform = support.capabilities.currentTransform;
+            createInfo.compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+            createInfo.presentMode = presentMode;
+            createInfo.clipped = VK_TRUE;
+
+            createInfo.oldSwapchain = vk::SwapchainKHR(nullptr);
+
+            sSwapChainBundle bundle;
+            try {
+                bundle.swapchain = logicalDevice.createSwapchainKHR(createInfo);
+            }
+            catch (vk::SystemError err) {
+                LY_CORE_ERROR("VULKAN: failed to create swap chain!");
+            }
+            bundle.images = logicalDevice.getSwapchainImagesKHR(bundle.swapchain);
+            bundle.format = format.format;
+            bundle.extent = extent;
+            return bundle;
+        }
+        
     }
 }

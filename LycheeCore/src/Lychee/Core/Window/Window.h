@@ -44,6 +44,10 @@ namespace Lychee {
 		vk::Device LogicalDevice = nullptr;
 		vk::Queue GraphicsQueue = nullptr;
 		vk::Queue PresentQueue = nullptr;
+		vk::SwapchainKHR Swapchain;
+		std::vector<vk::Image> SwapchainImages;
+		vk::Format SwapchainFormat;
+		vk::Extent2D SwapchainExtent;
 	};
 
 
