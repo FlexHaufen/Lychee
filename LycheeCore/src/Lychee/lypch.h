@@ -55,7 +55,7 @@
 #include <imgui.h>
 #include <imconfig.h>
 #include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_vulkan.h>
 
 // EnTT
 #include "entt.hpp"
