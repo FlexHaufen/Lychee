@@ -11,12 +11,13 @@
 #pragma once
 
 // *** INCLUDE ***
-#include "Lychee/lypch.h"
+#include <vector>
+
 #include "Lychee/Core/Layer/Layer.h"
 
 // *** DEFINES ***
 
-// *** NAMESPACE
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class LayerStack {

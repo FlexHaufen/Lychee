@@ -11,12 +11,12 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
+#include "entt.hpp"
+
 #include "Lychee/Scene/Scene.h"
 #include "Lychee/Helper/UUID/UUID.h"
 
 //*** DEFINES ***
-
 
 //*** NAMESPACE ***
 namespace Lychee {

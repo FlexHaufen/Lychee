@@ -11,7 +11,10 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
+#include <string>
+
+#include <glm/glm.hpp>
+
 #include "Lychee/Helper/UUID/UUID.h"
 
 //*** DEFINES ***

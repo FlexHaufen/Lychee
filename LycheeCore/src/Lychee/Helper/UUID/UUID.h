@@ -11,12 +11,7 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
-
 #include <xhash>
-
-// *** DEFINES ***
-
 
 // *** NAMESPACE ***
 namespace Lychee {

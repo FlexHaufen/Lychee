@@ -12,7 +12,7 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
+#include <string>
 
 //*** DEFINES ***
 #define LY_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)

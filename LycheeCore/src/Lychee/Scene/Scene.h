@@ -11,12 +11,9 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
-//#include "Lychee/Scene/Entity/Entity.h"
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Events/Event.h"
 
 //*** DEFINES ***
 #define LY_MAX_RENDERLAYERS     10

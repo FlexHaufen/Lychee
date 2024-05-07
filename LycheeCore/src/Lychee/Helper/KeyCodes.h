@@ -10,15 +10,9 @@
  */
 #pragma once
 
-//*** INCLUDES ***
-#include "Lychee/lypch.h"
-
-//*** DEFINES ***
-
-
-// *** NAMESPACE ***
 using KeyCode = uint16_t;
 
+// *** NAMESPACE ***
 namespace Key {
     enum : KeyCode {
         // From glfw3.h

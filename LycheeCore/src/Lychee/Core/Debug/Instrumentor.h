@@ -12,8 +12,6 @@
  *        Press load and upload the json file
  *        Examin the data.
  * 
- *  TODO (flex): Write brief description of functions
- * 
  * @version 0.1
  * @date 2022-12-04
  * 
@@ -73,7 +71,11 @@ namespace Lychee {
          */
 		void EndSession();
 
-
+		/**
+		 * @brief Writes given result to json file
+		 * 
+		 * @param result 
+		 */
 		void WriteProfile(const sProfileResult& result);
 
 

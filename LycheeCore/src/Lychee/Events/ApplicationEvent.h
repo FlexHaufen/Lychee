@@ -11,6 +11,8 @@
 #pragma once
 
 //*** INCLUDES ***
+#include <string>
+
 #include "Lychee/Events/Event.h"
 
 //*** DEFINES ***

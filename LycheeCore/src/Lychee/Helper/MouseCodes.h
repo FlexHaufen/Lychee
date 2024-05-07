@@ -10,20 +10,11 @@
  */
 #pragma once
 
-//*** INCLUDES ***
-#include "Lychee/lypch.h"
-
-//*** DEFINES ***
-
-
-// *** NAMESPACE ***
-
 using MouseCode = uint16_t;
 
-namespace Mouse
-{
-    enum : MouseCode
-    {
+// *** NAMESPACE ***
+namespace Mouse {
+    enum : MouseCode {
         // From glfw3.h
         Button0                = 0,
         Button1                = 1,

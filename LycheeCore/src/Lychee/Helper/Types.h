@@ -1,6 +1,21 @@
-#include <cstdint>
+/**
+ * @file Types.h
+ * @author flexhaufen
+ * @brief Custom types and macrose are defined here
+ * @version 0.1
+ * @date 2024-05-07
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #pragma once
 
+// *** DEFINES ***
+// ** Macros **
+#define LY_EXPAND_MACRO(x) x
+#define LY_STRINGIFY_MACRO(x) #x
+
+// *** NAMESPACE ***
 namespace Lychee {
 
 	template<typename T>
@@ -16,5 +31,4 @@ namespace Lychee {
 	constexpr Ref<T> CreateRef(Args&& ... args) {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
-
 }

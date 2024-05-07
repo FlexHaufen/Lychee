@@ -8,19 +8,18 @@
  * @copyright Copyright (c) 2022
  * 
  */
-# pragma once
+#pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
-
+#include "Lychee/Core/Layer/Layer.h"
 #include "Lychee/Core/Layer/LayerStack.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Core/Window/Window.h"
 
-#include "Lychee/Events/KeyEvent.h"
+#include "Lychee/Events/Event.h"
 #include "Lychee/Events/ApplicationEvent.h"
-#include "Lychee/ImGui/ImGuiLayer.h"
 
+#include "Lychee/ImGui/ImGuiLayer.h"
 // *** DEFINES ***
 
 

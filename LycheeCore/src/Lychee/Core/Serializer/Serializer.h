@@ -11,8 +11,7 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
-
+#include <string>
 
 //*** DEFINES ***
 

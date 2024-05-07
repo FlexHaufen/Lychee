@@ -10,8 +10,11 @@
  */
 
 // *** INCLUDES ***
+#include "Lychee/lypch.h"
+
 #include "Lychee/Scene/Scene.h"
 #include "Lychee/Scene/Entity/Entity.h"
+#include "Lychee/Scene/Entity/Components.h"
 
 
 // *** DEFINE ***

@@ -12,7 +12,10 @@
 
 // *** INCLUDES *** 
 #include "Lychee/lypch.h"
+
 #include "Lychee/ImGui/ImGuiLayer.h"
+
+#include "Lychee/Config.h"
 #include "Lychee/Core/Core.h"
 
 

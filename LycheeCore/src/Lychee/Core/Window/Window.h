@@ -11,14 +11,13 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
+#include <string>
+#include <functional>
+
+#include <GLFW/glfw3.h>
 
 #include "Lychee/Events/Event.h"
-#include "Lychee/Events/MouseEvent.h"
-
 #include "Lychee/Core/Time/DeltaTime.h"
-
-
 
 // *** DEFIENS ***
 

@@ -11,6 +11,8 @@
 #pragma once
 
 //*** INCLUDES ***
+#include "Lychee/lypch.h"
+
 #include "Lychee/Core/Input/Input.h"
 #include "Lychee/Core/Core.h"
 

@@ -13,6 +13,8 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
+#include "Lychee/Config.h"
+
 // *** DEFIENS ***
 
 // *** NAMESPACE ***

@@ -10,8 +10,9 @@
  */
 
 // *** INCLUDES ***
-#include "Lychee/Renderer/Renderer.h"
+#include "Lychee/lypch.h"
 
+#include "Lychee/Renderer/Renderer.h"
 
 // *** DEFINE ***
 

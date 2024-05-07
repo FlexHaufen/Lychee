@@ -10,6 +10,9 @@
  */
 
 // *** INCLUDES ***
+#include "Lychee/lypch.h"
+
+#include "Lychee/Config.h"
 #include "Lychee/Core/Window/Window.h"
 
 #include "Lychee/Events/KeyEvent.h"
