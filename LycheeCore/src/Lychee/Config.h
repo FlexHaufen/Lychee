@@ -26,9 +26,10 @@
 
 // * Rescources *
 #define LY_DEFAULT_PATH             "./"
-#define LY_ICON_PNG                 "./resource/images/Lychee.png"
+#define LY_DEFAULT_SHADER_PATH      "./LycheeCore/resource/shaders/"
+#define LY_ICON_PNG                 "./LycheeCore/resource/images/Lychee.png"
 #define LY_FONT_SIZE                15.0f
-#define LY_FONT_REGULAR             "./resource/fonts/Rilu-Regular.ttf"
+#define LY_FONT_REGULAR             "./LycheeCore/resource/fonts/Rilu-Regular.ttf"
 
 // * Colors *
 // TODO (flex): convert

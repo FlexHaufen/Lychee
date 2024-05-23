@@ -19,10 +19,6 @@
 #include "Lychee/Events/MouseEvent.h"
 #include "Lychee/Events/ApplicationEvent.h"
 
-#include "Lychee/Core/Vulkan/vkDebug.h"
-#include "Lychee/Core/Vulkan/vkInstance.h"
-#include "Lychee/Core/Vulkan/vkDevice.h"
-
 // *** DEFINES ***
 
 // *** NAMESPACE ***
@@ -60,7 +56,7 @@ namespace Lychee {
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
-		m_glfwWindow = glfwCreateWindow((int32_t)m_WindowData.width, 
+		m_vkhInstance.window = glfwCreateWindow((int32_t)m_WindowData.width, 
                                         (int32_t)m_WindowData.height, 
                                         m_WindowData.title.c_str(), 
                                         nullptr, 
@@ -70,39 +66,37 @@ namespace Lychee {
 		if (!glfwVulkanSupported()) {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
-
-		m_vkWindow.Instance = vkIntern::CreateInstance(m_WindowData.title.c_str());
-		if (m_vkWindow.Instance == nullptr) {
-			LY_CORE_ERROR("Window:       \\---- Failed initializing Vulkan!");
+        if (vkh::DeviceInitialization(m_vkhInstance) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error initializing Vulkan device");
+		};
+		if (vkh::CreateSwapchain(m_vkhInstance) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error initializing Vulkan swapchain");
+		}
+		if (vkh::GetQueue(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error initializing Vulkan queue");
+		}
+		if (vkh::CreateRenderPass(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan render pass");
+		}
+		if (vkh::CreateGraphicsPipeline(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan graphics pipeline");
+		}
+		if (vkh::CreateGraphicsPipeline(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan graphics pipeline");
+		}
+		if (vkh::CreateFramebuffers(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Framebuffer");
+		}
+		if (vkh::CreateCommandPool(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Commandpool");
+		}
+        if (vkh::CreateCommandBuffers(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Commandbuffers");
+		}
+        if (vkh::CreateSyncObjects(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
+			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Sync objects");
 		}
 
-		m_vkWindow.DispatchLoaderD = vk::DispatchLoaderDynamic(m_vkWindow.Instance, vkGetInstanceProcAddr);
-		#ifdef LY_DEBUG
-			m_vkWindow.DebugMessenger = vkIntern::CreateDebugMessenger(m_vkWindow.Instance, m_vkWindow.DispatchLoaderD);
-		#endif
-
-
-		LY_CORE_INFO("Window: \\---- Creating Vulkan window surface");
-		VkSurfaceKHR c_style_surface;
-		if (glfwCreateWindowSurface(m_vkWindow.Instance, m_glfwWindow, nullptr, &c_style_surface) != VK_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Failed to Create vulkan window surface");
-		}
-		m_vkWindow.Surface = c_style_surface;
-
-		// Device Setup
-		m_vkWindow.PhysicalDevice = vkIntern::CreatePhysicalDevice(m_vkWindow.Instance);
-		m_vkWindow.LogicalDevice = vkIntern::CreateLogicalDevice(m_vkWindow.PhysicalDevice, m_vkWindow.Surface);
-
-		std::array<vk::Queue, 2> vkQueues = vkIntern::GetQueues(m_vkWindow.PhysicalDevice, m_vkWindow.Surface, m_vkWindow.LogicalDevice);
-		m_vkWindow.GraphicsQueue = vkQueues[0];
-		m_vkWindow.PresentQueue = vkQueues[1];
-	
-		LY_CORE_INFO("Window: \\---- Creating Vulkan Swapchain");
-		vkIntern::sSwapChainBundle bundle = vkIntern::CreateSwapchain(m_vkWindow.LogicalDevice, m_vkWindow.PhysicalDevice, m_vkWindow.Surface, LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y);
-		m_vkWindow.Swapchain 		= bundle.swapchain;
-		m_vkWindow.SwapchainImages 	= bundle.images;
-		m_vkWindow.SwapchainFormat	= bundle.format;
-		m_vkWindow.SwapchainExtent 	= bundle.extent;
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 	
@@ -202,14 +196,8 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
-
-		m_vkWindow.LogicalDevice.destroySwapchainKHR(m_vkWindow.Swapchain);
-		m_vkWindow.LogicalDevice.destroy();
-
-		m_vkWindow.Instance.destroySurfaceKHR(m_vkWindow.Surface);
-		m_vkWindow.Instance.destroyDebugUtilsMessengerEXT(m_vkWindow.DebugMessenger, nullptr, m_vkWindow.DispatchLoaderD);
-		m_vkWindow.Instance.destroy();
-		glfwDestroyWindow(m_glfwWindow);	
+		vkh::Terminate(m_vkhInstance, m_vkhRenderData);
+		glfwDestroyWindow(m_vkhInstance.window);	
         glfwTerminate();
 	}
 
@@ -223,14 +211,16 @@ namespace Lychee {
 
 			if (m_elapsedTimeFps >= 1.0f) {
 				std::string title =  m_WindowData.title + " FPS:  " + std::to_string(m_frameCounterFps);
-				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
+				glfwSetWindowTitle(m_vkhInstance.window, title.c_str());	
 				m_frameCounterFps = 0;
 				m_elapsedTimeFps = 0;
 			}
 		#endif
 
 		glfwPollEvents();
-		glfwSwapBuffers(static_cast<GLFWwindow*>(m_glfwWindow));
+
+
+		(void)draw_frame(m_vkhInstance, m_vkhRenderData);
 	}
 
 	void Window::SetVSync(bool enabled) {

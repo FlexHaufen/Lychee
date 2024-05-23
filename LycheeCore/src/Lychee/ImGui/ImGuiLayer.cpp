@@ -54,12 +54,11 @@ namespace Lychee {
 		//SetStyle();
 
 		Core& app = Core::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeGlfwWindow());
-		//sVkWindow& vkWindow = static_cast<sVkWindow&>(app.GetWindow().GetNativeVkWindow());
+		vkh::Instance& instance = static_cast<vkh::Instance&>(app.GetWindow().GetNativeVkhInstance());
 		
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForVulkan(window, LY_IMGUI_INSTALL_CALLBACKS);
+		//ImGui_ImplGlfw_InitForVulkan(window, LY_IMGUI_INSTALL_CALLBACKS);
 		//ImGui_ImplVulkan_InitInfo init_info = {};
 		//ImGui_ImplVulkan_Init(&init_info);
 	}

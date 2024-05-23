@@ -18,6 +18,7 @@
 
 #include "Lychee/Events/Event.h"
 #include "Lychee/Core/Time/DeltaTime.h"
+#include "Lychee/Core/Vulkan/vkh.h"
 
 // *** DEFIENS ***
 
@@ -25,30 +26,6 @@
 namespace Lychee {
 
     using EventCallbackFn = std::function<void(Event&)>;
-
-
-	/**
-	 * @brief Vulkan window struct
-	 * 
-	 */
-	struct sVkWindow {
-		// Instance related
-		vk::Instance Instance = nullptr;
-		vk::DebugUtilsMessengerEXT DebugMessenger = nullptr;
-		vk::DispatchLoaderDynamic DispatchLoaderD;
-		vk::SurfaceKHR Surface;
-
-		// Device related
-		vk::PhysicalDevice PhysicalDevice = nullptr;
-		vk::Device LogicalDevice = nullptr;
-		vk::Queue GraphicsQueue = nullptr;
-		vk::Queue PresentQueue = nullptr;
-		vk::SwapchainKHR Swapchain;
-		std::vector<vk::Image> SwapchainImages;
-		vk::Format SwapchainFormat;
-		vk::Extent2D SwapchainExtent;
-	};
-
 
     /**
      * @brief Window Class
@@ -97,8 +74,8 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
-		sVkWindow& GetNativeVkWindow() { return m_vkWindow; }
+		GLFWwindow* GetNativeGlfwWindow() { return m_vkhInstance.window; }
+		vkh::Instance& GetNativeVkhInstance() { return m_vkhInstance; }
 
 	private:
 
@@ -117,7 +94,8 @@ namespace Lychee {
 	private:
 
        	//** Members **
-		GLFWwindow* m_glfwWindow; // GLFW Window
+		vkh::Instance m_vkhInstance;	// Vulkan Instance
+		vkh::RenderData m_vkhRenderData;	// Vulkan RenderData
 		
 		/**
 		 * @brief Data of window
@@ -130,8 +108,6 @@ namespace Lychee {
 
 			EventCallbackFn eventCallback;
 		} m_WindowData;
-
-		sVkWindow m_vkWindow;
 
 		float m_elapsedTimeFps = 0.0f;	// Elapsed time since last fps update
 		uint16_t m_frameCounterFps = 0;		// Frames since last fps update

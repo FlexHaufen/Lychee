@@ -57,8 +57,9 @@ namespace Lychee {
 
         LY_CORE_INFO("\\---- Initializing renderer");
 
-        m_ImGuiLayer = new ImGuiLayer();
-		PushOverlay(m_ImGuiLayer);
+        // TODO (flex) implement imgui
+        //m_ImGuiLayer = new ImGuiLayer();
+		//PushOverlay(m_ImGuiLayer);
     }
 
     Core::~Core() {
@@ -79,13 +80,13 @@ namespace Lychee {
 					layer->OnUpdate(deltaTime);
                 }
                
-                m_ImGuiLayer->Begin();
+               // m_ImGuiLayer->Begin();
                 
-                for (Layer* layer : m_LayerStack) {
-                    layer->OnImGuiRender();
-                }
+                //for (Layer* layer : m_LayerStack) {
+                //    layer->OnImGuiRender();
+                //}
             
-                m_ImGuiLayer->End();
+                //m_ImGuiLayer->End();
             }
             m_Window->OnUpdate(deltaTime);
         }

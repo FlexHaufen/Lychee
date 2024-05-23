@@ -41,6 +41,7 @@
 
 // Vulkan
 #include <vulkan/vulkan.hpp>
+#include <VkBootstrap.h>
 
 // glm
 #define GLM_ENABLE_EXPERIMENTAL
