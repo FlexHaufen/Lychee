@@ -14,6 +14,6 @@
 [submodule "LycheeCore/lib/vendor/glm"]
 	path = LycheeCore/lib/vendor/glm
 	url = git@github.com:g-truc/glm.git
-[submodule "LycheeCore/lib/vendor/vk-bootstrap"]
-	path = LycheeCore/lib/vendor/vk-bootstrap
-	url = git@github.com:charles-lunarg/vk-bootstrap.git
+[submodule "LycheeCore/lib/vendor/VulkanMemoryAllocator"]
+	path = LycheeCore/lib/vendor/VulkanMemoryAllocator
+	url = git@github.com:GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git

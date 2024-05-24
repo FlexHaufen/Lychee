@@ -56,7 +56,7 @@ namespace Lychee {
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
-		m_vkhInstance.window = glfwCreateWindow((int32_t)m_WindowData.width, 
+		m_glfwWindow = glfwCreateWindow((int32_t)m_WindowData.width, 
                                         (int32_t)m_WindowData.height, 
                                         m_WindowData.title.c_str(), 
                                         nullptr, 
@@ -66,36 +66,8 @@ namespace Lychee {
 		if (!glfwVulkanSupported()) {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
-        if (vkh::DeviceInitialization(m_vkhInstance) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error initializing Vulkan device");
-		};
-		if (vkh::CreateSwapchain(m_vkhInstance) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error initializing Vulkan swapchain");
-		}
-		if (vkh::GetQueue(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error initializing Vulkan queue");
-		}
-		if (vkh::CreateRenderPass(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan render pass");
-		}
-		if (vkh::CreateGraphicsPipeline(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan graphics pipeline");
-		}
-		if (vkh::CreateGraphicsPipeline(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan graphics pipeline");
-		}
-		if (vkh::CreateFramebuffers(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Framebuffer");
-		}
-		if (vkh::CreateCommandPool(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Commandpool");
-		}
-        if (vkh::CreateCommandBuffers(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Commandbuffers");
-		}
-        if (vkh::CreateSyncObjects(m_vkhInstance, m_vkhRenderData) != vkh::VKH_SUCCESS) {
-			LY_CORE_ERROR("Window:       \\---- Error creating Vulkan Sync objects");
-		}
+    
+		m_vkhManager.setupInstance(true);
 
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
@@ -196,8 +168,10 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
-		vkh::Terminate(m_vkhInstance, m_vkhRenderData);
-		glfwDestroyWindow(m_vkhInstance.window);	
+		m_vkhManager.cleanup();
+        //vkDestroySurfaceKHR(m_vkhManager.getInstance(), surface, nullptr);
+        m_vkhManager.cleanupInstance();
+		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}
 
@@ -211,7 +185,7 @@ namespace Lychee {
 
 			if (m_elapsedTimeFps >= 1.0f) {
 				std::string title =  m_WindowData.title + " FPS:  " + std::to_string(m_frameCounterFps);
-				glfwSetWindowTitle(m_vkhInstance.window, title.c_str());	
+				glfwSetWindowTitle(m_glfwWindow, title.c_str());	
 				m_frameCounterFps = 0;
 				m_elapsedTimeFps = 0;
 			}
@@ -219,8 +193,6 @@ namespace Lychee {
 
 		glfwPollEvents();
 
-
-		(void)draw_frame(m_vkhInstance, m_vkhRenderData);
 	}
 
 	void Window::SetVSync(bool enabled) {

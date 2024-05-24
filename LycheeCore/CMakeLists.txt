@@ -33,8 +33,9 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW)
 #--------Vulkan--------
 find_package(Vulkan REQUIRED)
 
-#---- vk Bootstrap ----
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/vk-bootstrap)
+
+#--------Vulkan Memmory Allocator --------
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/VulkanMemoryAllocator)
 
 #--------SPDLOG--------
 set(SPDLOG_BUILD_WARNINGS OFF)
@@ -91,6 +92,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/vk-bootstrap/src
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/glm
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/entt
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/VulkanMemoryAllocator/include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/spdlog/include
 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/imgui
@@ -103,6 +105,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 #----------------------------------------------------
 
 # Libs
-target_link_libraries(${PROJECT_NAME} PRIVATE 	glfw Vulkan::Vulkan vk-bootstrap::vk-bootstrap yaml-cpp imgui stb_image)
+target_link_libraries(${PROJECT_NAME} PRIVATE 	glfw Vulkan::Vulkan GPUOpen::VulkanMemoryAllocator yaml-cpp imgui stb_image)
 # pch
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/Lychee/lypch.h)

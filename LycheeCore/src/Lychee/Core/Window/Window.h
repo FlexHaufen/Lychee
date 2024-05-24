@@ -18,7 +18,7 @@
 
 #include "Lychee/Events/Event.h"
 #include "Lychee/Core/Time/DeltaTime.h"
-#include "Lychee/Core/Vulkan/vkh.h"
+#include "Lychee/Core/Vulkan/vkhManager.h"
 
 // *** DEFIENS ***
 
@@ -74,8 +74,7 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		GLFWwindow* GetNativeGlfwWindow() { return m_vkhInstance.window; }
-		vkh::Instance& GetNativeVkhInstance() { return m_vkhInstance; }
+		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
 
 	private:
 
@@ -94,9 +93,11 @@ namespace Lychee {
 	private:
 
        	//** Members **
-		vkh::Instance m_vkhInstance;	// Vulkan Instance
-		vkh::RenderData m_vkhRenderData;	// Vulkan RenderData
-		
+		// Window functions and members
+        GLFWwindow* m_glfwWindow = nullptr;
+
+		vkhManager m_vkhManager;
+
 		/**
 		 * @brief Data of window
 		 * 

@@ -54,7 +54,7 @@ namespace Lychee {
 		//SetStyle();
 
 		Core& app = Core::Get();
-		vkh::Instance& instance = static_cast<vkh::Instance&>(app.GetWindow().GetNativeVkhInstance());
+		//vkh::Instance& instance = static_cast<vkh::Instance&>(app.GetWindow().GetNativeVkhInstance());
 		
 
 		// Setup Platform/Renderer bindings
