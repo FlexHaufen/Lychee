@@ -33,10 +33,8 @@ namespace Lychee {
 
     class vkhManager {
     public:
-        void setupInstance(bool enableValidationLayers);
-        void setupDevice(VkSurfaceKHR surface, uint32_t frameCount);
+        void setup(GLFWwindow* window, bool enableValidationLayers, uint32_t frameCount);
         void cleanup();
-        void cleanupInstance();
 
         // getter & setter
         VkInstance getInstance() { return m_Instance; }
@@ -62,8 +60,9 @@ namespace Lychee {
         // Initialization
         void createInstance();
         void setupDebugCallback();
-        void pickPhysicalDevice(VkSurfaceKHR surface);
-        void createLogicalDevice(VkSurfaceKHR surface);
+        void createSurface(GLFWwindow* window);
+        void pickPhysicalDevice();
+        void createLogicalDevice();
         void createAllocator();
         void createCommandPool();
         void createDescriptorPool(uint32_t poolCount);
@@ -84,6 +83,7 @@ namespace Lychee {
         vkhQueueFamilyIndices m_QueueFamilyIndices;
         
         VkInstance m_Instance;
+        VkSurfaceKHR m_Surface;
         VkPhysicalDevice m_PhysicalDevice;
         VkDevice m_Device;
         VkDebugUtilsMessengerEXT m_Callback;

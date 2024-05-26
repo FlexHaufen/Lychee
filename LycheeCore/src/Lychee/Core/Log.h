@@ -23,6 +23,7 @@
 #include <filesystem>
 #pragma warning(pop)
 
+#include "Lychee/Config.h"
 
 // *** DEFINES ***
 #ifndef NLY_DEBUG

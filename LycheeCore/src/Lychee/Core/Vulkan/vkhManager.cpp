@@ -23,17 +23,15 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-    void vkhManager::setupInstance(bool enabledValidationLayers) {
+    void vkhManager::setup(GLFWwindow* window, bool enabledValidationLayers, uint32_t frameCount) {
         m_EnableValidationLayers = enabledValidationLayers;
+        m_FrameCount = frameCount;
 
         createInstance();
         setupDebugCallback();
-    }
-
-    void vkhManager::setupDevice(VkSurfaceKHR surface, uint32_t frameCount) {
-        m_FrameCount = frameCount;
-        pickPhysicalDevice(surface);
-        createLogicalDevice(surface);
+        createSurface(window);
+        pickPhysicalDevice();
+        createLogicalDevice();
         createAllocator();
         createCommandPool();
         createDescriptorPool(frameCount);
@@ -46,10 +44,9 @@ namespace Lychee {
         if (m_EnableValidationLayers) {
             DestroyDebugUtilsMessengerEXT(m_Instance, m_Callback, nullptr);
         }
-    }
-
-    void vkhManager::cleanupInstance() {
+        vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
         vkDestroyInstance(m_Instance, nullptr);
+
     }
 
     // Private
@@ -101,7 +98,13 @@ namespace Lychee {
         }
     }
 
-    void vkhManager::pickPhysicalDevice(VkSurfaceKHR surface) {
+    void vkhManager::createSurface(GLFWwindow* window) {
+        if (glfwCreateWindowSurface(m_Instance, window, nullptr, &m_Surface) != VK_SUCCESS) {
+            LY_CORE_ERROR("Failed to create window surface!");
+        }
+    }
+
+    void vkhManager::pickPhysicalDevice() {
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(m_Instance, &deviceCount, nullptr);
 
@@ -113,7 +116,7 @@ namespace Lychee {
         vkEnumeratePhysicalDevices(m_Instance, &deviceCount, devices.data());
 
         for (const auto& device : devices) {
-            if (isDeviceSuitable(device, surface)) {
+            if (isDeviceSuitable(device, m_Surface)) {
                 m_PhysicalDevice = device;
                 break;
             }
@@ -123,8 +126,8 @@ namespace Lychee {
         }
     }
 
-    void vkhManager::createLogicalDevice(VkSurfaceKHR surface) {
-        m_QueueFamilyIndices = findQueueFamilies(m_PhysicalDevice, surface);
+    void vkhManager::createLogicalDevice() {
+        m_QueueFamilyIndices = findQueueFamilies(m_PhysicalDevice, m_Surface);
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
         std::set<uint32_t> uniqueQueueFamilies = { m_QueueFamilyIndices.graphicsFamily.value(), m_QueueFamilyIndices.presentFamily.value() };
@@ -170,6 +173,7 @@ namespace Lychee {
         VmaAllocatorCreateInfo createInfo = {};
         createInfo.physicalDevice = m_PhysicalDevice;
         createInfo.device = m_Device;
+        createInfo.instance = m_Instance;
         vmaCreateAllocator(&createInfo, &m_Allocator);
     }
 

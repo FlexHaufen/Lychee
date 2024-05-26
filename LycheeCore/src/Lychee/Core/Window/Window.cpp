@@ -67,7 +67,7 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
     
-		m_vkhManager.setupInstance(true);
+		m_vkhManager.setup(m_glfwWindow, true, 2);
 
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
@@ -169,8 +169,6 @@ namespace Lychee {
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
 		m_vkhManager.cleanup();
-        //vkDestroySurfaceKHR(m_vkhManager.getInstance(), surface, nullptr);
-        m_vkhManager.cleanupInstance();
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}
