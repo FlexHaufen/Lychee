@@ -24,8 +24,7 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-    void vkhManager::setup(GLFWwindow* window, uint32_t frameCount) {
-        m_FrameCount = frameCount;
+    void vkhManager::setup(GLFWwindow* window) {
         m_glfwWindow = window;
 
         createInstance();
@@ -33,8 +32,6 @@ namespace Lychee {
         createSurface();
         pickPhysicalDevice();
         createLogicalDevice();
-        //createAllocator();
-        //createDescriptorPool(frameCount);
         createSwapChain();
         createImageViews();
         createRenderPass();
@@ -46,28 +43,98 @@ namespace Lychee {
     }
 
     void vkhManager::cleanup() {
-        //for (size_t i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
-            vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores, nullptr);
-            vkDestroySemaphore(m_Device, m_RenderFinishedSemaphores, nullptr);
-            vkDestroyFence(m_Device, m_InFlightFences, nullptr);
-        //}
-        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
+        // Swapchain
         for (auto framebuffer : m_SwapChainFramebuffers) {
             vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
-        }
-        vkDestroyPipelineLayout(m_Device, m_PipelineLayout, nullptr);
-        vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
+        }            
         for (auto imageView : m_SwapChainImageViews) {
             vkDestroyImageView(m_Device, imageView, nullptr);
         }
         vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
+        
+        // Graphics pipeline
+        vkDestroyPipeline(m_Device, m_GraphicsPipeline, nullptr);
+        vkDestroyPipelineLayout(m_Device, m_PipelineLayout, nullptr);
+        // Render pass
+        vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
+
+        for (size_t i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
+            vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores[i], nullptr);
+            vkDestroySemaphore(m_Device, m_RenderFinishedSemaphores[i], nullptr);
+            vkDestroyFence(m_Device, m_InFlightFences[i], nullptr);
+        }
+        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
         vkDestroyDevice(m_Device, nullptr);
+
         #ifdef VKH_ENABLE_VALIDATION_LAYERS
             vkhDestroyDebugUtilsMessengerEXT(m_Instance, m_Callback, nullptr);
         #endif
         vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
         vkDestroyInstance(m_Instance, nullptr);
     }
+
+    
+    void vkhManager::drawFrame() {
+        vkWaitForFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+
+        uint32_t imageIndex;
+        VkResult result = vkAcquireNextImageKHR(m_Device, m_SwapChain, std::numeric_limits<uint64_t>::max(), m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+            m_isFramebufferResized = false;
+            recreateSwapChain();
+            return;
+        } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+            LY_CORE_ERROR("failed to acquire swap chain image!");
+        }
+
+        vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
+        recordCommandBuffer(imageIndex);
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+        VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphores[m_CurrentFrame] };
+        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = waitSemaphores;
+        submitInfo.pWaitDstStageMask = waitStages;
+
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_CommandBuffers[m_CurrentFrame];
+
+        VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = signalSemaphores;
+
+        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
+
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to submit draw command buffer!");
+        }
+
+        VkPresentInfoKHR presentInfo = {};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = signalSemaphores;
+
+        VkSwapchainKHR swapChains[] = { m_SwapChain };
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = swapChains;
+        presentInfo.pImageIndices = &imageIndex;
+
+        result = vkQueuePresentKHR(m_PresentQueue, &presentInfo);
+
+        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
+            recreateSwapChain();
+        } else if (result != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to present swap chain image!");
+        }
+
+        m_CurrentFrame = (m_CurrentFrame + 1) % VKH_MAX_FRAMES_IN_FLIGHT;
+
+    }
+
 
     // Private
 
@@ -495,21 +562,23 @@ namespace Lychee {
     }
 
     void vkhManager::createCommandBuffer() {
+        m_CommandBuffers.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.commandPool = m_CommandPool;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = 1;
+        allocInfo.commandBufferCount = m_CommandBuffers.size();
 
-        if (vkAllocateCommandBuffers(m_Device, &allocInfo, &m_CommandBuffer) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(m_Device, &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS) {
             LY_CORE_ERROR("failed to allocate command buffers!");
         }
     }
 
     void vkhManager::createSyncObjects() {
-        //m_ImageAvailableSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
-        //m_RenderFinishedSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
-        //m_InFlightFences.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+        m_ImageAvailableSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+        m_RenderFinishedSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+        m_InFlightFences.resize(VKH_MAX_FRAMES_IN_FLIGHT);
 
         VkSemaphoreCreateInfo semaphoreInfo{};
         semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -518,26 +587,23 @@ namespace Lychee {
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-        //for (size_t i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
-            if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores) != VK_SUCCESS ||
-                vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores) != VK_SUCCESS ||
-                vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences) != VK_SUCCESS) {
+        for (size_t i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
+            if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
+                vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
+                vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS) {
                 LY_CORE_ERROR("Failed to create synchronization objects for a frame!");
             }
-        //}
+        }
     }
 
-
     void vkhManager::recordCommandBuffer(uint32_t imageIndex) {
-        
-        //LY_CORE_TRACE("ImageIndex: {0}", m_SwapChainFramebuffers[imageIndex]);
         
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         beginInfo.flags = 0; // Optional
         beginInfo.pInheritanceInfo = nullptr; // Optional
 
-        if (vkBeginCommandBuffer(m_CommandBuffer, &beginInfo) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(m_CommandBuffers[m_CurrentFrame], &beginInfo) != VK_SUCCESS) {
             LY_CORE_ERROR("failed to begin recording command buffer!");
         }
 
@@ -552,8 +618,8 @@ namespace Lychee {
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
-        vkCmdBeginRenderPass(m_CommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
+        vkCmdBeginRenderPass(m_CommandBuffers[m_CurrentFrame], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBindPipeline(m_CommandBuffers[m_CurrentFrame], VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
         // VkBuffer vertexBuffers[] = {m_VertexBuffer};
         // VkDeviceSize offsets[] = {0};
         // vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
@@ -566,64 +632,39 @@ namespace Lychee {
         //}
 
 
-        vkCmdDraw(m_CommandBuffer, 3, 1, 0, 0);
+        vkCmdDraw(m_CommandBuffers[m_CurrentFrame], 3, 1, 0, 0);
 
-        vkCmdEndRenderPass(m_CommandBuffer);
+        vkCmdEndRenderPass(m_CommandBuffers[m_CurrentFrame]);
 
-        if (vkEndCommandBuffer(m_CommandBuffer) != VK_SUCCESS) {
+        if (vkEndCommandBuffer(m_CommandBuffers[m_CurrentFrame]) != VK_SUCCESS) {
             LY_CORE_INFO("Failed to record command buffer!");
         }
     }
 
+    void vkhManager::recreateSwapChain() {
 
-    void vkhManager::drawFrame() {
-        vkWaitForFences(m_Device, 1, &m_InFlightFences, VK_TRUE, std::numeric_limits<uint64_t>::max());
-
-        uint32_t imageIndex;
-        vkAcquireNextImageKHR(m_Device, m_SwapChain, std::numeric_limits<uint64_t>::max(), m_ImageAvailableSemaphores, VK_NULL_HANDLE, &imageIndex);
-
-        // Recreate swapchain here if error vkAcquireNextImageKHR
-
-        vkResetCommandBuffer(m_CommandBuffer, 0);
-        recordCommandBuffer(imageIndex);
-
-        VkSubmitInfo submitInfo = {};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-        VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphores };
-        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-        submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = waitSemaphores;
-        submitInfo.pWaitDstStageMask = waitStages;
-
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &m_CommandBuffer;  // TODO (flex) multiple command buffers
-
-        VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores };
-        submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = signalSemaphores;
-
-        vkResetFences(m_Device, 1, &m_InFlightFences);
-
-        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to submit draw command buffer!");
+        // TODO (flex): Should this be handled here?
+        int width = 0, height = 0;
+        glfwGetFramebufferSize(m_glfwWindow, &width, &height);
+        while (width == 0 || height == 0) {
+            glfwGetFramebufferSize(m_glfwWindow, &width, &height);
+            glfwWaitEvents();
         }
 
-        VkPresentInfoKHR presentInfo = {};
-        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-        presentInfo.waitSemaphoreCount = 1;
-        presentInfo.pWaitSemaphores = signalSemaphores;
+        vkDeviceWaitIdle(m_Device);
 
-        VkSwapchainKHR swapChains[] = { m_SwapChain };
-        presentInfo.swapchainCount = 1;
-        presentInfo.pSwapchains = swapChains;
-        presentInfo.pImageIndices = &imageIndex;
+        for (auto framebuffer : m_SwapChainFramebuffers) {
+            vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+        }
 
-        vkQueuePresentKHR(m_PresentQueue, &presentInfo);
+        for (auto imageView : m_SwapChainImageViews) {
+            vkDestroyImageView(m_Device, imageView, nullptr);
+        }
+        vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
 
-        // Recreate swapchain here if error vkQueuePresentKHR
+        createSwapChain();
+        createImageViews();
+        createFramebuffers();
     }
-
-
 
 }

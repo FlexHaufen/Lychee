@@ -23,7 +23,7 @@
 
 
 // *** DEFIENS ***
-#define VKH_MAX_FRAMES_IN_FLIGHT 1
+#define VKH_MAX_FRAMES_IN_FLIGHT 2
 
 
 // *** NAMESPACE ***
@@ -32,7 +32,7 @@ namespace Lychee {
 
     class vkhManager {
     public:
-        void setup(GLFWwindow* window, uint32_t frameCount);
+        void setup(GLFWwindow* window);
         void cleanup();
 
         void drawFrame();
@@ -46,9 +46,10 @@ namespace Lychee {
         VkCommandPool getCommandPool() { return m_CommandPool; }
         VkQueue getGraphicsQueue() { return m_GraphicsQueue; }
         VkQueue getPresentQueue() { return m_PresentQueue; }
-        uint32_t getFrameCount() { return m_FrameCount; }
-        void setCurrentFrame(uint32_t currentFrame) { m_CurrentFrame = currentFrame; }
         uint32_t getCurrentFrame() { return m_CurrentFrame; }
+
+        void setCurrentFrame(uint32_t currentFrame) { m_CurrentFrame = currentFrame; }
+        void setFrameBufferResized(bool b) { m_isFramebufferResized = b; }
 
     private:
         // Initialization
@@ -68,6 +69,7 @@ namespace Lychee {
         void createSyncObjects();
 
         void recordCommandBuffer(uint32_t imageIndex);
+        void recreateSwapChain();
 
     private:
 
@@ -99,18 +101,15 @@ namespace Lychee {
         VkPipeline m_GraphicsPipeline;
 
         VkCommandPool m_CommandPool;
-        VkCommandBuffer m_CommandBuffer;
+        std::vector<VkCommandBuffer> m_CommandBuffers;
         VkDescriptorSetLayout m_DescriptorSetLayout;
 
-        //std::vector<VkSemaphore> m_ImageAvailableSemaphores;
-        //std::vector<VkSemaphore> m_RenderFinishedSemaphores;
-        //std::vector<VkFence> m_InFlightFences;
+        std::vector<VkSemaphore> m_ImageAvailableSemaphores;
+        std::vector<VkSemaphore> m_RenderFinishedSemaphores;
+        std::vector<VkFence> m_InFlightFences;
 
-        VkSemaphore m_ImageAvailableSemaphores;
-        VkSemaphore m_RenderFinishedSemaphores;
-        VkFence m_InFlightFences;
-
-        uint32_t m_FrameCount;
         uint32_t m_CurrentFrame = 0;
+        bool m_isFramebufferResized = false;
+
     };
 }

@@ -75,7 +75,7 @@ namespace Lychee {
 		bool IsVSync() const;
 
 		void WaitIdle() { m_vkhManager.waitIdle(); }
-
+		void ResizeEvent() {m_vkhManager.setFrameBufferResized(true);}	// TODO (flex): Put this somewhere else
 
 		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
 

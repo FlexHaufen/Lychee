@@ -67,13 +67,11 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
     
-		m_vkhManager.setup(m_glfwWindow, 2);
+		m_vkhManager.setup(m_glfwWindow);
 
-		/*
-		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
-	
+		LY_CORE_INFO("Window: \\---- Settingup callbacks");
+		//glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 		glfwSetWindowUserPointer(m_glfwWindow, &m_WindowData);
-
 
 		// TODO (flex): Implement window icon
 		// Set window ico
@@ -81,12 +79,12 @@ namespace Lychee {
 		//glfwWindowIco[0].pixels = stbi_load(LY_ICON_PNG, &glfwWindowIco[0].width, &glfwWindowIco[0].height, nullptr, 4);
 		//glfwSetWindowIcon(m_glfwWindow, 1, glfwWindowIco) ;
 
-        LY_CORE_INFO("Window: \\---- Setting vsync to {0}", LY_VSYNC_DEFAULT);
-		SetVSync(LY_VSYNC_DEFAULT);
+        //LY_CORE_INFO("Window: \\---- Setting vsync to {0}", LY_VSYNC_DEFAULT);
+		//SetVSync(LY_VSYNC_DEFAULT);
 
 		//** Callbacks **
 		//* Window Resize *
-		glfwSetWindowSizeCallback(m_glfwWindow, [](GLFWwindow* window, int32_t width, int32_t height) {
+		glfwSetFramebufferSizeCallback(m_glfwWindow, [](GLFWwindow* window, int32_t width, int32_t height) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			data.width = width;
 			data.height = height;
@@ -94,6 +92,7 @@ namespace Lychee {
 			data.eventCallback(event);
 		});
 
+		
 		//* Window Close *
 		glfwSetWindowCloseCallback(m_glfwWindow, [](GLFWwindow* window) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
@@ -163,7 +162,6 @@ namespace Lychee {
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.eventCallback(event);
 		});
-		*/
 	}
 
 	void Window::Terminate() {
@@ -202,5 +200,6 @@ namespace Lychee {
 	bool Window::IsVSync() const {
 		return m_WindowData.isVSyncOn;
 	}
+
 
 }
