@@ -58,6 +58,8 @@ namespace Lychee {
         void createAllocator();
         void createCommandPool();
         void createDescriptorPool(uint32_t poolCount);
+        void createSwapChain();
+        void createImageViews();
 
     private:
 
@@ -77,6 +79,13 @@ namespace Lychee {
         VkQueue m_PresentQueue;
         VkDescriptorPool m_DescriptorPool;
         VkDescriptorSetLayout m_DescriptorSetLayout;
+
+        VkSwapchainKHR m_SwapChain;
+        std::vector<VkImage> m_SwapChainImages;
+        std::vector<VkImageView> m_SwapChainImageViews;
+        std::vector<VkFramebuffer> m_SwapChainFramebuffers;
+        VkFormat m_SwapChainImageFormat;
+        VkExtent2D m_SwapChainExtent;
 
     
         uint32_t m_FrameCount;

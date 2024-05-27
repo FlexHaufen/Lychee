@@ -51,8 +51,13 @@ namespace Lychee {
         glm::mat4x4 transform ;
     };
 
-    static VKAPI_ATTR VkBool32 VKAPI_CALL vkhDebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
-        LY_CORE_TRACE("VULKAN: {0}", pCallbackData->pMessage);
+    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+        VkDebugUtilsMessageTypeFlagsEXT messageType,
+        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+        void* pUserData) {
+
+        LY_CORE_ERROR("VULKAN: {0}", pCallbackData->pMessage);
         return VK_FALSE;
     }
 
@@ -64,5 +69,7 @@ namespace Lychee {
     vkhQueueFamilyIndices vkhFindQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface);
     bool vkhCheckDeviceExtensionSupport(VkPhysicalDevice device);
     vkhSwapChainSupportDetails vkhQuerySwapChainSupport(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface);
-
+    VkSurfaceFormatKHR vkhChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+    VkPresentModeKHR vkhChooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
+    VkExtent2D vkhChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* window);
 }
