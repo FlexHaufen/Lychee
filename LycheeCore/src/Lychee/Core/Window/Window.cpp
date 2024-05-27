@@ -67,7 +67,7 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
     
-		m_vkhManager.setup(m_glfwWindow, true, 2);
+		m_vkhManager.setup(m_glfwWindow, 2);
 
 		/*
 		glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));

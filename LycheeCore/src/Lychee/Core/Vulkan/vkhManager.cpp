@@ -23,13 +23,13 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-    void vkhManager::setup(GLFWwindow* window, bool enabledValidationLayers, uint32_t frameCount) {
-        m_EnableValidationLayers = enabledValidationLayers;
+    void vkhManager::setup(GLFWwindow* window, uint32_t frameCount) {
         m_FrameCount = frameCount;
+        m_glfwWindow = window;
 
         createInstance();
         setupDebugCallback();
-        createSurface(window);
+        createSurface();
         pickPhysicalDevice();
         createLogicalDevice();
         createAllocator();
@@ -41,9 +41,9 @@ namespace Lychee {
         vmaDestroyAllocator(m_Allocator);
         vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
         vkDestroyDevice(m_Device, nullptr);
-        if (m_EnableValidationLayers) {
-            DestroyDebugUtilsMessengerEXT(m_Instance, m_Callback, nullptr);
-        }
+        #ifdef VKH_ENABLE_VALIDATION_LAYERS
+            vkhDestroyDebugUtilsMessengerEXT(m_Instance, m_Callback, nullptr);
+        #endif
         vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
         vkDestroyInstance(m_Instance, nullptr);
 
@@ -52,9 +52,12 @@ namespace Lychee {
     // Private
 
     void vkhManager::createInstance() {
-        if (m_EnableValidationLayers && !checkValidationLayerSupport()) {
-            LY_CORE_ERROR("Validation layers requested, but not available!");
-        }
+
+        #ifdef VKH_ENABLE_VALIDATION_LAYERS
+            if (!vkhCheckValidationLayerSupport()) {
+                LY_CORE_ERROR("Validation layers requested, but not available!");
+            }
+        #endif
         VkApplicationInfo appInfo = {};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         appInfo.pApplicationName = LY_PROJECT_NAME;
@@ -67,17 +70,16 @@ namespace Lychee {
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.pApplicationInfo = &appInfo;
 
-        auto extensions = getRequiredExtensions();
+        auto extensions = vkhGetRequiredExtensions();
         createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
         createInfo.ppEnabledExtensionNames = extensions.data();
 
-        if (m_EnableValidationLayers) {
-            createInfo.enabledLayerCount = static_cast<uint32_t>(m_ValidationLayers.size());
-            createInfo.ppEnabledLayerNames = m_ValidationLayers.data();
-        }
-        else {
+        #ifdef VKH_ENABLE_VALIDATION_LAYERS
+            createInfo.enabledLayerCount = static_cast<uint32_t>(s_ValidationLayers.size());
+            createInfo.ppEnabledLayerNames = s_ValidationLayers.data();
+        #else
             createInfo.enabledLayerCount = 0;
-        }
+        #endif
 
         if (vkCreateInstance(&createInfo, nullptr, &m_Instance) != VK_SUCCESS) {
             LY_CORE_ERROR("Failed to create vulkan instance!");
@@ -85,21 +87,21 @@ namespace Lychee {
     }
 
     void vkhManager::setupDebugCallback() {
-        if (!m_EnableValidationLayers) return;
+        #ifdef VKH_ENABLE_VALIDATION_LAYERS
+            VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
+            createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+            createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+            createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+            createInfo.pfnUserCallback = vkhDebugCallback;
 
-        VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-        createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-        createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-        createInfo.pfnUserCallback = debugCallback;
-
-        if (CreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, &m_Callback) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to set up debug callback!");
-        }
+            if (vkhCreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, &m_Callback) != VK_SUCCESS) {
+                LY_CORE_ERROR("failed to set up debug callback!");
+            }
+        #endif
     }
 
-    void vkhManager::createSurface(GLFWwindow* window) {
-        if (glfwCreateWindowSurface(m_Instance, window, nullptr, &m_Surface) != VK_SUCCESS) {
+    void vkhManager::createSurface() {
+        if (glfwCreateWindowSurface(m_Instance, m_glfwWindow, nullptr, &m_Surface) != VK_SUCCESS) {
             LY_CORE_ERROR("Failed to create window surface!");
         }
     }
@@ -116,7 +118,7 @@ namespace Lychee {
         vkEnumeratePhysicalDevices(m_Instance, &deviceCount, devices.data());
 
         for (const auto& device : devices) {
-            if (isDeviceSuitable(device, m_Surface)) {
+            if (vkhIsDeviceSuitable(device, m_Surface)) {
                 m_PhysicalDevice = device;
                 break;
             }
@@ -127,7 +129,7 @@ namespace Lychee {
     }
 
     void vkhManager::createLogicalDevice() {
-        m_QueueFamilyIndices = findQueueFamilies(m_PhysicalDevice, m_Surface);
+        m_QueueFamilyIndices = vkhFindQueueFamilies(m_PhysicalDevice, m_Surface);
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
         std::set<uint32_t> uniqueQueueFamilies = { m_QueueFamilyIndices.graphicsFamily.value(), m_QueueFamilyIndices.presentFamily.value() };
@@ -150,16 +152,15 @@ namespace Lychee {
         createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         createInfo.pQueueCreateInfos = queueCreateInfos.data();
         createInfo.pEnabledFeatures = &deviceFeatures;
-        createInfo.enabledExtensionCount = static_cast<uint32_t>(m_DeviceExtensions.size());
-        createInfo.ppEnabledExtensionNames = m_DeviceExtensions.data();
+        createInfo.enabledExtensionCount = static_cast<uint32_t>(s_DeviceExtensions.size());
+        createInfo.ppEnabledExtensionNames = s_DeviceExtensions.data();
 
-        if (m_EnableValidationLayers) {
-            createInfo.enabledLayerCount = static_cast<uint32_t>(m_ValidationLayers.size());
-            createInfo.ppEnabledLayerNames = m_ValidationLayers.data();
-        }
-        else {
+        #ifdef VKH_ENABLE_VALIDATION_LAYERS
+            createInfo.enabledLayerCount = static_cast<uint32_t>(s_ValidationLayers.size());
+            createInfo.ppEnabledLayerNames = s_ValidationLayers.data();
+        #else
             createInfo.enabledLayerCount = 0;
-        }
+        #endif
 
         if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS) {
             LY_CORE_ERROR("failed to create logical device!");
@@ -204,125 +205,4 @@ namespace Lychee {
         }
     }
 
-    // ------------
-
-    bool vkhManager::checkValidationLayerSupport() {
-        uint32_t layerCount;
-        vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
-        std::vector<VkLayerProperties> availableLayers(layerCount);
-        vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
-
-        for (const char* layerName : m_ValidationLayers) {
-            bool layerFound = false;
-
-            for (const auto& layerProperties : availableLayers) {
-                if (strcmp(layerName, layerProperties.layerName) == 0) {
-                    layerFound = true;
-                    break;
-                }
-            }
-            if (!layerFound) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    std::vector<const char *> vkhManager::getRequiredExtensions() {
-        uint32_t glfwExtensionCount = 0;
-        const char** glfwExtensions;
-        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-        std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-        if (m_EnableValidationLayers) {
-            extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-        }
-        return extensions;
-    }
-
-
-    VkResult vkhManager::CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback) {
-        auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
-        if (func != nullptr) {
-            return func(instance, pCreateInfo, pAllocator, pCallback);
-        }
-        else {
-            return VK_ERROR_EXTENSION_NOT_PRESENT;
-        }
-    }
-
-    void vkhManager::DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks* pAllocator) {
-        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-        if (func != nullptr) {
-            func(instance, callback, pAllocator);
-        }
-    }
-
-    bool vkhManager::isDeviceSuitable(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface) {
-        vkhQueueFamilyIndices indices = findQueueFamilies(physicalDevice, surface);
-        bool extensionsSupported = checkDeviceExtensionSupport(physicalDevice);
-        bool swapChainAdequate = false;
-        if (extensionsSupported) {
-            vkhSwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice, surface);
-            swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
-        }
-        VkPhysicalDeviceFeatures supportedFeatures;
-        vkGetPhysicalDeviceFeatures(physicalDevice, &supportedFeatures);
-        return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
-    }
-
-    vkhQueueFamilyIndices vkhManager::findQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface) {
-        vkhQueueFamilyIndices indices;
-        uint32_t queueFamilyCount = 0;
-        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
-        std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
-        int i = 0;
-        for (const auto& queueFamily : queueFamilies) {
-            if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-                indices.graphicsFamily = i;
-            }
-            VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
-            if (queueFamily.queueCount > 0 && presentSupport) {
-                indices.presentFamily = i;
-            }
-            if (indices.isComplete()) {
-                break;
-            }
-            i++;
-        }
-
-        return indices;
-    }
-
-    bool vkhManager::checkDeviceExtensionSupport(VkPhysicalDevice device) {
-        uint32_t extensionCount;
-        vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
-        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-        vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
-        std::set<std::string> requiredExtensions(m_DeviceExtensions.begin(), m_DeviceExtensions.end());
-        for (const auto& extension : availableExtensions) {
-            requiredExtensions.erase(extension.extensionName);
-        }
-        return requiredExtensions.empty();
-    }
-
-    vkhSwapChainSupportDetails vkhManager::querySwapChainSupport(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface) {
-        vkhSwapChainSupportDetails details;
-        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &details.capabilities);
-        uint32_t formatCount;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, nullptr);
-        if (formatCount != 0) {
-            details.formats.resize(formatCount);
-            vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, details.formats.data());
-        }
-        uint32_t presentModeCount;
-        vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr);
-        if (presentModeCount != 0) {
-            details.presentModes.resize(presentModeCount);
-            vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, details.presentModes.data());
-        }
-        return details;
-    }
 }
