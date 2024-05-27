@@ -74,6 +74,9 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
+		void WaitIdle() { m_vkhManager.waitIdle(); }
+
+
 		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
 
 	private:

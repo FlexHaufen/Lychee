@@ -190,6 +190,7 @@ namespace Lychee {
 		#endif
 
 		glfwPollEvents();
+		m_vkhManager.drawFrame();
 
 	}
 

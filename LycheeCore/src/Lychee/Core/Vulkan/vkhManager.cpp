@@ -34,30 +34,39 @@ namespace Lychee {
         pickPhysicalDevice();
         createLogicalDevice();
         //createAllocator();
-        //createCommandPool();
         //createDescriptorPool(frameCount);
         createSwapChain();
         createImageViews();
         createRenderPass();
         createGraphicsPipeline();
+        createFramebuffers();
+        createCommandPool();
+        createCommandBuffer();
+        createSyncObjects();
     }
 
     void vkhManager::cleanup() {
+        //for (size_t i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
+            vkDestroySemaphore(m_Device, m_ImageAvailableSemaphores, nullptr);
+            vkDestroySemaphore(m_Device, m_RenderFinishedSemaphores, nullptr);
+            vkDestroyFence(m_Device, m_InFlightFences, nullptr);
+        //}
+        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
+        for (auto framebuffer : m_SwapChainFramebuffers) {
+            vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
+        }
         vkDestroyPipelineLayout(m_Device, m_PipelineLayout, nullptr);
         vkDestroyRenderPass(m_Device, m_RenderPass, nullptr);
         for (auto imageView : m_SwapChainImageViews) {
             vkDestroyImageView(m_Device, imageView, nullptr);
         }
         vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
-        vmaDestroyAllocator(m_Allocator);
-        vkDestroyCommandPool(m_Device, m_CommandPool, nullptr);
         vkDestroyDevice(m_Device, nullptr);
         #ifdef VKH_ENABLE_VALIDATION_LAYERS
             vkhDestroyDebugUtilsMessengerEXT(m_Instance, m_Callback, nullptr);
         #endif
         vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
         vkDestroyInstance(m_Instance, nullptr);
-
     }
 
     // Private
@@ -181,41 +190,6 @@ namespace Lychee {
         vkGetDeviceQueue(m_Device, m_QueueFamilyIndices.presentFamily.value(), 0, &m_PresentQueue);
     }
 
-    void vkhManager::createAllocator() {
-        VmaAllocatorCreateInfo createInfo = {};
-        createInfo.physicalDevice = m_PhysicalDevice;
-        createInfo.device = m_Device;
-        createInfo.instance = m_Instance;
-        vmaCreateAllocator(&createInfo, &m_Allocator);
-    }
-
-    void vkhManager::createCommandPool() {
-        VkCommandPoolCreateInfo poolInfo = {};
-        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        poolInfo.queueFamilyIndex = m_QueueFamilyIndices.graphicsFamily.value();
-        if (vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to create command pool!");
-        }
-    }
-
-    void vkhManager::createDescriptorPool(uint32_t poolCount) {
-        std::array<VkDescriptorPoolSize, 2> poolSizes = {};
-        poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSizes[0].descriptorCount = poolCount;
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[1].descriptorCount = poolCount;
-
-        VkDescriptorPoolCreateInfo poolInfo = {};
-        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-        poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = poolCount;
-
-        if (vkCreateDescriptorPool(m_Device, &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create descriptor pool!");
-        }
-    }
-
     void vkhManager::createSwapChain() {
         vkhSwapChainSupportDetails swapChainSupport = vkhQuerySwapChainSupport(m_PhysicalDevice, m_Surface);
 
@@ -263,7 +237,7 @@ namespace Lychee {
 
         // Retrieve the swapchain images
         vkGetSwapchainImagesKHR(m_Device, m_SwapChain, &imageCount, nullptr);
-        std::vector<VkImage> swapChainImages(imageCount);
+        m_SwapChainImages.resize(imageCount);
         vkGetSwapchainImagesKHR(m_Device, m_SwapChain, &imageCount, m_SwapChainImages.data());
 
         // Store the swapchain and related resources
@@ -273,6 +247,8 @@ namespace Lychee {
 
     void vkhManager::createImageViews() {
         m_SwapChainImageViews.resize(m_SwapChainImages.size());
+
+        //LY_CORE_TRACE("SwapChainImages size: {0}", m_SwapChainImages.size());
 
         for (size_t i = 0; i < m_SwapChainImages.size(); i++) {
             VkImageViewCreateInfo createInfo{};
@@ -482,4 +458,172 @@ namespace Lychee {
         vkDestroyShaderModule(m_Device, vertShaderModule, nullptr);
         vkDestroyShaderModule(m_Device, fragShaderModule, nullptr);
     }
+
+    void vkhManager::createFramebuffers() {
+        m_SwapChainFramebuffers.resize(m_SwapChainImageViews.size());
+        for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
+            VkImageView attachments[] = {
+                m_SwapChainImageViews[i]
+            };
+
+            VkFramebufferCreateInfo framebufferInfo{};
+            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+            framebufferInfo.renderPass = m_RenderPass;
+            framebufferInfo.attachmentCount = 1;
+            framebufferInfo.pAttachments = attachments;
+            framebufferInfo.width = m_SwapChainExtent.width;
+            framebufferInfo.height = m_SwapChainExtent.height;
+            framebufferInfo.layers = 1;
+
+            if (vkCreateFramebuffer(m_Device, &framebufferInfo, nullptr, &m_SwapChainFramebuffers[i]) != VK_SUCCESS) {
+                LY_CORE_ERROR("failed to create framebuffer!");
+            }
+        }
+    }
+
+    void vkhManager::createCommandPool() {
+        vkhQueueFamilyIndices queueFamilyIndices = vkhFindQueueFamilies(m_PhysicalDevice, m_Surface);
+
+        VkCommandPoolCreateInfo poolInfo{};
+        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+
+        if (vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to create command pool!");
+        }
+    }
+
+    void vkhManager::createCommandBuffer() {
+        VkCommandBufferAllocateInfo allocInfo{};
+        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        allocInfo.commandPool = m_CommandPool;
+        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocInfo.commandBufferCount = 1;
+
+        if (vkAllocateCommandBuffers(m_Device, &allocInfo, &m_CommandBuffer) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to allocate command buffers!");
+        }
+    }
+
+    void vkhManager::createSyncObjects() {
+        //m_ImageAvailableSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+        //m_RenderFinishedSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+        //m_InFlightFences.resize(VKH_MAX_FRAMES_IN_FLIGHT);
+
+        VkSemaphoreCreateInfo semaphoreInfo{};
+        semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+        VkFenceCreateInfo fenceInfo{};
+        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+        fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+        //for (size_t i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
+            if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores) != VK_SUCCESS ||
+                vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores) != VK_SUCCESS ||
+                vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences) != VK_SUCCESS) {
+                LY_CORE_ERROR("Failed to create synchronization objects for a frame!");
+            }
+        //}
+    }
+
+
+    void vkhManager::recordCommandBuffer(uint32_t imageIndex) {
+        
+        //LY_CORE_TRACE("ImageIndex: {0}", m_SwapChainFramebuffers[imageIndex]);
+        
+        VkCommandBufferBeginInfo beginInfo{};
+        beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        beginInfo.flags = 0; // Optional
+        beginInfo.pInheritanceInfo = nullptr; // Optional
+
+        if (vkBeginCommandBuffer(m_CommandBuffer, &beginInfo) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to begin recording command buffer!");
+        }
+
+        VkRenderPassBeginInfo renderPassInfo{};
+        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        renderPassInfo.renderPass = m_RenderPass;
+        renderPassInfo.framebuffer = m_SwapChainFramebuffers[imageIndex];
+        renderPassInfo.renderArea.offset = {0, 0};
+        renderPassInfo.renderArea.extent = m_SwapChainExtent;
+
+        VkClearValue clearColor = {{{0.0f, 0.5f, 0.0f, 1.0f}}};
+        renderPassInfo.clearValueCount = 1;
+        renderPassInfo.pClearValues = &clearColor;
+
+        vkCmdBeginRenderPass(m_CommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
+        // VkBuffer vertexBuffers[] = {m_VertexBuffer};
+        // VkDeviceSize offsets[] = {0};
+        // vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
+
+        //if (m_IndexBuffer != VK_NULL_HANDLE) {
+        //    vkCmdBindIndexBuffer(m_CommandBuffer, m_IndexBuffer, 0, VK_INDEX_TYPE_UINT32);
+        //    vkCmdDrawIndexed(m_CommandBuffer, m_IndexCount, 1, 0, 0, 0);
+        //} else {
+        //    vkCmdDraw(m_CommandBuffer, m_VertexCount, 1, 0, 0);
+        //}
+
+
+        vkCmdDraw(m_CommandBuffer, 3, 1, 0, 0);
+
+        vkCmdEndRenderPass(m_CommandBuffer);
+
+        if (vkEndCommandBuffer(m_CommandBuffer) != VK_SUCCESS) {
+            LY_CORE_INFO("Failed to record command buffer!");
+        }
+    }
+
+
+    void vkhManager::drawFrame() {
+        vkWaitForFences(m_Device, 1, &m_InFlightFences, VK_TRUE, std::numeric_limits<uint64_t>::max());
+
+        uint32_t imageIndex;
+        vkAcquireNextImageKHR(m_Device, m_SwapChain, std::numeric_limits<uint64_t>::max(), m_ImageAvailableSemaphores, VK_NULL_HANDLE, &imageIndex);
+
+        // Recreate swapchain here if error vkAcquireNextImageKHR
+
+        vkResetCommandBuffer(m_CommandBuffer, 0);
+        recordCommandBuffer(imageIndex);
+
+        VkSubmitInfo submitInfo = {};
+        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+        VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphores };
+        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = waitSemaphores;
+        submitInfo.pWaitDstStageMask = waitStages;
+
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &m_CommandBuffer;  // TODO (flex) multiple command buffers
+
+        VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores };
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = signalSemaphores;
+
+        vkResetFences(m_Device, 1, &m_InFlightFences);
+
+        if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to submit draw command buffer!");
+        }
+
+        VkPresentInfoKHR presentInfo = {};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = signalSemaphores;
+
+        VkSwapchainKHR swapChains[] = { m_SwapChain };
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = swapChains;
+        presentInfo.pImageIndices = &imageIndex;
+
+        vkQueuePresentKHR(m_PresentQueue, &presentInfo);
+
+        // Recreate swapchain here if error vkQueuePresentKHR
+    }
+
+
+
 }

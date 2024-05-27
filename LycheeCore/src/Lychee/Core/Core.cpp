@@ -90,6 +90,7 @@ namespace Lychee {
             }
             m_Window->OnUpdate(deltaTime);
         }
+        m_Window->WaitIdle();
     }
 
     void Core::Close() {
