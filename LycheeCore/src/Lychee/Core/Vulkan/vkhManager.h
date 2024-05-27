@@ -60,33 +60,42 @@ namespace Lychee {
         void createDescriptorPool(uint32_t poolCount);
         void createSwapChain();
         void createImageViews();
+        void createRenderPass();
+        void createGraphicsPipeline();
 
     private:
 
 
         GLFWwindow* m_glfwWindow;
 
-        vkhQueueFamilyIndices m_QueueFamilyIndices;
-        
         VkInstance m_Instance;
+        VkDebugUtilsMessengerEXT m_Callback;
+
         VkSurfaceKHR m_Surface;
         VkPhysicalDevice m_PhysicalDevice;
         VkDevice m_Device;
-        VkDebugUtilsMessengerEXT m_Callback;
-        VmaAllocator m_Allocator;
-        VkCommandPool m_CommandPool;
+
+        vkhQueueFamilyIndices m_QueueFamilyIndices;
         VkQueue m_GraphicsQueue;
         VkQueue m_PresentQueue;
-        VkDescriptorPool m_DescriptorPool;
-        VkDescriptorSetLayout m_DescriptorSetLayout;
+
+        VmaAllocator m_Allocator;
+        VkCommandPool m_CommandPool;
 
         VkSwapchainKHR m_SwapChain;
+        VkFormat m_SwapChainImageFormat;
+        VkExtent2D m_SwapChainExtent;
         std::vector<VkImage> m_SwapChainImages;
         std::vector<VkImageView> m_SwapChainImageViews;
         std::vector<VkFramebuffer> m_SwapChainFramebuffers;
-        VkFormat m_SwapChainImageFormat;
-        VkExtent2D m_SwapChainExtent;
 
+        VkRenderPass m_RenderPass;
+        VkFormat m_DepthFormat;
+        VkPipelineLayout m_PipelineLayout;
+        VkPipeline m_GraphicsPipeline;
+
+        VkDescriptorPool m_DescriptorPool;
+        VkDescriptorSetLayout m_DescriptorSetLayout;
     
         uint32_t m_FrameCount;
         uint32_t m_CurrentFrame;

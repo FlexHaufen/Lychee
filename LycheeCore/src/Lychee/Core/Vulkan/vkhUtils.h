@@ -72,4 +72,5 @@ namespace Lychee {
     VkSurfaceFormatKHR vkhChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR vkhChooseSwapPresentMode(const std::vector<VkPresentModeKHR> availablePresentModes);
     VkExtent2D vkhChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* window);
+    VkShaderModule vkhCreateShaderModule(const std::vector<char>& code, VkDevice device);
 }
