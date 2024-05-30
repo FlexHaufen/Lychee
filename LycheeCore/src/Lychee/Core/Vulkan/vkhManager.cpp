@@ -16,9 +16,6 @@
 #include "Lychee/Core/Vulkan/vkhManager.h"
 #include "Lychee/Helper/File.h"
 
-#define VMA_IMPLEMENTATION
-#include <vk_mem_alloc.h>
-
 // *** DEFINES ***
 
 // *** NAMESPACE ***
@@ -38,6 +35,7 @@ namespace Lychee {
         createGraphicsPipeline();
         createFramebuffers();
         createCommandPool();
+        createVertexBuffer();
         createCommandBuffer();
         createSyncObjects();
     }
@@ -52,6 +50,10 @@ namespace Lychee {
         }
         vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
         
+        // Buffer
+        vkDestroyBuffer(m_Device, m_VertexBuffer, nullptr);
+        vkFreeMemory(m_Device, m_VertexBufferMemory, nullptr);
+
         // Graphics pipeline
         vkDestroyPipeline(m_Device, m_GraphicsPipeline, nullptr);
         vkDestroyPipelineLayout(m_Device, m_PipelineLayout, nullptr);
@@ -89,7 +91,7 @@ namespace Lychee {
         }
 
         vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
-        recordCommandBuffer(imageIndex);
+        recordCommandBuffer(m_CommandBuffers[m_CurrentFrame], imageIndex);
 
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -405,8 +407,8 @@ namespace Lychee {
     void vkhManager::createGraphicsPipeline() {
 
         // TODO (flex): Compile shader at runtime
-        auto vertShaderCode = File::readFile(std::string(LY_DEFAULT_SHADER_PATH) + std::string("vert.spv"));
-        auto fragShaderCode = File::readFile(std::string(LY_DEFAULT_SHADER_PATH) + std::string("frag.spv"));
+        auto vertShaderCode = File::readFile(std::string(LY_DEFAULT_SHADER_PATH) + std::string("default.vert.spv"));
+        auto fragShaderCode = File::readFile(std::string(LY_DEFAULT_SHADER_PATH) + std::string("default.frag.spv"));
 
         VkShaderModule vertShaderModule = vkhCreateShaderModule(vertShaderCode, m_Device);
         VkShaderModule fragShaderModule = vkhCreateShaderModule(fragShaderCode, m_Device);
@@ -428,8 +430,12 @@ namespace Lychee {
         // Vertex input stage
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-
-        // Fill in vertex input binding and attribute descriptions here...
+        auto bindingDescription = Vertex::getBindingDescription();
+        auto attributeDescriptions = Vertex::getAttributeDescriptions();
+        vertexInputInfo.vertexBindingDescriptionCount = 1;
+        vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+        vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+        vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
         // Input assembly stage
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
@@ -437,25 +443,10 @@ namespace Lychee {
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
-        // Viewport and scissor
-        VkViewport viewport{};
-        viewport.x = 0.0f;
-        viewport.y = 0.0f;
-        viewport.width = (float) m_SwapChainExtent.width;
-        viewport.height = (float) m_SwapChainExtent.height;
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
-
-        VkRect2D scissor{};
-        scissor.offset = {0, 0};
-        scissor.extent = m_SwapChainExtent;
-
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         viewportState.viewportCount = 1;
-        viewportState.pViewports = &viewport;
         viewportState.scissorCount = 1;
-        viewportState.pScissors = &scissor;
 
         // Rasterizer
         VkPipelineRasterizationStateCreateInfo rasterizer{};
@@ -490,6 +481,16 @@ namespace Lychee {
         colorBlending.blendConstants[2] = 0.0f;
         colorBlending.blendConstants[3] = 0.0f;
 
+        std::vector<VkDynamicState> dynamicStates = {
+            VK_DYNAMIC_STATE_VIEWPORT,
+            VK_DYNAMIC_STATE_SCISSOR
+        };
+        VkPipelineDynamicStateCreateInfo dynamicState{};
+        dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+        dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+        dynamicState.pDynamicStates = dynamicStates.data();
+
+
         // Pipeline layout
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -512,6 +513,7 @@ namespace Lychee {
         pipelineInfo.pRasterizationState = &rasterizer;
         pipelineInfo.pMultisampleState = &multisampling;
         pipelineInfo.pColorBlendState = &colorBlending;
+        pipelineInfo.pDynamicState = &dynamicState;  
         pipelineInfo.layout = m_PipelineLayout;
         pipelineInfo.renderPass = m_RenderPass;
         pipelineInfo.subpass = 0;
@@ -561,6 +563,37 @@ namespace Lychee {
         }
     }
 
+    void vkhManager::createVertexBuffer() {
+        VkBufferCreateInfo bufferInfo{};
+        bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.size = sizeof(vertices[0]) * vertices.size();
+        bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+        if (vkCreateBuffer(m_Device, &bufferInfo, nullptr, &m_VertexBuffer) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to create vertex buffer!");
+        }
+
+        VkMemoryRequirements memRequirements;
+        vkGetBufferMemoryRequirements(m_Device, m_VertexBuffer, &memRequirements);
+
+        VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize = memRequirements.size;
+        allocInfo.memoryTypeIndex = vkhFindMemoryType(m_PhysicalDevice, memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+        if (vkAllocateMemory(m_Device, &allocInfo, nullptr, &m_VertexBufferMemory) != VK_SUCCESS) {
+            LY_CORE_ERROR("failed to allocate vertex buffer memory!");
+        }
+
+        vkBindBufferMemory(m_Device, m_VertexBuffer, m_VertexBufferMemory, 0);
+
+        void* data;
+        vkMapMemory(m_Device, m_VertexBufferMemory, 0, bufferInfo.size, 0, &data);
+        memcpy(data, vertices.data(), (size_t)bufferInfo.size);
+        vkUnmapMemory(m_Device, m_VertexBufferMemory);
+    }
+
     void vkhManager::createCommandBuffer() {
         m_CommandBuffers.resize(VKH_MAX_FRAMES_IN_FLIGHT);
 
@@ -596,14 +629,13 @@ namespace Lychee {
         }
     }
 
-    void vkhManager::recordCommandBuffer(uint32_t imageIndex) {
-        
+    void vkhManager::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         beginInfo.flags = 0; // Optional
         beginInfo.pInheritanceInfo = nullptr; // Optional
 
-        if (vkBeginCommandBuffer(m_CommandBuffers[m_CurrentFrame], &beginInfo) != VK_SUCCESS) {
+        if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
             LY_CORE_ERROR("failed to begin recording command buffer!");
         }
 
@@ -618,25 +650,34 @@ namespace Lychee {
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
-        vkCmdBeginRenderPass(m_CommandBuffers[m_CurrentFrame], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        vkCmdBindPipeline(m_CommandBuffers[m_CurrentFrame], VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
-        // VkBuffer vertexBuffers[] = {m_VertexBuffer};
-        // VkDeviceSize offsets[] = {0};
-        // vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
 
-        //if (m_IndexBuffer != VK_NULL_HANDLE) {
-        //    vkCmdBindIndexBuffer(m_CommandBuffer, m_IndexBuffer, 0, VK_INDEX_TYPE_UINT32);
-        //    vkCmdDrawIndexed(m_CommandBuffer, m_IndexCount, 1, 0, 0, 0);
-        //} else {
-        //    vkCmdDraw(m_CommandBuffer, m_VertexCount, 1, 0, 0);
-        //}
+            VkViewport viewport{};
+            viewport.x = 0.0f;
+            viewport.y = 0.0f;
+            viewport.width = (float)m_SwapChainExtent.width;
+            viewport.height = (float)m_SwapChainExtent.height;
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 
+            VkRect2D scissor{};
+            scissor.offset = {0, 0};
+            scissor.extent = m_SwapChainExtent;
+            vkCmdSetScissor(commandBuffer, 0, 1, &scissor);   
 
-        vkCmdDraw(m_CommandBuffers[m_CurrentFrame], 3, 1, 0, 0);
+            VkBuffer vertexBuffers[] = {m_VertexBuffer};
+            VkDeviceSize offsets[] = {0};
 
-        vkCmdEndRenderPass(m_CommandBuffers[m_CurrentFrame]);
+            // FIXME (inj): vkCmdBindVertexBuffers():  Couldn't find VkBuffer Object 0xcdcdcdcdcdcdcdcd
+            vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
-        if (vkEndCommandBuffer(m_CommandBuffers[m_CurrentFrame]) != VK_SUCCESS) {
+            vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+
+        vkCmdEndRenderPass(commandBuffer);
+
+        if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
             LY_CORE_INFO("Failed to record command buffer!");
         }
     }

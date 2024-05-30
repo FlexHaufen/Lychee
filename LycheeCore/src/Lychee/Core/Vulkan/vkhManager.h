@@ -14,12 +14,11 @@
 #include <vulkan/vulkan.hpp>
 #include <GLFW/glfw3.h>
 
-#include <vk_mem_alloc.h>
-
 #include <vector>
 
 #include "Lychee/Config.h"
 #include "Lychee/Core/Vulkan/vkhUtils.h"
+#include "Lychee/Core/Vulkan/vkhBuffer.h"
 
 
 // *** DEFIENS ***
@@ -65,10 +64,11 @@ namespace Lychee {
         void createGraphicsPipeline();
         void createFramebuffers();
         void createCommandPool();
+        void createVertexBuffer();
         void createCommandBuffer();
         void createSyncObjects();
 
-        void recordCommandBuffer(uint32_t imageIndex);
+        void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
         void recreateSwapChain();
 
     private:
@@ -107,6 +107,16 @@ namespace Lychee {
         std::vector<VkSemaphore> m_ImageAvailableSemaphores;
         std::vector<VkSemaphore> m_RenderFinishedSemaphores;
         std::vector<VkFence> m_InFlightFences;
+
+        VkBuffer m_VertexBuffer;
+        VkDeviceMemory m_VertexBufferMemory;
+
+        //! DEBUG
+        const std::vector<Vertex> vertices = {
+            {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+            {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+        };
 
         uint32_t m_CurrentFrame = 0;
         bool m_isFramebufferResized = false;
