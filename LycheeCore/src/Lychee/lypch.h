@@ -15,6 +15,7 @@
 #pragma warning(push, 0)  // Disable all warnings
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <filesystem>
 #include <fstream>

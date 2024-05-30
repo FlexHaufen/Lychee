@@ -31,7 +31,7 @@ if exist "%SHADER_NAME%.vert" (
     )
     echo Compilation complete.
 ) else (
-    echo Vertex shader %SHADER_NAME.vert not found
+    echo Vertex shader %SHADER_NAME%.vert not found
 )
 
 REM Compile the fragment shader
@@ -43,7 +43,7 @@ if exist "%SHADER_NAME%.frag" (
     )
     echo Compilation complete.
 ) else (
-    echo Fragment shader %SHADER_NAME.frag not found
+    echo Fragment shader %SHADER_NAME%.frag not found
 )
 
 endlocal

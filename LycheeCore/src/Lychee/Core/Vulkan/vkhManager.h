@@ -61,20 +61,25 @@ namespace Lychee {
         void createSwapChain();
         void createImageViews();
         void createRenderPass();
+        void createDescriptorSetLayout();
         void createGraphicsPipeline();
         void createFramebuffers();
         void createCommandPool();
         void createVertexBuffer();
         void createIndexBuffer();
+        void createUniformBuffers();
+        void createDescriptorPool();
+        void createDescriptorSets();
         void createCommandBuffer();
         void createSyncObjects();
 
         void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
+        void updateUniformBuffer(uint32_t currentImage);
         void recreateSwapChain();
 
         void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
         void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
- 
+    
 
     private:
 
@@ -108,6 +113,8 @@ namespace Lychee {
         VkCommandPool m_CommandPool;
         std::vector<VkCommandBuffer> m_CommandBuffers;
         VkDescriptorSetLayout m_DescriptorSetLayout;
+        VkDescriptorPool m_DescriptorPool;
+        std::vector<VkDescriptorSet> m_DescriptorSets;
 
         std::vector<VkSemaphore> m_ImageAvailableSemaphores;
         std::vector<VkSemaphore> m_RenderFinishedSemaphores;
@@ -117,6 +124,10 @@ namespace Lychee {
         VkDeviceMemory m_VertexBufferMemory;
         VkBuffer m_IndexBuffer;
         VkDeviceMemory m_IndexBufferMemory;
+
+        std::vector<VkBuffer> m_UniformBuffers;
+        std::vector<VkDeviceMemory> m_UniformBuffersMemory;
+        std::vector<void*> m_UniformBuffersMapped;
 
         //! DEBUG
         const std::vector<Vertex> vertices = {
