@@ -38,7 +38,7 @@
 #define LY_SHOW_WINDOWTITLE_FPS     // FPS counter on window title
 
 #define LY_PROJECT_NAME             "Lychee"
-#define LY_VERSION_STR              "v2.1.0a"
+#define LY_VERSION_STR              "v0.1.0a"
 
 #define LY_IMGUI_INSTALL_CALLBACKS  true
 
