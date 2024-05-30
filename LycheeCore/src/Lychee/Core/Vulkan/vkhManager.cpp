@@ -22,8 +22,8 @@
 namespace Lychee {
 
     void vkhManager::setup(GLFWwindow* window) {
+        LY_CORE_INFO("VULKAN: Running setup");
         m_glfwWindow = window;
-
         createInstance();
         setupDebugCallback();
         createSurface();
@@ -41,6 +41,7 @@ namespace Lychee {
     }
 
     void vkhManager::cleanup() {
+        LY_CORE_INFO("VULKAN: Cleaning up");
         // Swapchain
         for (auto framebuffer : m_SwapChainFramebuffers) {
             vkDestroyFramebuffer(m_Device, framebuffer, nullptr);
@@ -87,7 +88,7 @@ namespace Lychee {
             recreateSwapChain();
             return;
         } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-            LY_CORE_ERROR("failed to acquire swap chain image!");
+            LY_CORE_ERROR("VULKAN: failed to acquire swap chain image!");
         }
 
         vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
@@ -112,7 +113,7 @@ namespace Lychee {
         vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
 
         if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to submit draw command buffer!");
+            LY_CORE_ERROR("VULKAN: failed to submit draw command buffer!");
         }
 
         VkPresentInfoKHR presentInfo = {};
@@ -130,7 +131,7 @@ namespace Lychee {
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
             recreateSwapChain();
         } else if (result != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to present swap chain image!");
+            LY_CORE_ERROR("VULKAN: failed to present swap chain image!");
         }
 
         m_CurrentFrame = (m_CurrentFrame + 1) % VKH_MAX_FRAMES_IN_FLIGHT;
@@ -141,10 +142,10 @@ namespace Lychee {
     // Private
 
     void vkhManager::createInstance() {
-
+        LY_CORE_INFO("VULKAN: Creating instance");
         #ifdef VKH_ENABLE_VALIDATION_LAYERS
             if (!vkhCheckValidationLayerSupport()) {
-                LY_CORE_ERROR("Validation layers requested, but not available!");
+                LY_CORE_ERROR("VULKAN: Validation layers requested, but not available!");
             }
         #endif
         VkApplicationInfo appInfo = {};
@@ -171,11 +172,13 @@ namespace Lychee {
         #endif
 
         if (vkCreateInstance(&createInfo, nullptr, &m_Instance) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create vulkan instance!");
+            LY_CORE_ERROR("VULKAN: Failed to create vulkan instance!");
         }
     }
 
     void vkhManager::setupDebugCallback() {
+        LY_CORE_INFO("VULKAN: setup debug callback");
+
         #ifdef VKH_ENABLE_VALIDATION_LAYERS
             VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
             createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -184,23 +187,25 @@ namespace Lychee {
             createInfo.pfnUserCallback = debugCallback;
 
             if (vkhCreateDebugUtilsMessengerEXT(m_Instance, &createInfo, nullptr, &m_Callback) != VK_SUCCESS) {
-                LY_CORE_ERROR("failed to set up debug callback!");
+                LY_CORE_ERROR("VULKAN: failed to set up debug callback!");
             }
         #endif
     }
 
     void vkhManager::createSurface() {
+        LY_CORE_INFO("VULKAN: creating surface");
         if (glfwCreateWindowSurface(m_Instance, m_glfwWindow, nullptr, &m_Surface) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create window surface!");
+            LY_CORE_ERROR("VULKAN: Failed to create window surface!");
         }
     }
 
     void vkhManager::pickPhysicalDevice() {
+        LY_CORE_INFO("VULKAN: creating physical device");
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(m_Instance, &deviceCount, nullptr);
 
         if (deviceCount == 0) {
-            LY_CORE_ERROR("failed to find GPUs with Vulkan support!");
+            LY_CORE_ERROR("VULKAN: failed to find GPUs with Vulkan support!");
         }
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
@@ -213,11 +218,12 @@ namespace Lychee {
             }
         }
         if (m_PhysicalDevice == VK_NULL_HANDLE) {
-            LY_CORE_ERROR("failed to find a suitable GPU!");
+            LY_CORE_ERROR("VULKAN: failed to find a suitable GPU!");
         }
     }
 
     void vkhManager::createLogicalDevice() {
+        LY_CORE_INFO("VULKAN: creating logical device");
         m_QueueFamilyIndices = vkhFindQueueFamilies(m_PhysicalDevice, m_Surface);
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -252,7 +258,7 @@ namespace Lychee {
         #endif
 
         if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to create logical device!");
+            LY_CORE_ERROR("VULKAN: failed to create logical device!");
         }
 
         vkGetDeviceQueue(m_Device, m_QueueFamilyIndices.graphicsFamily.value(), 0, &m_GraphicsQueue);
@@ -260,6 +266,8 @@ namespace Lychee {
     }
 
     void vkhManager::createSwapChain() {
+        LY_CORE_INFO("VULKAN: creating swapchain");
+
         vkhSwapChainSupportDetails swapChainSupport = vkhQuerySwapChainSupport(m_PhysicalDevice, m_Surface);
 
         VkSurfaceFormatKHR surfaceFormat = vkhChooseSwapSurfaceFormat(swapChainSupport.formats);
@@ -301,7 +309,7 @@ namespace Lychee {
         createInfo.clipped = VK_TRUE;
 
         if (vkCreateSwapchainKHR(m_Device, &createInfo, nullptr, &m_SwapChain) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create swap chain!");
+            LY_CORE_ERROR("VULKAN: Failed to create swap chain!");
         }
 
         // Retrieve the swapchain images
@@ -315,6 +323,7 @@ namespace Lychee {
     }
 
     void vkhManager::createImageViews() {
+        LY_CORE_INFO("VULKAN: creating image views");
         m_SwapChainImageViews.resize(m_SwapChainImages.size());
 
         //LY_CORE_TRACE("SwapChainImages size: {0}", m_SwapChainImages.size());
@@ -336,12 +345,14 @@ namespace Lychee {
             createInfo.subresourceRange.layerCount = 1;
 
             if (vkCreateImageView(m_Device, &createInfo, nullptr, &m_SwapChainImageViews[i]) != VK_SUCCESS) {
-                LY_CORE_ERROR("Failed to create image views!");
+                LY_CORE_ERROR("VULKAN: Failed to create image views!");
             }
         }
     }
 
     void vkhManager::createRenderPass() {
+        LY_CORE_INFO("VULKAN: creating renderpass");
+
         // Color attachment
         VkAttachmentDescription colorAttachment{};
         colorAttachment.format = m_SwapChainImageFormat;
@@ -400,11 +411,12 @@ namespace Lychee {
         //renderPassInfo.pDependencies = &dependency;
 
         if (vkCreateRenderPass(m_Device, &renderPassInfo, nullptr, &m_RenderPass) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create render pass!");
+            LY_CORE_ERROR("VULKAN: Failed to create render pass!");
         }
     }
 
     void vkhManager::createGraphicsPipeline() {
+        LY_CORE_INFO("VULKAN: creating graphics pipeline");
 
         // TODO (flex): Compile shader at runtime
         auto vertShaderCode = File::readFile(std::string(LY_DEFAULT_SHADER_PATH) + std::string("default.vert.spv"));
@@ -499,7 +511,7 @@ namespace Lychee {
         pipelineLayoutInfo.pushConstantRangeCount = 0;
 
         if (vkCreatePipelineLayout(m_Device, &pipelineLayoutInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create pipeline layout!");
+            LY_CORE_ERROR("VULKAN: Failed to create pipeline layout!");
         }
 
         // Graphics pipeline
@@ -521,7 +533,7 @@ namespace Lychee {
         pipelineInfo.basePipelineIndex = -1;
 
         if (vkCreateGraphicsPipelines(m_Device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_GraphicsPipeline) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create graphics pipeline!");
+            LY_CORE_ERROR("VULKAN: Failed to create graphics pipeline!");
         }
 
         vkDestroyShaderModule(m_Device, vertShaderModule, nullptr);
@@ -529,6 +541,8 @@ namespace Lychee {
     }
 
     void vkhManager::createFramebuffers() {
+        LY_CORE_INFO("VULKAN: creating framebuffer");
+
         m_SwapChainFramebuffers.resize(m_SwapChainImageViews.size());
         for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
             VkImageView attachments[] = {
@@ -545,12 +559,13 @@ namespace Lychee {
             framebufferInfo.layers = 1;
 
             if (vkCreateFramebuffer(m_Device, &framebufferInfo, nullptr, &m_SwapChainFramebuffers[i]) != VK_SUCCESS) {
-                LY_CORE_ERROR("failed to create framebuffer!");
+                LY_CORE_ERROR("VULKAN: failed to create framebuffer!");
             }
         }
     }
 
     void vkhManager::createCommandPool() {
+        LY_CORE_INFO("VULKAN: creating command pool");
         vkhQueueFamilyIndices queueFamilyIndices = vkhFindQueueFamilies(m_PhysicalDevice, m_Surface);
 
         VkCommandPoolCreateInfo poolInfo{};
@@ -559,11 +574,13 @@ namespace Lychee {
         poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
         if (vkCreateCommandPool(m_Device, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to create command pool!");
+            LY_CORE_ERROR("VULKAN: failed to create command pool!");
         }
     }
 
     void vkhManager::createVertexBuffer() {
+        LY_CORE_INFO("VULKAN: creating vertexbuffer");
+
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferInfo.size = sizeof(vertices[0]) * vertices.size();
@@ -571,7 +588,7 @@ namespace Lychee {
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
         if (vkCreateBuffer(m_Device, &bufferInfo, nullptr, &m_VertexBuffer) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to create vertex buffer!");
+            LY_CORE_ERROR("VULKAN: failed to create vertex buffer!");
         }
 
         VkMemoryRequirements memRequirements;
@@ -583,7 +600,7 @@ namespace Lychee {
         allocInfo.memoryTypeIndex = vkhFindMemoryType(m_PhysicalDevice, memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
         if (vkAllocateMemory(m_Device, &allocInfo, nullptr, &m_VertexBufferMemory) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to allocate vertex buffer memory!");
+            LY_CORE_ERROR("VULKAN: failed to allocate vertex buffer memory!");
         }
 
         vkBindBufferMemory(m_Device, m_VertexBuffer, m_VertexBufferMemory, 0);
@@ -595,6 +612,8 @@ namespace Lychee {
     }
 
     void vkhManager::createCommandBuffer() {
+        LY_CORE_INFO("VULKAN: creating command buffer");
+
         m_CommandBuffers.resize(VKH_MAX_FRAMES_IN_FLIGHT);
 
         VkCommandBufferAllocateInfo allocInfo{};
@@ -604,11 +623,13 @@ namespace Lychee {
         allocInfo.commandBufferCount = m_CommandBuffers.size();
 
         if (vkAllocateCommandBuffers(m_Device, &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to allocate command buffers!");
+            LY_CORE_ERROR("VULKAN: failed to allocate command buffers!");
         }
     }
 
     void vkhManager::createSyncObjects() {
+        LY_CORE_INFO("VULKAN: creating sync objects");
+
         m_ImageAvailableSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
         m_RenderFinishedSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
         m_InFlightFences.resize(VKH_MAX_FRAMES_IN_FLIGHT);
@@ -624,7 +645,7 @@ namespace Lychee {
             if (vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
                 vkCreateSemaphore(m_Device, &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
                 vkCreateFence(m_Device, &fenceInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS) {
-                LY_CORE_ERROR("Failed to create synchronization objects for a frame!");
+                LY_CORE_ERROR("VULKAN: Failed to create synchronization objects for a frame!");
             }
         }
     }
@@ -636,7 +657,7 @@ namespace Lychee {
         beginInfo.pInheritanceInfo = nullptr; // Optional
 
         if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-            LY_CORE_ERROR("failed to begin recording command buffer!");
+            LY_CORE_ERROR("VULKAN: failed to begin recording command buffer!");
         }
 
         VkRenderPassBeginInfo renderPassInfo{};

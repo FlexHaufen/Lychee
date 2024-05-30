@@ -186,7 +186,7 @@ namespace Lychee {
 
         VkShaderModule shaderModule;
         if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-            LY_CORE_ERROR("Failed to create shader module!");
+            LY_CORE_ERROR("VULKAN: Failed to create shader module!");
         }
 
         return shaderModule;
@@ -201,6 +201,7 @@ namespace Lychee {
                 return i;
             }
         }
-        LY_CORE_ERROR("failed to find suitable memory type!");
+        LY_CORE_ERROR("VULKAN: failed to find suitable memory type!");
+        return 0;
     }
 }
