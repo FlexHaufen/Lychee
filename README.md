@@ -8,8 +8,6 @@ A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
 > There is no guarantee the engine will run.   
 
 
-<img src="resource/screenshots/LycheeApp.png">
-
 ## Dependencies
 - [GLFW](https://github.com/glfw/glfw)
 - [Vulkan](https://www.vulkan.org/)
