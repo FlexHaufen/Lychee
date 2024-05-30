@@ -11,15 +11,9 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
-//#include "Lychee/Scene/Entity/Entity.h"
 #include "Lychee/Scene/Entity/Components.h"
 #include "Lychee/Core/Time/DeltaTime.h"
-
 #include "Lychee/Renderer/Renderer.h"
-#include "Lychee/Scene/Voxel/Chunk/VoxelChunk.h"
-
-#include "Lychee/Renderer/EditorCamera.h"
 
 //*** DEFINES ***
 #define LY_MAX_RENDERLAYERS     10
@@ -67,13 +61,15 @@ namespace Lychee {
 
         // ** Scene Handling **
 
+		void OnViewportResize(uint32_t width, uint32_t height) {  };
+
         void OnRuntimeStart();
 
         void OnRuntimeStop();
 
         void OnRuntimeUpdate(DeltaTime dt);
 
-        void OnEditorUpdate(DeltaTime dt, EditorCamera& camera);
+        void OnEditorUpdate(DeltaTime dt);
 
 		entt::registry& GetRegistry() { return m_Registry; }
 
@@ -82,10 +78,9 @@ namespace Lychee {
         // ** Members **
         entt::registry      m_Registry;             // entt Registry
 
+        bool m_IsRuntimeRunning = false;            // true if runtime is running
 
-        VoxelChunk m_Chunk;
-
-        b8 m_IsRuntimeRunning = false;              // true if runtime is running
+        Renderer m_Renderer;
 
         friend class Entity;                        // Entity class
     };

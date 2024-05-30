@@ -12,7 +12,10 @@
 
 // *** INCLUDES *** 
 #include "Lychee/lypch.h"
+
 #include "Lychee/ImGui/ImGuiLayer.h"
+
+#include "Lychee/Config.h"
 #include "Lychee/Core/Core.h"
 
 
@@ -48,21 +51,23 @@ namespace Lychee {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		// Setup Dear ImGui style
-		SetStyle();
+		//SetStyle();
 
 		Core& app = Core::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+		//vkh::Instance& instance = static_cast<vkh::Instance&>(app.GetWindow().GetNativeVkhInstance());
+		
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(window, LY_IMGUI_INSTALL_CALLBACKS);
-		ImGui_ImplOpenGL3_Init(LY_OPENGL_VERSION);
+		//ImGui_ImplGlfw_InitForVulkan(window, LY_IMGUI_INSTALL_CALLBACKS);
+		//ImGui_ImplVulkan_InitInfo init_info = {};
+		//ImGui_ImplVulkan_Init(&init_info);
 	}
 
 	void ImGuiLayer::OnDetach() {
 		LY_CORE_INFO("ImGuiLayer: Terminating");
 		//ImPlot::DestroyContext();
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
+		//ImGui_ImplVulkan_Shutdown();
+		//ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
@@ -75,19 +80,19 @@ namespace Lychee {
 	}
 	
 	void ImGuiLayer::Begin() {
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
+		//ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
 
 	void ImGuiLayer::End() {
 		ImGuiIO& io = ImGui::GetIO();
 		Core& app = Core::Get();
-		io.DisplaySize = ImVec2((f32)app.GetWindow().GetWidth(), (f32)app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 		// Rendering
 		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();

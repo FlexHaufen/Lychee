@@ -11,12 +11,13 @@
 #pragma once
 
 // *** INCLUDE ***
-#include "Lychee/lypch.h"
+#include <vector>
+
 #include "Lychee/Core/Layer/Layer.h"
 
 // *** DEFINES ***
 
-// *** NAMESPACE
+// *** NAMESPACE ***
 namespace Lychee {
 
 	class LayerStack {
@@ -40,7 +41,7 @@ namespace Lychee {
 		std::vector<Layer*>::const_reverse_iterator rend() const { return m_Layers.rend(); }
 	private:
 		std::vector<Layer*> m_Layers;			// Layer Vector
-		u32 m_LayerInsertIndex = 0;
+		uint32_t m_LayerInsertIndex = 0;
 	};
 
 }

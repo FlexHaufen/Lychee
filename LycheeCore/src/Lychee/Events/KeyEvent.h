@@ -11,7 +11,8 @@
 #pragma once
 
 //*** INCLUDES ***
-#include "Lychee/lypch.h"
+#include <string>
+
 #include "Lychee/Events/Event.h"
 #include "Lychee/Helper/KeyCodes.h"
 

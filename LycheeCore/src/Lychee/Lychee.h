@@ -10,8 +10,10 @@
  */
 #pragma once
 
+
 // *** INCLUDES ***
 // ** Main app **
+#include "Lychee/Config.h"
 #include "Lychee/Core/Core.h"
 #include "Lychee/Scene/Scene.h"
 #include "Lychee/Scene/Entity/Entity.h"
@@ -21,19 +23,12 @@
 #include "Lychee/Helper/MouseCodes.h"
 #include "Lychee/Helper/Types.h"
 
-#include "Lychee/Renderer/Framebuffer.h"
-#include "Lychee/Renderer/EditorCamera.h"
-
-
 #include "Lychee/Events/Event.h"
+#include "Lychee/Events/ApplicationEvent.h"
+#include "Lychee/Events/KeyEvent.h"
+#include "Lychee/Events/MouseEvent.h"
 
 #include "Lychee/Core/Time/DeltaTime.h"
 
-#include "Lychee/Helper/Convert.h"
-
 // ** Logger **
 #include "Lychee/Core/Log.h"        
-
-
-
-// *** DEFINES ***

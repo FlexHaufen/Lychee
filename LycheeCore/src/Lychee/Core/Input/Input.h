@@ -11,7 +11,7 @@
 #pragma once
 
 //*** INCLUDES ***
-#include "Lychee/lypch.h"
+#include <glm/glm.hpp>
 
 #include "Lychee/Helper/KeyCodes.h"
 #include "Lychee/Helper/MouseCodes.h"
@@ -33,7 +33,7 @@ namespace Lychee {
 
 		static bool IsMouseButtonPressed(MouseCode button);
 		static glm::vec2 GetMousePosition();
-		static f32 GetMouseX();
-		static f32 GetMouseY();
+		static float GetMouseX();
+		static float GetMouseY();
 	};
 }

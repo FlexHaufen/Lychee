@@ -28,7 +28,7 @@ namespace Lychee {
                 m_Context->GetRegistry().view<Component::Tag>().each([&](auto entityID, auto& tag) {
                     Entity entity(entityID, m_Context.get());
 
-                    const b8 is_selected = (currentEntity == entity.GetUUID());
+                    const bool is_selected = (currentEntity == entity.GetUUID());
                     if (ImGui::Selectable(entity.GetTag().c_str(), is_selected)) {
                         currentEntity = entity.GetUUID();
                     }
@@ -56,13 +56,9 @@ namespace Lychee {
         
         ImGui::Begin("Properties");
         if (m_SelectionContext) {
-
-            // TODO (flex): Rework if more components are added
-
-            /*
             // Simple selection popup (if you want to show the current selection inside the Button itself,
             // you may want to build a string using the "###" operator to preserve a constant ID with a variable label)
-            s8 selectedComponent = -1;
+            int8_t selectedComponent = -1;
             if (ImGui::Button("Add Component")) {
                 ImGui::OpenPopup("popup_Components");
             }
@@ -77,6 +73,7 @@ namespace Lychee {
                     
                         switch(selectedComponent) {
                             case 0:
+                                //m_SelectionContext.AddComponent<Component::Camera>();
                                 break;
                             default:
                                 LY_WARN("Componet was selected but could not be added");
@@ -86,7 +83,7 @@ namespace Lychee {
                 }
                 ImGui::EndPopup();
             }
-            */
+            
 
             ImGui::SeparatorText("Components");
 
@@ -121,23 +118,30 @@ namespace Lychee {
 
             ImGui::Text("Index: ");
             ImGui::SameLine();
-            ImGui::TextColored((LY_COLOR_LIME), std::to_string((u32)entity).c_str());
+            ImGui::TextColored((LY_COLOR_LIME), std::to_string((uint32_t)entity).c_str());
         }
 
         if (entity.HasComponent<Component::Transform>() && ImGui::CollapsingHeader("Transform")) {
             auto &transform = entity.GetComponent<Component::Transform>();
 
-            ImGui::SliderInt("render layer", (s32*)&transform.renderLayer, 0, 9);
+            ImGui::SliderInt("render layer", (int32_t*)&transform.renderLayer, 0, 9);
 
-            f32 f1[2] = {transform.pos.x, transform.pos.y};
+            float f1[2] = {transform.pos.x, transform.pos.y};
             ImGui::InputFloat2("pos", f1);
             transform.pos = {f1[0], f1[1]};
 
-            f32 f2[2] = {transform.scale.x, transform.scale.y};
+            float f2[2] = {transform.scale.x, transform.scale.y};
             ImGui::InputFloat2("Scale", f2);
             transform.scale = {f2[0], f2[1]};
 
             ImGui::InputFloat("Rotation", &transform.rotation);
         }
+
+        //if (entity.HasComponent<Component::Camera>() && ImGui::CollapsingHeader("Camera")) {
+        //    auto &camera = entity.GetComponent<Component::Camera>();
+        //    b8* b1 = &camera.isPrimary;
+        //    ImGui::Checkbox("Is Primary", b1);
+        //    camera.isPrimary = *b1;
+        //}
     }
 }

@@ -10,8 +10,11 @@
  */
 
 // *** INCLUDES ***
+#include "Lychee/lypch.h"
+
 #include "Lychee/Scene/Scene.h"
 #include "Lychee/Scene/Entity/Entity.h"
+#include "Lychee/Scene/Entity/Components.h"
 
 
 // *** DEFINE ***
@@ -19,7 +22,7 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
-    Scene::Scene(){
+    Scene::Scene() {
         LY_CORE_INFO("Scene: Initializing");
     }
 
@@ -55,6 +58,8 @@ namespace Lychee {
 
     void Scene::OnRuntimeStart() {
         m_IsRuntimeRunning = true;
+    
+        m_Renderer.Init();
     }
 
     void Scene::OnRuntimeStop() {
@@ -64,16 +69,11 @@ namespace Lychee {
 
 
     void Scene::OnRuntimeUpdate(DeltaTime dt) {
+        m_Renderer.Clear();
+        m_Renderer.Render();
     }
 
-
-    void Scene::OnEditorUpdate(DeltaTime dt, EditorCamera& camera) {
-        Renderer::BeginScene(camera);
-
-        // you shall be a voxel one day
-        Renderer::RenderVoxel({ 0.0f, 0.8f, 0.9f}, { 0.8f, 0.2f, 0.3f, 1.0f });
-        //m_Chunk.OnRender();
-
-        Renderer::EndScene();
+    void Scene::OnEditorUpdate(DeltaTime dt) {
+        
     }
 }

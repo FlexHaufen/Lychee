@@ -12,17 +12,12 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
 #include "Lychee/Core/Layer/Layer.h"
 
 //* Events *
 //#include "Lychee/Events/ApplicationEvent.h"
 //#include "Lychee/Events/KeyEvent.h"
 //#include "Lychee/Events/MouseEvent.h"
-
-#include "Lychee/Core/Time/DeltaTime.h"
-
-#include "Lychee/Core/Layer/LayerStack.h"
 
 // *** DEFINES ***
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24.1)
+cmake_minimum_required(VERSION 3.28.0)
 
 #----------------------------------------------------
 #			   	 PROJECT PROPERTIES
@@ -22,3 +22,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/release)
 #----------------------------------------------------
 add_subdirectory(LycheeCore)
 add_subdirectory(LycheeApp)
+#add_subdirectory(LycheeRuntime)

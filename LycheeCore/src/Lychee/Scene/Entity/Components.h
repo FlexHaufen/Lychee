@@ -11,7 +11,10 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
+#include <string>
+
+#include <glm/glm.hpp>
+
 #include "Lychee/Helper/UUID/UUID.h"
 
 //*** DEFINES ***
@@ -25,6 +28,9 @@ namespace Lychee {
      *        that an entity can have
      */
     namespace Component {
+
+
+        static const char* availableComponents[] {"Camera"};
 
         /**
          * @brief Tag Component
@@ -43,10 +49,21 @@ namespace Lychee {
          *  
          */
         struct Transform {
-            s8 renderLayer      = 0;            // Order in the renderer [0..LY_MAX_RENDERLAYERS]
+            int8_t renderLayer      = 0;            // Order in the renderer [0..LY_MAX_RENDERLAYERS]
             glm::vec2 pos       = {0, 0};       // Position [px]
             glm::vec2 scale     = {1, 1};       // Scale [1].
-            f32 rotation        = 0.f;          // Rotation
+            float rotation        = 0.f;          // Rotation
+        };
+
+
+        /**
+         * @brief Camera Component
+         * 
+         */
+        struct Camera {
+            //SceneCamera camera;
+
+            bool isPrimary = true;
         };
     }
 }

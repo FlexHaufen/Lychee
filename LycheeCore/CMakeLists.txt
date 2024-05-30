@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.24.1)
+cmake_minimum_required(VERSION 3.28.0)
 
 #----------------------------------------------------
 #			   	 PROJECT PROPERTIES
@@ -30,6 +30,13 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 #set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW)
 
+#--------Vulkan--------
+find_package(Vulkan REQUIRED)
+
+#--------SPDLOG--------
+set(SPDLOG_BUILD_WARNINGS OFF)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/spdlog)
+
 #--------YAML---------
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
@@ -46,6 +53,7 @@ target_include_directories(stb_image PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/stb_image
 )
 
+#--------IMGUI---------
 set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/imgui)
 add_library(imgui STATIC 
 	${IMGUI_PATH}/imconfig.h
@@ -70,26 +78,19 @@ target_include_directories(imgui PRIVATE
 )
 target_link_libraries(imgui glfw)
 
-set(GLAD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad)
-add_library(glad STATIC 
-				${GLAD_PATH}/include/glad/glad.h
-				${GLAD_PATH}/src/glad.c
-) 
-target_include_directories(glad PRIVATE
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include
-)
-
 #----------------------------------------------------
 #				      INCLUDE DIRS
 #----------------------------------------------------
 target_include_directories(${PROJECT_NAME} PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/src/
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW/include
+	${Vulkan_INCLUDE_DIRS}
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/vk-bootstrap/src
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/glm
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/entt
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/VulkanMemoryAllocator/include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/spdlog/include
 
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/glad/include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/imgui
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/stb_image
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/yaml-cpp/include
@@ -100,6 +101,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 #----------------------------------------------------
 
 # Libs
-target_link_libraries(${PROJECT_NAME} PRIVATE 	glfw yaml-cpp glad imgui stb_image)
+target_link_libraries(${PROJECT_NAME} PRIVATE 	glfw Vulkan::Vulkan yaml-cpp imgui stb_image)
 # pch
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/Lychee/lypch.h)

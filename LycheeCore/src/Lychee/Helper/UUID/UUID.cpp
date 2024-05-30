@@ -10,9 +10,9 @@
  */
 
 // *** INCLUDES ***
-#include "Lychee/Helper/UUID/UUID.h"
+#include "Lychee/lypch.h"
 
-#include <random>
+#include "Lychee/Helper/UUID/UUID.h"
 
 // *** DEFINE ***
 
@@ -21,7 +21,7 @@ namespace Lychee {
 
     static std::random_device s_RandomDevice;
     static std::mt19937_64 s_Engine(s_RandomDevice());
-    static std::uniform_int_distribution<u64> s_UniformDistribution;
+    static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
 
 
     UUID::UUID() {
@@ -29,7 +29,7 @@ namespace Lychee {
     }
 
 
-    UUID::UUID(u64 uuid) {
+    UUID::UUID(uint64_t uuid) {
         m_UUID = uuid;
     }
 }

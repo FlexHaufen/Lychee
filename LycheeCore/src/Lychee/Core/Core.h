@@ -8,20 +8,18 @@
  * @copyright Copyright (c) 2022
  * 
  */
-# pragma once
+#pragma once
 
 // *** INCLUDES ***
-#include "Lychee/lypch.h"
-
+#include "Lychee/Core/Layer/Layer.h"
 #include "Lychee/Core/Layer/LayerStack.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Core/Window/Window.h"
-#include "Lychee/Renderer/Renderer.h"
 
-#include "Lychee/Events/KeyEvent.h"
+#include "Lychee/Events/Event.h"
 #include "Lychee/Events/ApplicationEvent.h"
-#include "Lychee/ImGui/ImGuiLayer.h"
 
+#include "Lychee/ImGui/ImGuiLayer.h"
 // *** DEFINES ***
 
 
@@ -119,7 +117,7 @@ namespace Lychee {
         bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
-        f32 m_lastFrameTime;        // delta time
+        float m_lastFrameTime;        // delta time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui

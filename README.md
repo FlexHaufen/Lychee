@@ -11,8 +11,8 @@ A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
 <img src="resource/screenshots/LycheeApp.png">
 
 ## Dependencies
-- [glad](https://glad.dav1d.de/)
 - [GLFW](https://github.com/glfw/glfw)
+- [Vulkan](https://www.vulkan.org/)
 - [glm](https://github.com/g-truc/glm)
 - [ImGui](https://github.com/ocornut/imgui)
 - [EnTT](https://github.com/skypjack/entt)
@@ -22,8 +22,9 @@ A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
 
 ## Setup
 ### Requirements
-- Cmake Version **Version 3.24.1** or higher
-- MSVC 19 or higher
+- Vulkan SDK
+- Cmake Version **Version 3.28** or higher
+- **MSVC 19.39.33521.0** or higher
 
 ### Setup Repo
 1. Clone
@@ -83,5 +84,6 @@ To Run the .exe file via F5 you first need to configure a ```launch.json``` in y
 
 ## Acknowledgements
  - [Hazel Engine](https://github.com/TheCherno/Hazel)
+ - [Vulkan Tutorial by @GetIntoGameDev](https://www.youtube.com/@GetIntoGameDev)
  - [Game Engine Series](https://www.youtube.com/watch?v=JxIZbV_XjAs&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
  - [ImGui Theme by @Trippasch](https://github.com/Trippasch)
