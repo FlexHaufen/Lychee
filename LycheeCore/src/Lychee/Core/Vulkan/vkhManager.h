@@ -24,6 +24,7 @@
 // *** DEFIENS ***
 #define VKH_MAX_FRAMES_IN_FLIGHT 2
 
+#define VKH_CLEAR_COLOR {0.1f, 0.1f, 0.1f, 1.0f}
 
 // *** NAMESPACE ***
 namespace Lychee {
@@ -64,6 +65,7 @@ namespace Lychee {
         void createFramebuffers();
         void createCommandPool();
         void createVertexBuffer();
+        void createIndexBuffer();
         void createCommandBuffer();
         void createSyncObjects();
 
@@ -113,13 +115,21 @@ namespace Lychee {
 
         VkBuffer m_VertexBuffer;
         VkDeviceMemory m_VertexBufferMemory;
+        VkBuffer m_IndexBuffer;
+        VkDeviceMemory m_IndexBufferMemory;
 
         //! DEBUG
         const std::vector<Vertex> vertices = {
-            {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-            {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-            {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
         };
+
+        const std::vector<uint16_t> indices = {
+            0, 1, 2, 2, 3, 0
+        };
+        //!
 
         uint32_t m_CurrentFrame = 0;
         bool m_isFramebufferResized = false;

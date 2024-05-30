@@ -36,6 +36,7 @@ namespace Lychee {
         createFramebuffers();
         createCommandPool();
         createVertexBuffer();
+        createIndexBuffer();
         createCommandBuffer();
         createSyncObjects();
     }
@@ -52,6 +53,8 @@ namespace Lychee {
         vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
         
         // Buffer
+        vkDestroyBuffer(m_Device, m_IndexBuffer, nullptr);
+        vkFreeMemory(m_Device, m_IndexBufferMemory, nullptr);
         vkDestroyBuffer(m_Device, m_VertexBuffer, nullptr);
         vkFreeMemory(m_Device, m_VertexBufferMemory, nullptr);
 
@@ -585,14 +588,34 @@ namespace Lychee {
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+        
         void* data;
         vkMapMemory(m_Device, stagingBufferMemory, 0, bufferSize, 0, &data);
             memcpy(data, vertices.data(), (size_t) bufferSize);
-
         vkUnmapMemory(m_Device, stagingBufferMemory);
+        
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer, m_VertexBufferMemory);
-    
         copyBuffer(stagingBuffer, m_VertexBuffer, bufferSize);
+        
+        vkDestroyBuffer(m_Device, stagingBuffer, nullptr);
+        vkFreeMemory(m_Device, stagingBufferMemory, nullptr);
+    }
+
+    void vkhManager::createIndexBuffer() {
+        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+
+        VkBuffer stagingBuffer;
+        VkDeviceMemory stagingBufferMemory;
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+        void* data;
+        vkMapMemory(m_Device, stagingBufferMemory, 0, bufferSize, 0, &data);
+            memcpy(data, indices.data(), (size_t) bufferSize);
+        vkUnmapMemory(m_Device, stagingBufferMemory);
+
+        createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_IndexBuffer, m_IndexBufferMemory);
+        copyBuffer(stagingBuffer, m_IndexBuffer, bufferSize);
+
         vkDestroyBuffer(m_Device, stagingBuffer, nullptr);
         vkFreeMemory(m_Device, stagingBufferMemory, nullptr);
     }
@@ -653,7 +676,9 @@ namespace Lychee {
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = m_SwapChainExtent;
 
-        VkClearValue clearColor = {{{0.0f, 0.5f, 0.0f, 1.0f}}};
+        VkClearValue clearColor = {
+            .color = VKH_CLEAR_COLOR
+        };
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
@@ -677,10 +702,10 @@ namespace Lychee {
             VkBuffer vertexBuffers[] = {m_VertexBuffer};
             VkDeviceSize offsets[] = {0};
 
-            // FIXME (inj): vkCmdBindVertexBuffers():  Couldn't find VkBuffer Object 0xcdcdcdcdcdcdcdcd
             vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+            vkCmdBindIndexBuffer(commandBuffer, m_IndexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
-            vkCmdDraw(commandBuffer, static_cast<uint32_t>(vertices.size()), 1, 0, 0);
+            vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);;
 
         vkCmdEndRenderPass(commandBuffer);
 
