@@ -57,7 +57,6 @@ namespace Lychee {
         void createSurface();
         void pickPhysicalDevice();
         void createLogicalDevice();
-        // void createDescriptorPool(uint32_t poolCount);
         void createSwapChain();
         void createImageViews();
         void createRenderPass();
@@ -70,6 +69,10 @@ namespace Lychee {
 
         void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
         void recreateSwapChain();
+
+        void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+        void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+ 
 
     private:
 
