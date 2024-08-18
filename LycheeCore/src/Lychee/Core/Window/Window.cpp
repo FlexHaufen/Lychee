@@ -35,6 +35,7 @@ namespace Lychee {
 		m_WindowData.title = title;
 		m_WindowData.width = width;
 		m_WindowData.height = height;
+		m_WindowData.isSwapChainOutOfDate = false;
         Init();
 	}
 
@@ -51,7 +52,6 @@ namespace Lychee {
         }
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);	// Disable OpenGL default client
-		// TODO: Implement resize
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);		// Disable window resizeable for now
 
         glfwSetErrorCallback(GLFWErrorCallback);
@@ -67,10 +67,7 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
     
-		m_vkhManager.setup(m_glfwWindow);
-
 		LY_CORE_INFO("Window: \\---- Settingup callbacks");
-		//glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 		glfwSetWindowUserPointer(m_glfwWindow, &m_WindowData);
 
 		// TODO (flex): Implement window icon
@@ -84,14 +81,17 @@ namespace Lychee {
 
 		//** Callbacks **
 		//* Window Resize *
-		glfwSetFramebufferSizeCallback(m_glfwWindow, [](GLFWwindow* window, int32_t width, int32_t height) {
+
+		glfwSetWindowContentScaleCallback(m_glfwWindow, [](GLFWwindow* window, float width, float height) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
-			data.width = width;
-			data.height = height;
-			WindowResizeEvent event(width, height);
-			data.eventCallback(event);
+			data.width = (uint32_t)width;
+			data.height = (uint32_t)height;
+			//WindowResizeEvent event(data.width, data.height);
+			//data.eventCallback(event);
+			data.isSwapChainOutOfDate = true;
 		});
 
+		/*
 		
 		//* Window Close *
 		glfwSetWindowCloseCallback(m_glfwWindow, [](GLFWwindow* window) {
@@ -162,11 +162,12 @@ namespace Lychee {
 			MouseMovedEvent event((float)xPos, (float)yPos);
 			data.eventCallback(event);
 		});
+		*/
 	}
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
-		m_vkhManager.cleanup();
+		//m_vkhManager.cleanup();
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}
@@ -188,18 +189,7 @@ namespace Lychee {
 		#endif
 
 		glfwPollEvents();
-		m_vkhManager.drawFrame();
-
+		glfwSwapBuffers(m_glfwWindow);
 	}
-
-	void Window::SetVSync(bool enabled) {
-        glfwSwapInterval(int32_t(enabled));
-		m_WindowData.isVSyncOn = enabled;
-	}
-
-	bool Window::IsVSync() const {
-		return m_WindowData.isVSyncOn;
-	}
-
 
 }

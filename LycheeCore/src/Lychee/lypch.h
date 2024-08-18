@@ -42,6 +42,7 @@
 
 // Vulkan
 #include <vulkan/vulkan.hpp>
+#include <vk_mem_alloc.h>
 
 // glm
 #define GLM_ENABLE_EXPERIMENTAL

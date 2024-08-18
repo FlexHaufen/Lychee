@@ -15,6 +15,8 @@
 #include "Lychee/Core/Layer/LayerStack.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 #include "Lychee/Core/Window/Window.h"
+#include "Lychee/Core/Vulkan/vkhManager.h"
+
 
 #include "Lychee/Events/Event.h"
 #include "Lychee/Events/ApplicationEvent.h"
@@ -58,13 +60,6 @@ namespace Lychee {
          */
         void Close();
 
-        /**
-         * @brief Event Handling
-         * 
-         */
-        void OnEvent(Event& e);
-
-
         void PushLayer(Layer* layer);
         void PushOverlay(Layer* layer);
 
@@ -90,21 +85,6 @@ namespace Lychee {
         Window& GetWindow() { return *m_Window; }
 
     private:
-        /**
-         * @brief Window close event
-         * 
-         * @param e Event
-         * @return true if window is closed
-         */
-        bool OnWindowClose(WindowCloseEvent& e);
-
-        /**
-         * @brief Window resize event
-         * 
-         * @param e Event
-         * @return true if window is rezised 
-         */
-        bool OnWindowResize(WindowResizeEvent& e);
 
         // TODO (flex): setup splashscreen
         //void OnSplashScreenDisplay();
@@ -113,8 +93,6 @@ namespace Lychee {
         // ** Members **
         static Core* s_Instance;    // Instance of core - for external usage
         
-        bool m_isRunning = true;    // True when app is running
-        bool m_isMinimized = false; // True when app is minimzed
         Window* m_Window;           // Window
         
         float m_lastFrameTime;        // delta time

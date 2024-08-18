@@ -18,7 +18,6 @@
 
 #include "Lychee/Events/Event.h"
 #include "Lychee/Core/Time/DeltaTime.h"
-#include "Lychee/Core/Vulkan/vkhManager.h"
 
 // *** DEFIENS ***
 
@@ -55,6 +54,9 @@ namespace Lychee {
 		 */
 		void OnUpdate(DeltaTime dt);
 
+
+		bool ShouldClose() const { return glfwWindowShouldClose(m_glfwWindow); }
+
 		/**
 		 * @brief Get the Width
 		 * 
@@ -71,11 +73,6 @@ namespace Lychee {
 
 		// Window attributes
 		void SetEventCallback(const EventCallbackFn& callback) { m_WindowData.eventCallback = callback; }
-		void SetVSync(bool enabled);
-		bool IsVSync() const;
-
-		void WaitIdle() { m_vkhManager.waitIdle(); }
-		void ResizeEvent() {m_vkhManager.setFrameBufferResized(true);}	// TODO (flex): Put this somewhere else
 
 		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
 
@@ -99,7 +96,7 @@ namespace Lychee {
 		// Window functions and members
         GLFWwindow* m_glfwWindow = nullptr;
 
-		vkhManager m_vkhManager;
+		//vkhManager m_vkhManager;
 
 		/**
 		 * @brief Data of window
@@ -108,6 +105,7 @@ namespace Lychee {
 		struct sWindowData {
 			std::string title;
 			uint32_t width, height;
+			bool isSwapChainOutOfDate;
 			bool isVSyncOn;
 
 			EventCallbackFn eventCallback;
