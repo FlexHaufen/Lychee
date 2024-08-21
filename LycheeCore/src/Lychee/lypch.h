@@ -42,6 +42,7 @@
 
 // Vulkan
 #include <vulkan/vulkan.hpp>
+#include <VkBootstrap.h>
 #include <vk_mem_alloc.h>
 
 // glm

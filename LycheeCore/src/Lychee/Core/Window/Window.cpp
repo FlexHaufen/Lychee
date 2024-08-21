@@ -167,7 +167,6 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
-		//m_vkhManager.cleanup();
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}

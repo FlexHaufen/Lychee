@@ -54,7 +54,8 @@ namespace Lychee {
                                   LY_WINDOW_SIZE_Y);
 		#endif
 
-        LY_CORE_INFO("\\---- Initializing renderer");
+        LY_CORE_INFO("\\---- Initializing VULKAN");
+        m_vkhManager.setup(m_Window->GetNativeWindow());
 
         // TODO (flex) implement imgui
         //m_ImGuiLayer = new ImGuiLayer();
@@ -63,6 +64,8 @@ namespace Lychee {
 
     Core::~Core() {
         LY_CORE_INFO("Terminating");
+        m_vkhManager.cleanup();
+        delete m_Window;
     }
 
     void Core::Run() {

@@ -12,16 +12,17 @@
 
 // *** INCLUDES ***
 #include <vulkan/vulkan.hpp>
+#include <VkBootstrap.h>
 #include <GLFW/glfw3.h>
 
 #include <vector>
 
 #include "Lychee/Config.h"
-#include "Lychee/Core/Vulkan/vkhUtils.h"
-#include "Lychee/Core/Vulkan/vkhBuffer.h"
 
 
 // *** DEFIENS ***
+
+#define VKH_USE_VALIDATION_LAYERS   1
 #define VKH_MAX_FRAMES_IN_FLIGHT 2
 
 #define VKH_CLEAR_COLOR {0.1f, 0.1f, 0.1f, 1.0f}
@@ -32,60 +33,34 @@ namespace Lychee {
 
     class vkhManager {
     public:
+
+        vkhManager() {}
+        ~vkhManager() {}
+
         void setup(GLFWwindow* window);
         void cleanup();
 
-        void drawFrame();
-
-        void waitIdle() { vkDeviceWaitIdle(m_Device); }
-
-        // getter & setter
-        VkInstance getInstance() { return m_Instance; }
-        VkPhysicalDevice getPhysicalDevice() { return m_PhysicalDevice; }
-        VkDevice getDevice() { return m_Device; }
-        VkCommandPool getCommandPool() { return m_CommandPool; }
-        VkQueue getGraphicsQueue() { return m_GraphicsQueue; }
-        VkQueue getPresentQueue() { return m_PresentQueue; }
-        uint32_t getCurrentFrame() { return m_CurrentFrame; }
-
-        void setCurrentFrame(uint32_t currentFrame) { m_CurrentFrame = currentFrame; }
-        void setFrameBufferResized(bool b) { m_isFramebufferResized = b; }
 
     private:
         // Initialization
-        void createInstance();
-        void setupDebugCallback();
-        void createSurface();
-        void pickPhysicalDevice();
-        void createLogicalDevice();
-        void createSwapChain();
-        void createImageViews();
-        void createRenderPass();
-        void createDescriptorSetLayout();
-        void createGraphicsPipeline();
-        void createFramebuffers();
-        void createCommandPool();
-        void createVertexBuffer();
-        void createIndexBuffer();
-        void createUniformBuffers();
-        void createDescriptorPool();
-        void createDescriptorSets();
-        void createCommandBuffer();
-        void createSyncObjects();
-
-        void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
-        void updateUniformBuffer(uint32_t currentImage);
-        void recreateSwapChain();
-
-        void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-        void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+        void setupVulkan();
+        void setupSwapchain();
+        //void setupCommands();
+        //void setupSyncStructures();
     
+        void createSwapchain(uint32_t width, uint32_t height);
+	    void destroySwapchain();
 
     private:
 
         // ** Members **
 
+        //bool _isInitialized{ false };
+	    //int _frameNumber {0};
+	    //bool stop_rendering{ false };
+
         GLFWwindow* m_glfwWindow;
+        VkExtent2D m_WindowExtend {LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y };
 
         VkInstance m_Instance;
         VkDebugUtilsMessengerEXT m_Callback;
@@ -94,15 +69,13 @@ namespace Lychee {
         VkPhysicalDevice m_PhysicalDevice;
         VkDevice m_Device;
 
-        vkhQueueFamilyIndices m_QueueFamilyIndices;
-        VkQueue m_GraphicsQueue;
-        VkQueue m_PresentQueue;
+        VkSwapchainKHR m_Swapchain;
+        VkFormat m_SwapchainImageFormat;
+        VkExtent2D m_SwapchainExtent;
 
-        VkSwapchainKHR m_SwapChain;
-        VkFormat m_SwapChainImageFormat;
-        VkExtent2D m_SwapChainExtent;
-        std::vector<VkImage> m_SwapChainImages;
-        std::vector<VkImageView> m_SwapChainImageViews;
+        std::vector<VkImage> m_SwapchainImages;
+        std::vector<VkImageView> m_SwapchainImageViews;
+        /*
         std::vector<VkFramebuffer> m_SwapChainFramebuffers;
 
         VkRenderPass m_RenderPass;
@@ -144,6 +117,7 @@ namespace Lychee {
 
         uint32_t m_CurrentFrame = 0;
         bool m_isFramebufferResized = false;
+        */
 
     };
 }

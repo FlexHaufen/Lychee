@@ -94,8 +94,9 @@ namespace Lychee {
         static Core* s_Instance;    // Instance of core - for external usage
         
         Window* m_Window;           // Window
+        vkhManager m_vkhManager;    // Vulkan abstraction
         
-        float m_lastFrameTime;        // delta time
+        float m_lastFrameTime;      // delta time
 
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui

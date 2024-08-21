@@ -54,7 +54,7 @@ namespace Lychee {
 		 */
 		void OnUpdate(DeltaTime dt);
 
-
+		// TODO (flex): Handle this using events. Also resize and shit
 		bool ShouldClose() const { return glfwWindowShouldClose(m_glfwWindow); }
 
 		/**
@@ -74,7 +74,7 @@ namespace Lychee {
 		// Window attributes
 		void SetEventCallback(const EventCallbackFn& callback) { m_WindowData.eventCallback = callback; }
 
-		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
+		GLFWwindow* GetNativeWindow() { return m_glfwWindow; }
 
 	private:
 
@@ -95,8 +95,6 @@ namespace Lychee {
        	//** Members **
 		// Window functions and members
         GLFWwindow* m_glfwWindow = nullptr;
-
-		//vkhManager m_vkhManager;
 
 		/**
 		 * @brief Data of window
