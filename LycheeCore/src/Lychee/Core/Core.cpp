@@ -53,6 +53,7 @@ namespace Lychee {
                                   LY_WINDOW_SIZE_X,
                                   LY_WINDOW_SIZE_Y);
 		#endif
+        m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
         LY_CORE_INFO("\\---- Initializing VULKAN");
         m_vkhManager.setup(m_Window->GetNativeWindow());
@@ -71,7 +72,7 @@ namespace Lychee {
     void Core::Run() {
         //LY_PROFILE_FUNCTION();
 
-        while (!m_Window->ShouldClose()) {
+        while (m_isRunning) {
 
             float time = (float)glfwGetTime();
             DeltaTime deltaTime = time - m_lastFrameTime;
@@ -92,6 +93,10 @@ namespace Lychee {
         }
     }
 
+    void Core::Close() {
+		m_isRunning = false;
+	}
+
     // ** LAYERS **
     void Core::PushLayer(Layer* layer) {
 		m_LayerStack.PushLayer(layer);
@@ -101,5 +106,37 @@ namespace Lychee {
 	void Core::PushOverlay(Layer* layer){
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
+	}
+
+    // ** EVENTS **
+    void Core::OnEvent(Event& e) {
+        //LY_PROFILE_FUNCTION();
+
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
+
+        for (auto i = m_LayerStack.rbegin(); i != m_LayerStack.rend(); ++i) {
+			if (e.m_isHandled) 
+				break;
+			(*i)->OnEvent(e);
+		}
+        #ifdef LY_LOG_EVENTS
+            LY_CORE_TRACE(e);
+        #endif
+    }
+
+    bool Core::OnWindowClose(WindowCloseEvent& e) {
+        m_isRunning = false;
+        return true;
+    }
+
+	bool Core::OnWindowResize(WindowResizeEvent& e) {
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+			m_isMinimized = true;
+			return true;
+		}
+		m_isMinimized = false;
+		return false;
 	}
 }

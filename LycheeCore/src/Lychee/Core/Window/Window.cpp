@@ -81,18 +81,15 @@ namespace Lychee {
 
 		//** Callbacks **
 		//* Window Resize *
-
 		glfwSetWindowContentScaleCallback(m_glfwWindow, [](GLFWwindow* window, float width, float height) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
 			data.width = (uint32_t)width;
 			data.height = (uint32_t)height;
-			//WindowResizeEvent event(data.width, data.height);
-			//data.eventCallback(event);
+			WindowResizeEvent event(data.width, data.height);
+			data.eventCallback(event);
 			data.isSwapChainOutOfDate = true;
 		});
 
-		/*
-		
 		//* Window Close *
 		glfwSetWindowCloseCallback(m_glfwWindow, [](GLFWwindow* window) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);
@@ -100,6 +97,7 @@ namespace Lychee {
 			data.eventCallback(event);
 		});
 
+		/*
 		//* Keys *
 		glfwSetKeyCallback(m_glfwWindow, [](GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods) {
 			sWindowData& data = *(sWindowData*)glfwGetWindowUserPointer(window);

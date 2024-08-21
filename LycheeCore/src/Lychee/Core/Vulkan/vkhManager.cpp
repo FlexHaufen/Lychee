@@ -32,7 +32,7 @@ namespace Lychee {
     }
 
     void vkhManager::cleanup() {
-        LY_CORE_INFO("Setting up vkhManager");
+        LY_CORE_INFO("Cleaning up vkhManager");
         destroySwapchain();
         vkDestroyDevice(m_Device, nullptr);
         vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
