@@ -23,13 +23,21 @@
 // *** DEFIENS ***
 
 #define VKH_USE_VALIDATION_LAYERS   1
-#define VKH_MAX_FRAMES_IN_FLIGHT 2
+#define VKH_MAX_FRAMES_IN_FLIGHT    2
 
 #define VKH_CLEAR_COLOR {0.1f, 0.1f, 0.1f, 1.0f}
 
 // *** NAMESPACE ***
 namespace Lychee {
 
+    
+    struct FrameData {
+        VkCommandPool   commandPool;
+        VkCommandBuffer mainCommandBuffer;
+        VkSemaphore swapchainSemaphore;
+        VkSemaphore renderSemaphore;
+	    VkFence renderFence;
+    };
 
     class vkhManager {
     public:
@@ -40,13 +48,16 @@ namespace Lychee {
         void setup(GLFWwindow* window);
         void cleanup();
 
+        void draw();
+
+        FrameData& getCurrentFrame() { return m_Frames[m_CurrentFrame % VKH_MAX_FRAMES_IN_FLIGHT]; }
 
     private:
         // Initialization
         void setupVulkan();
         void setupSwapchain();
-        //void setupCommands();
-        //void setupSyncStructures();
+        void setupCommands();
+        void setupSyncStructures();
     
         void createSwapchain(uint32_t width, uint32_t height);
 	    void destroySwapchain();
@@ -75,6 +86,14 @@ namespace Lychee {
 
         std::vector<VkImage> m_SwapchainImages;
         std::vector<VkImageView> m_SwapchainImageViews;
+        
+        FrameData m_Frames[VKH_MAX_FRAMES_IN_FLIGHT];
+        uint32_t m_CurrentFrame = 0;
+        
+        VkQueue m_GraphicsQueue;
+        uint32_t m_GraphicsQueueFamily;
+
+
         /*
         std::vector<VkFramebuffer> m_SwapChainFramebuffers;
 
