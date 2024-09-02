@@ -90,6 +90,7 @@ namespace Lychee {
         
             //m_ImGuiLayer->End();
             m_Window->OnUpdate(deltaTime);
+            m_vkhManager.draw();
         }
     }
 

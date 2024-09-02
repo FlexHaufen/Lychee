@@ -186,7 +186,7 @@ namespace Lychee {
 		#endif
 
 		glfwPollEvents();
-		glfwSwapBuffers(m_glfwWindow);
+		//glfwSwapBuffers(m_glfwWindow);
 	}
 
 }
