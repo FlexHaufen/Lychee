@@ -24,6 +24,14 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
+    #define VK_CHECK(x)                                 \
+        {                                               \
+            VkResult err = x;                           \
+            if (err) {                                  \
+                LY_CORE_ERROR("VULKAN: {0}", err);      \
+            }                                           \
+        }                       
+
     struct vkhAllocatedImage {
         VkImage image;
         VkImageView imageView;

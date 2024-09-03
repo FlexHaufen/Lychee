@@ -60,9 +60,7 @@ namespace Lychee {
 
     void vkhManager::draw() {
         // wait until the gpu has finished rendering the last frame. Timeout of 1 second
-        if (vkWaitForFences(m_Device, 1, &getCurrentFrame().renderFence, true, 1000000000) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error waiting for vulkan fence");
-        }
+        VK_CHECK(vkWaitForFences(m_Device, 1, &getCurrentFrame().renderFence, true, 1000000000));
 
         getCurrentFrame().deletionQueue.flush();
 
@@ -73,12 +71,9 @@ namespace Lychee {
             // Rebuild Swapchain
         }
         
-        if (vkResetFences(m_Device, 1, &getCurrentFrame().renderFence) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error resetting vulkan fence");
-        }
-        if (vkResetCommandBuffer(getCurrentFrame().mainCommandBuffer, 0) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error resetting vulkan command buffer");
-        }
+        VK_CHECK(vkResetFences(m_Device, 1, &getCurrentFrame().renderFence));
+        VK_CHECK(vkResetCommandBuffer(getCurrentFrame().mainCommandBuffer, 0));
+       
 
         //naming it cmd for shorter writing
 	    VkCommandBuffer cmd = getCurrentFrame().mainCommandBuffer;
@@ -94,9 +89,7 @@ namespace Lychee {
         m_DrawExtent.width = m_DrawImage.imageExtent.width;
 	    m_DrawExtent.height = m_DrawImage.imageExtent.height;
         //start the command buffer recording
-        if (vkBeginCommandBuffer(cmd, &cmdBeginInfo) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error couldn't begin vulkan command buffer");
-        }
+        VK_CHECK(vkBeginCommandBuffer(cmd, &cmdBeginInfo));
 
         //make the swapchain image into writeable mode before rendering
 	    vkhTransitionImage(cmd, m_DrawImage.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
@@ -105,7 +98,7 @@ namespace Lychee {
 
         //make the swapchain image into presentable mode
         //transition the draw image and the swapchain image into their correct transfer layouts
-        vkhTransitionImage(cmd, m_DrawImage.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL); //! ERROR HERE
+        vkhTransitionImage(cmd, m_DrawImage.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         vkhTransitionImage(cmd, m_SwapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
         // execute a copy from the draw image into the swapchain
@@ -115,9 +108,7 @@ namespace Lychee {
 	    vkhTransitionImage(cmd, m_SwapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
 	    //finalize the command buffer (we can no longer add commands, but it can now be executed)
-        if(vkEndCommandBuffer(cmd) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error couldn't end vulkan command buffer");
-        }
+        VK_CHECK(vkEndCommandBuffer(cmd));
         // ------------------------
 
         //prepare the submission to the queue. 
@@ -157,9 +148,7 @@ namespace Lychee {
 
         //submit command buffer to the queue and execute it.
         // _renderFence will now block until the graphic commands finish execution
-        if(vkQueueSubmit2(m_GraphicsQueue, 1, &submit, getCurrentFrame().renderFence) != VK_SUCCESS) {
-            LY_CORE_ERROR("Couldn't submit queue");
-        }
+        VK_CHECK(vkQueueSubmit2(m_GraphicsQueue, 1, &submit, getCurrentFrame().renderFence));
 
 
         VkPresentInfoKHR presentInfo = {};
@@ -171,9 +160,7 @@ namespace Lychee {
         presentInfo.pSwapchains = &m_Swapchain;
         presentInfo.pImageIndices = &swapchainImageIndex;
 
-        if(vkQueuePresentKHR(m_GraphicsQueue, &presentInfo) != VK_SUCCESS) {
-            LY_CORE_ERROR("Couldn't present queue");
-        }
+        VK_CHECK(vkQueuePresentKHR(m_GraphicsQueue, &presentInfo));
 
         //increase the number of frames drawn
         m_CurrentFrame++;
@@ -287,9 +274,7 @@ namespace Lychee {
         
         for (int i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
 
-            if (vkCreateCommandPool(m_Device, &commandPoolInfo, nullptr, &m_Frames[i].commandPool) != VK_SUCCESS) {
-                LY_CORE_ERROR("Could not create vulkan command pool");
-            }
+            VK_CHECK(vkCreateCommandPool(m_Device, &commandPoolInfo, nullptr, &m_Frames[i].commandPool));
 
             // allocate the default command buffer that we will use for rendering
             VkCommandBufferAllocateInfo cmdAllocInfo = {};
@@ -300,9 +285,7 @@ namespace Lychee {
             cmdAllocInfo.commandBufferCount = 1;
             
 
-            if (vkAllocateCommandBuffers(m_Device, &cmdAllocInfo, &m_Frames[i].mainCommandBuffer) != VK_SUCCESS) {
-                LY_CORE_ERROR("Could not allocate vulkan command buffer");
-            }
+            VK_CHECK(vkAllocateCommandBuffers(m_Device, &cmdAllocInfo, &m_Frames[i].mainCommandBuffer));
         }
     }
 
@@ -323,15 +306,9 @@ namespace Lychee {
         semaphoreCreateInfo.flags = 0;
 
         for (int i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
-            if (vkCreateFence(m_Device, &fenceCreateInfo, nullptr, &m_Frames[i].renderFence) != VK_SUCCESS) {
-                LY_CORE_ERROR("Could create vulkan fence");
-            }
-            if (vkCreateSemaphore(m_Device, &semaphoreCreateInfo, nullptr, &m_Frames[i].swapchainSemaphore) != VK_SUCCESS) {
-                LY_CORE_ERROR("Could create vulkan swapchain semaphore");
-            }
-            if (vkCreateSemaphore(m_Device, &semaphoreCreateInfo, nullptr, &m_Frames[i].renderSemaphore) != VK_SUCCESS) {
-                LY_CORE_ERROR("Could create vulkan render semaphore");
-            }
+            VK_CHECK(vkCreateFence(m_Device, &fenceCreateInfo, nullptr, &m_Frames[i].renderFence));
+            VK_CHECK(vkCreateSemaphore(m_Device, &semaphoreCreateInfo, nullptr, &m_Frames[i].swapchainSemaphore));
+            VK_CHECK(vkCreateSemaphore(m_Device, &semaphoreCreateInfo, nullptr, &m_Frames[i].renderSemaphore));
         }
     }
 
@@ -405,9 +382,7 @@ namespace Lychee {
         rview_info.subresourceRange.baseArrayLayer = 0;
         rview_info.subresourceRange.layerCount = 1;
         rview_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        if(vkCreateImageView(m_Device, &rview_info, nullptr, &m_DrawImage.imageView) != VK_SUCCESS) {
-            LY_CORE_ERROR("VULKAN: Failed to create image view!");
-        }
+        VK_CHECK(vkCreateImageView(m_Device, &rview_info, nullptr, &m_DrawImage.imageView));
 
         //add to deletion queues
         m_MainDeletionQueue.push_function([=]() {
