@@ -13,12 +13,15 @@
 // *** INCLUDES ***
 #include <vulkan/vulkan.hpp>
 #include <VkBootstrap.h>
+#include <vk_mem_alloc.h>
 #include <GLFW/glfw3.h>
 
 #include <vector>
+#include <deque>
+#include <functional>
 
 #include "Lychee/Config.h"
-
+#include "Lychee/Core/Vulkan/vkhUtil.h"
 
 // *** DEFIENS ***
 
@@ -30,6 +33,20 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
+
+    struct DeletionQueue  {
+        std::deque<std::function<void()>> deletors;
+
+        void push_function(std::function<void()>&& function) {
+            deletors.push_back(function);
+        }
+        void flush() {
+            for (auto it = deletors.rbegin(); it != deletors.rend(); it++) {
+                (*it)(); //call functors
+            }
+            deletors.clear();
+        }
+    };
     
     struct FrameData {
         VkCommandPool   commandPool;
@@ -37,6 +54,7 @@ namespace Lychee {
         VkSemaphore swapchainSemaphore;
         VkSemaphore renderSemaphore;
 	    VkFence renderFence;
+        DeletionQueue deletionQueue;
     };
 
     class vkhManager {
@@ -62,13 +80,11 @@ namespace Lychee {
         void createSwapchain(uint32_t width, uint32_t height);
 	    void destroySwapchain();
 
+        void drawBackground(VkCommandBuffer cmd);
+
     private:
 
         // ** Members **
-
-        //bool _isInitialized{ false };
-	    //int _frameNumber {0};
-	    //bool stop_rendering{ false };
 
         GLFWwindow* m_glfwWindow;
         VkExtent2D m_WindowExtend {LY_WINDOW_SIZE_X, LY_WINDOW_SIZE_Y };
@@ -93,50 +109,12 @@ namespace Lychee {
         VkQueue m_GraphicsQueue;
         uint32_t m_GraphicsQueueFamily;
 
+        DeletionQueue m_MainDeletionQueue;
 
-        /*
-        std::vector<VkFramebuffer> m_SwapChainFramebuffers;
+        VmaAllocator m_Allocator;
 
-        VkRenderPass m_RenderPass;
-        VkFormat m_DepthFormat;
-        VkPipelineLayout m_PipelineLayout;
-        VkPipeline m_GraphicsPipeline;
-
-        VkCommandPool m_CommandPool;
-        std::vector<VkCommandBuffer> m_CommandBuffers;
-        VkDescriptorSetLayout m_DescriptorSetLayout;
-        VkDescriptorPool m_DescriptorPool;
-        std::vector<VkDescriptorSet> m_DescriptorSets;
-
-        std::vector<VkSemaphore> m_ImageAvailableSemaphores;
-        std::vector<VkSemaphore> m_RenderFinishedSemaphores;
-        std::vector<VkFence> m_InFlightFences;
-
-        VkBuffer m_VertexBuffer;
-        VkDeviceMemory m_VertexBufferMemory;
-        VkBuffer m_IndexBuffer;
-        VkDeviceMemory m_IndexBufferMemory;
-
-        std::vector<VkBuffer> m_UniformBuffers;
-        std::vector<VkDeviceMemory> m_UniformBuffersMemory;
-        std::vector<void*> m_UniformBuffersMapped;
-
-        //! DEBUG
-        const std::vector<Vertex> vertices = {
-            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
-        };
-
-        const std::vector<uint16_t> indices = {
-            0, 1, 2, 2, 3, 0
-        };
-        //!
-
-        uint32_t m_CurrentFrame = 0;
-        bool m_isFramebufferResized = false;
-        */
+        vkhAllocatedImage m_DrawImage;
+        VkExtent2D m_DrawExtent;
 
     };
 }

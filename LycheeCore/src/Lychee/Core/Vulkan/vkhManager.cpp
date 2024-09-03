@@ -14,9 +14,11 @@
 
 #include "Lychee/Config.h"
 #include "Lychee/Core/Vulkan/vkhManager.h"
-#include "Lychee/Core/Vulkan/vkhUtil.h"
 
 #include "Lychee/Helper/File.h"
+
+#define VMA_IMPLEMENTATION
+#include <vk_mem_alloc.h>
 
 
 // *** DEFINES ***
@@ -37,6 +39,8 @@ namespace Lychee {
         LY_CORE_INFO("Cleaning up vkhManager");
 
         vkDeviceWaitIdle(m_Device);
+
+        m_MainDeletionQueue.flush();
 		for (int i = 0; i < VKH_MAX_FRAMES_IN_FLIGHT; i++) {
 			vkDestroyCommandPool(m_Device, m_Frames[i].commandPool, nullptr);
 
@@ -44,10 +48,12 @@ namespace Lychee {
             vkDestroyFence(m_Device, m_Frames[i].renderFence, nullptr);
             vkDestroySemaphore(m_Device, m_Frames[i].renderSemaphore, nullptr);
             vkDestroySemaphore(m_Device ,m_Frames[i].swapchainSemaphore, nullptr);
-		}
+            m_Frames[i].deletionQueue.flush();
+        }
+
         destroySwapchain();
-        vkDestroyDevice(m_Device, nullptr);
         vkDestroySurfaceKHR(m_Instance, m_Surface, nullptr);
+        vkDestroyDevice(m_Device, nullptr);
         vkb::destroy_debug_utils_messenger(m_Instance, m_Callback);
         vkDestroyInstance(m_Instance, nullptr);
     }
@@ -57,23 +63,25 @@ namespace Lychee {
         if (vkWaitForFences(m_Device, 1, &getCurrentFrame().renderFence, true, 1000000000) != VK_SUCCESS) {
             LY_CORE_ERROR("Error waiting for vulkan fence");
         }
+
+        getCurrentFrame().deletionQueue.flush();
+
+
+        uint32_t swapchainImageIndex;
+	    VkResult e = vkAcquireNextImageKHR(m_Device, m_Swapchain, 1000000000, getCurrentFrame().swapchainSemaphore, nullptr, &swapchainImageIndex);
+        if (e == VK_ERROR_OUT_OF_DATE_KHR) {
+            // Rebuild Swapchain
+        }
+        
         if (vkResetFences(m_Device, 1, &getCurrentFrame().renderFence) != VK_SUCCESS) {
             LY_CORE_ERROR("Error resetting vulkan fence");
         }
-
-        uint32_t swapchainImageIndex;
-	    if (vkAcquireNextImageKHR(m_Device, m_Swapchain, 1000000000, getCurrentFrame().swapchainSemaphore, nullptr, &swapchainImageIndex) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error acquiring next vulkan image");
+        if (vkResetCommandBuffer(getCurrentFrame().mainCommandBuffer, 0) != VK_SUCCESS) {
+            LY_CORE_ERROR("Error resetting vulkan command buffer");
         }
 
         //naming it cmd for shorter writing
-        VkCommandBuffer cmd = getCurrentFrame().mainCommandBuffer;
-
-        // now that we are sure that the commands finished executing, we can safely
-        // reset the command buffer to begin recording again.
-        if (vkResetCommandBuffer(cmd, 0) != VK_SUCCESS) {
-            LY_CORE_ERROR("Error resetting vulkan command buffer");
-        }
+	    VkCommandBuffer cmd = getCurrentFrame().mainCommandBuffer;
 
         //begin the command buffer recording. We will use this command buffer exactly once, so we want to let vulkan know that
         VkCommandBufferBeginInfo cmdBeginInfo = {};
@@ -82,36 +90,35 @@ namespace Lychee {
         cmdBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
         cmdBeginInfo.pInheritanceInfo = nullptr;
         
+        // ------ DRAW_FIRST ------
+        m_DrawExtent.width = m_DrawImage.imageExtent.width;
+	    m_DrawExtent.height = m_DrawImage.imageExtent.height;
         //start the command buffer recording
         if (vkBeginCommandBuffer(cmd, &cmdBeginInfo) != VK_SUCCESS) {
             LY_CORE_ERROR("Error couldn't begin vulkan command buffer");
         }
 
         //make the swapchain image into writeable mode before rendering
-	    vkhTransitionImage(cmd, m_SwapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
+	    vkhTransitionImage(cmd, m_DrawImage.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
 
-        //make a clear-color from frame number. This will flash with a 120 frame period.
-        VkClearColorValue clearValue;
-        float flash = std::abs(std::sin(m_CurrentFrame / 120.f));
-        clearValue = { { 0.0f, 0.0f, flash, 1.0f } };
-
-        VkImageSubresourceRange clearRange = {};
-        clearRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        clearRange.baseMipLevel = 0;
-        clearRange.levelCount = VK_REMAINING_MIP_LEVELS;
-        clearRange.baseArrayLayer = 0;
-        clearRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
-
-        //clear image
-        vkCmdClearColorImage(cmd, m_SwapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_GENERAL, &clearValue, 1, &clearRange);
+        drawBackground(cmd);
 
         //make the swapchain image into presentable mode
-        vkhTransitionImage(cmd, m_SwapchainImages[swapchainImageIndex],VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+        //transition the draw image and the swapchain image into their correct transfer layouts
+        vkhTransitionImage(cmd, m_DrawImage.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL); //! ERROR HERE
+        vkhTransitionImage(cmd, m_SwapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
-        //finalize the command buffer (we can no longer add commands, but it can now be executed)
+        // execute a copy from the draw image into the swapchain
+	    vkhCopyImageToImage(cmd, m_DrawImage.image, m_SwapchainImages[swapchainImageIndex], m_DrawExtent, m_SwapchainExtent);
+
+	    // set swapchain image layout to Attachment Optimal so we can draw it
+	    vkhTransitionImage(cmd, m_SwapchainImages[swapchainImageIndex], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
+	    //finalize the command buffer (we can no longer add commands, but it can now be executed)
         if(vkEndCommandBuffer(cmd) != VK_SUCCESS) {
             LY_CORE_ERROR("Error couldn't end vulkan command buffer");
         }
+        // ------------------------
 
         //prepare the submission to the queue. 
         //we want to wait on the _presentSemaphore, as that semaphore is signaled when the swapchain is ready
@@ -250,6 +257,18 @@ namespace Lychee {
         // use vkbootstrap to get a Graphics queue
 	    m_GraphicsQueue = vkbDevice.get_queue(vkb::QueueType::graphics).value();
 	    m_GraphicsQueueFamily = vkbDevice.get_queue_index(vkb::QueueType::graphics).value();
+
+        // initialize the memory allocator
+        VmaAllocatorCreateInfo allocatorInfo = {};
+        allocatorInfo.physicalDevice = m_PhysicalDevice;
+        allocatorInfo.device = m_Device;
+        allocatorInfo.instance = m_Instance;
+        allocatorInfo.flags = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
+        vmaCreateAllocator(&allocatorInfo, &m_Allocator);
+
+        m_MainDeletionQueue.push_function([&]() {
+            vmaDestroyAllocator(m_Allocator);
+        });
     }
 
     void vkhManager::setupSwapchain() {
@@ -336,6 +355,65 @@ namespace Lychee {
         m_Swapchain = vkbSwapchain.swapchain;
         m_SwapchainImages = vkbSwapchain.get_images().value();
         m_SwapchainImageViews = vkbSwapchain.get_image_views().value();
+
+        //draw image size will match the window
+        VkExtent3D drawImageExtent = {
+            m_WindowExtend.width,
+            m_WindowExtend.height,
+            1
+        };
+
+        //hardcoding the draw format to 32 bit float
+        m_DrawImage.imageFormat = VK_FORMAT_R16G16B16A16_SFLOAT;
+        m_DrawImage.imageExtent = drawImageExtent;
+
+        VkImageUsageFlags drawImageUsages{};
+        drawImageUsages |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+        drawImageUsages |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        drawImageUsages |= VK_IMAGE_USAGE_STORAGE_BIT;
+        drawImageUsages |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+        VkImageCreateInfo rimg_info = {};
+        rimg_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+        rimg_info.pNext = nullptr;
+        rimg_info.imageType = VK_IMAGE_TYPE_2D;
+        rimg_info.format = m_DrawImage.imageFormat;
+        rimg_info.extent = drawImageExtent;
+        rimg_info.mipLevels = 1;
+        rimg_info.arrayLayers = 1;
+        rimg_info.samples = VK_SAMPLE_COUNT_1_BIT;  //for MSAA. we will not be using it by default, so default it to 1 sample per pixel.
+        rimg_info.tiling = VK_IMAGE_TILING_OPTIMAL;  //optimal tiling, which means the image is stored on the best gpu format
+        rimg_info.usage = drawImageUsages;   
+
+        //for the draw image, we want to allocate it from gpu local memory
+        VmaAllocationCreateInfo rimg_allocinfo = {};
+        rimg_allocinfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+        rimg_allocinfo.requiredFlags = VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+        //allocate and create the image
+        vmaCreateImage(m_Allocator, &rimg_info, &rimg_allocinfo, &m_DrawImage.image, &m_DrawImage.allocation, nullptr);
+
+        //build a image-view for the draw image to use for rendering
+        VkImageViewCreateInfo rview_info = {};
+        rview_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        rview_info.pNext = nullptr;
+        rview_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        rview_info.image = m_DrawImage.image;
+        rview_info.format = m_DrawImage.imageFormat;
+        rview_info.subresourceRange.baseMipLevel = 0;
+        rview_info.subresourceRange.levelCount = 1;
+        rview_info.subresourceRange.baseArrayLayer = 0;
+        rview_info.subresourceRange.layerCount = 1;
+        rview_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        if(vkCreateImageView(m_Device, &rview_info, nullptr, &m_DrawImage.imageView) != VK_SUCCESS) {
+            LY_CORE_ERROR("VULKAN: Failed to create image view!");
+        }
+
+        //add to deletion queues
+        m_MainDeletionQueue.push_function([=]() {
+            vkDestroyImageView(m_Device, m_DrawImage.imageView, nullptr);
+            vmaDestroyImage(m_Allocator, m_DrawImage.image, m_DrawImage.allocation);
+	    });
     }
 
     void vkhManager::destroySwapchain() {
@@ -344,6 +422,23 @@ namespace Lychee {
         for (uint32_t i = 0; i < m_SwapchainImageViews.size(); i++) {
             vkDestroyImageView(m_Device, m_SwapchainImageViews[i], nullptr);
         }
+    }
+
+
+    void vkhManager::drawBackground(VkCommandBuffer cmd) {
+        VkClearColorValue clearValue;
+        float flash = std::abs(std::sin(m_CurrentFrame / 120.f));
+        clearValue = { { 0.0f, 0.0f, flash, 1.0f } };
+
+        VkImageSubresourceRange clearRange = {};
+        clearRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        clearRange.baseMipLevel = 0;
+        clearRange.levelCount = VK_REMAINING_MIP_LEVELS;
+        clearRange.baseArrayLayer = 0;
+        clearRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
+
+        //clear image
+        vkCmdClearColorImage(cmd, m_DrawImage.image, VK_IMAGE_LAYOUT_GENERAL, &clearValue, 1, &clearRange);
     }
 
 }
