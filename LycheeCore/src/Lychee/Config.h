@@ -68,3 +68,5 @@
 #define LY_WINDOW_NAME_DEBUG        "Lychee - DEBUG"
 #define LY_WINDOW_NAME              "Lychee"
 #define LY_VSYNC_DEFAULT            true
+
+#define LY_RENDER_BACKEND           "VULKAN"

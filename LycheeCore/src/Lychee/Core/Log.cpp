@@ -14,6 +14,8 @@
 
 #include "Lychee/Config.h"
 
+#define _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
+#define _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
 #pragma warning(push, 0)  // Disable all warnings
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
@@ -24,10 +26,6 @@
 
 // *** NAMESPACE ***
 namespace Lychee {
-
-	//inline std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
-	//inline std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
-
 
 	void Log::Init() {
 		std::vector<spdlog::sink_ptr> logSinks;
@@ -47,6 +45,12 @@ namespace Lychee {
 		spdlog::register_logger(s_CoreLogger);
 		s_CoreLogger->set_level(spdlog::level::trace);
 		s_CoreLogger->flush_on(spdlog::level::trace);
+
+		// CORE:VK
+		s_CoreVkLogger = std::make_shared<spdlog::logger>("[CORE:VK]", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_CoreVkLogger);
+		s_CoreVkLogger->set_level(spdlog::level::trace);
+		s_CoreVkLogger->flush_on(spdlog::level::trace);
 
 		// CLIENT		
 		s_ClientLogger = std::make_shared<spdlog::logger>("[CLIENT]", begin(logSinks), end(logSinks));

@@ -57,7 +57,7 @@ namespace Lychee {
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData) {
 
-        LY_CORE_ERROR("VULKAN: {0}", pCallbackData->pMessage);
+        LY_CORE_VK_ERROR("API ERROR: {0}", pCallbackData->pMessage);
         return VK_FALSE;
     }
 

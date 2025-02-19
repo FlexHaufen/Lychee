@@ -58,6 +58,13 @@ namespace Lychee {
 		static inline std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
 
         /**
+         * @brief Get the Core Logger object
+         * 
+         * @return std::shared_ptr<spdlog::logger>& 
+         */
+		static inline std::shared_ptr<spdlog::logger>& GetCoreVkLogger() { return s_CoreVkLogger; }
+
+        /**
          * @brief Get the Client Logger object
          * 
          * @return std::shared_ptr<spdlog::logger>& 
@@ -66,8 +73,9 @@ namespace Lychee {
 	private:
 
         // *** MEMBERS ***
-		static inline std::shared_ptr<spdlog::logger> s_CoreLogger;     // Core Logger
-		static inline std::shared_ptr<spdlog::logger> s_ClientLogger;   // Client Logger
+		static inline std::shared_ptr<spdlog::logger> s_CoreLogger;         // Core Logger
+        static inline std::shared_ptr<spdlog::logger> s_CoreVkLogger;       // Core Vulkan Logger
+		static inline std::shared_ptr<spdlog::logger> s_ClientLogger;       // Client Logger
 	};
 
 }
@@ -75,11 +83,17 @@ namespace Lychee {
 // *** LOGGER ***
 #ifdef LY_LOGGER_ENABLE
     // Core log macros
-    #define LY_CORE_TRACE(...)    ::Lychee::Log::GetCoreLogger()->trace(__VA_ARGS__)
-    #define LY_CORE_INFO(...)     ::Lychee::Log::GetCoreLogger()->info(__VA_ARGS__)
-    #define LY_CORE_WARN(...)     ::Lychee::Log::GetCoreLogger()->warn(__VA_ARGS__)
-    #define LY_CORE_ERROR(...)    ::Lychee::Log::GetCoreLogger()->error(__VA_ARGS__)
-    #define LY_CORE_CRITICAL(...) ::Lychee::Log::GetCoreLogger()->critical(__VA_ARGS__)
+    #define LY_CORE_TRACE(...)        ::Lychee::Log::GetCoreLogger()->trace(__VA_ARGS__)
+    #define LY_CORE_INFO(...)         ::Lychee::Log::GetCoreLogger()->info(__VA_ARGS__)
+    #define LY_CORE_WARN(...)         ::Lychee::Log::GetCoreLogger()->warn(__VA_ARGS__)
+    #define LY_CORE_ERROR(...)        ::Lychee::Log::GetCoreLogger()->error(__VA_ARGS__)
+    #define LY_CORE_CRITICAL(...)     ::Lychee::Log::GetCoreLogger()->critical(__VA_ARGS__)
+
+    #define LY_CORE_VK_TRACE(...)    ::Lychee::Log::GetCoreVkLogger()->trace(__VA_ARGS__)
+    #define LY_CORE_VK_INFO(...)     ::Lychee::Log::GetCoreVkLogger()->info(__VA_ARGS__)
+    #define LY_CORE_VK_WARN(...)     ::Lychee::Log::GetCoreVkLogger()->warn(__VA_ARGS__)
+    #define LY_CORE_VK_ERROR(...)    ::Lychee::Log::GetCoreVkLogger()->error(__VA_ARGS__)
+    #define LY_CORE_VK_CRITICAL(...) ::Lychee::Log::GetCoreVkLogger()->critical(__VA_ARGS__)
 
     // Client log macros
     #define LY_TRACE(...)         ::Lychee::Log::GetClientLogger()->trace(__VA_ARGS__)
@@ -95,6 +109,12 @@ namespace Lychee {
     #define LY_CORE_WARN(...)     
     #define LY_CORE_ERROR(...)    
     #define LY_CORE_CRITICAL(...) 
+
+    #define LY_CORE_VK_TRACE(...)
+    #define LY_CORE_VK_INFO(...)
+    #define LY_CORE_VK_WARN(...)
+    #define LY_CORE_VK_ERROR(...)
+    #define LY_CORE_VK_CRITICAL(...)
 
     // Client log macros
     #define LY_TRACE(...)         
