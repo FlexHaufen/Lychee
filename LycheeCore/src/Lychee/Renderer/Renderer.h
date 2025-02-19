@@ -21,13 +21,29 @@ namespace Lychee {
     class Renderer {
     public:
         Renderer() {}
-        ~Renderer() { Terminate(); }
+        ~Renderer() {}
 
+        /**
+         * @brief Initialize the renderer
+         * 
+         * @param window  The window to render to
+         */
         void Init(GLFWwindow* window);
         void Render();
 
+
         void OnResize() { m_vkhManager.setFrameBufferResized(true); }
+
+        /**
+         * @brief Wait for the renderer to finish
+         * 
+         */
         void WaitIdle() { m_vkhManager.waitIdle(); }
+
+        /**
+         * @brief Terminate the renderer
+         * 
+         */
         void Terminate() { m_vkhManager.cleanup(); }
 
 

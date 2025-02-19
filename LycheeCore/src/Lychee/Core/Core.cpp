@@ -55,9 +55,8 @@ namespace Lychee {
 		#endif
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
-        LY_CORE_INFO("\\---- Initializing renderer");
+        LY_CORE_INFO("\\---- Allocating Renderer");
         m_Renderer = new Renderer();
-        m_Renderer->Init(m_Window->GetNativeGlfwWindow());
 
         // TODO (flex) implement imgui
         //m_ImGuiLayer = new ImGuiLayer();
@@ -75,7 +74,7 @@ namespace Lychee {
         //LY_PROFILE_FUNCTION();
 
         // TODO (flex) implement renderer initialization
-
+        m_Renderer->Init(m_Window->GetNativeGlfwWindow());
         
         while (m_isRunning) {
 
@@ -88,19 +87,19 @@ namespace Lychee {
 					layer->OnUpdate(deltaTime);
                 }
                 m_Renderer->Render();
-               // m_ImGuiLayer->Begin();
+                //m_ImGuiLayer->Begin();
                 
                 //for (Layer* layer : m_LayerStack) {
                 //    layer->OnImGuiRender();
                 //}
             
                 //m_ImGuiLayer->End();
+                m_Renderer->WaitIdle();
             }
             m_Window->OnUpdate(deltaTime);
 
         }
-
-        // TODO (flex) implement renderer termination
+        m_Renderer->Terminate();
     }
 
     void Core::Close() {

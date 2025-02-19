@@ -39,15 +39,6 @@ namespace Lychee {
 
         void waitIdle() { vkDeviceWaitIdle(m_Device); }
 
-        // getter & setter
-        VkInstance getInstance() { return m_Instance; }
-        VkPhysicalDevice getPhysicalDevice() { return m_PhysicalDevice; }
-        VkDevice getDevice() { return m_Device; }
-        VkCommandPool getCommandPool() { return m_CommandPool; }
-        VkQueue getGraphicsQueue() { return m_GraphicsQueue; }
-        VkQueue getPresentQueue() { return m_PresentQueue; }
-        uint32_t getCurrentFrame() { return m_CurrentFrame; }
-
         void setCurrentFrame(uint32_t currentFrame) { m_CurrentFrame = currentFrame; }
         void setFrameBufferResized(bool b) { m_isFramebufferResized = b; }
 
