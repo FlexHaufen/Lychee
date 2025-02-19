@@ -51,8 +51,7 @@ namespace Lychee {
         }
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);	// Disable OpenGL default client
-		// TODO: Implement resize
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);		// Disable window resizeable for now
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);		// Disable window resizeable for now
 
         glfwSetErrorCallback(GLFWErrorCallback);
 
@@ -67,8 +66,6 @@ namespace Lychee {
 			LY_CORE_ERROR("Window:       \\---- Vulkan not supported!");
 		}
     
-		m_vkhManager.setup(m_glfwWindow);
-
 		LY_CORE_INFO("Window: \\---- Settingup callbacks");
 		//glfwMakeContextCurrent(static_cast<GLFWwindow*>(m_glfwWindow));
 		glfwSetWindowUserPointer(m_glfwWindow, &m_WindowData);
@@ -166,7 +163,6 @@ namespace Lychee {
 
 	void Window::Terminate() {
         LY_CORE_INFO("Window: Terminating");
-		m_vkhManager.cleanup();
 		glfwDestroyWindow(m_glfwWindow);	
         glfwTerminate();
 	}
@@ -188,8 +184,6 @@ namespace Lychee {
 		#endif
 
 		glfwPollEvents();
-		m_vkhManager.drawFrame();
-
 	}
 
 	void Window::SetVSync(bool enabled) {
@@ -200,6 +194,4 @@ namespace Lychee {
 	bool Window::IsVSync() const {
 		return m_WindowData.isVSyncOn;
 	}
-
-
 }

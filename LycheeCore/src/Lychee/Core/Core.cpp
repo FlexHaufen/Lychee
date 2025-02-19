@@ -56,6 +56,8 @@ namespace Lychee {
         m_Window->SetEventCallback(LY_BIND_EVENT_FN(Core::OnEvent));
 
         LY_CORE_INFO("\\---- Initializing renderer");
+        m_Renderer = new Renderer();
+        m_Renderer->Init(m_Window->GetNativeGlfwWindow());
 
         // TODO (flex) implement imgui
         //m_ImGuiLayer = new ImGuiLayer();
@@ -63,12 +65,18 @@ namespace Lychee {
     }
 
     Core::~Core() {
+        delete m_Renderer;
+        delete m_Window;
+
         LY_CORE_INFO("Terminating");
     }
 
     void Core::Run() {
         //LY_PROFILE_FUNCTION();
 
+        // TODO (flex) implement renderer initialization
+
+        
         while (m_isRunning) {
 
             float time = (float)glfwGetTime();
@@ -79,7 +87,7 @@ namespace Lychee {
                 for (Layer* layer : m_LayerStack) {
 					layer->OnUpdate(deltaTime);
                 }
-               
+                m_Renderer->Render();
                // m_ImGuiLayer->Begin();
                 
                 //for (Layer* layer : m_LayerStack) {
@@ -89,8 +97,10 @@ namespace Lychee {
                 //m_ImGuiLayer->End();
             }
             m_Window->OnUpdate(deltaTime);
+
         }
-        m_Window->WaitIdle();
+
+        // TODO (flex) implement renderer termination
     }
 
     void Core::Close() {
@@ -132,8 +142,12 @@ namespace Lychee {
     }
 
 	bool Core::OnWindowResize(WindowResizeEvent& e) {
-        m_Window->ResizeEvent();
-		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+        
+        if (m_Renderer != nullptr) {
+            m_Renderer->OnResize();
+        }
+        
+        if (e.GetWidth() == 0 || e.GetHeight() == 0) {
 			m_isMinimized = true;
 			return true;
 		}

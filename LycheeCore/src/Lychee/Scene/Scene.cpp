@@ -59,7 +59,7 @@ namespace Lychee {
     void Scene::OnRuntimeStart() {
         m_IsRuntimeRunning = true;
     
-        m_Renderer.Init();
+        //m_Renderer.Init();
     }
 
     void Scene::OnRuntimeStop() {
@@ -69,8 +69,8 @@ namespace Lychee {
 
 
     void Scene::OnRuntimeUpdate(DeltaTime dt) {
-        m_Renderer.Clear();
-        m_Renderer.Render();
+        //m_Renderer.Clear();
+        //m_Renderer.Render();
     }
 
     void Scene::OnEditorUpdate(DeltaTime dt) {

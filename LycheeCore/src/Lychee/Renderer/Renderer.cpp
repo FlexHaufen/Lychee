@@ -19,18 +19,12 @@
 // *** NAMESPACE ***
 namespace Lychee {
     
-    void Renderer::Init() {
+    void Renderer::Init(GLFWwindow* window) {
         LY_CORE_INFO("Renderer: Initializing");
-
-        // load shaders
-
-        
-    }
-
-    void Renderer::Clear() {
+        m_vkhManager.setup(window);        
     }
 
     void Renderer::Render() {
-    
+        m_vkhManager.drawFrame();
     }
 }

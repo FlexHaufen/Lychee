@@ -18,7 +18,6 @@
 
 #include "Lychee/Events/Event.h"
 #include "Lychee/Core/Time/DeltaTime.h"
-#include "Lychee/Core/Vulkan/vkhManager.h"
 
 // *** DEFIENS ***
 
@@ -74,9 +73,6 @@ namespace Lychee {
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
-		void WaitIdle() { m_vkhManager.waitIdle(); }
-		void ResizeEvent() {m_vkhManager.setFrameBufferResized(true);}	// TODO (flex): Put this somewhere else
-
 		GLFWwindow* GetNativeGlfwWindow() { return m_glfwWindow; }
 
 	private:
@@ -98,8 +94,6 @@ namespace Lychee {
        	//** Members **
 		// Window functions and members
         GLFWwindow* m_glfwWindow = nullptr;
-
-		vkhManager m_vkhManager;
 
 		/**
 		 * @brief Data of window

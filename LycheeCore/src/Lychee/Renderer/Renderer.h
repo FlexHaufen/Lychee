@@ -11,6 +11,7 @@
 #pragma once
 
 // *** INCLUDES ***
+#include "Lychee/Core/Vulkan/vkhManager.h"
 
 
 
@@ -20,13 +21,19 @@ namespace Lychee {
     class Renderer {
     public:
         Renderer() {}
+        ~Renderer() { Terminate(); }
 
-        void Init();
-        void Clear();
+        void Init(GLFWwindow* window);
         void Render();
 
-        //static void OnWindowResize(uint32_t width, uint32_t height) { glViewport(0, 0, width, height); };
+        void OnResize() { m_vkhManager.setFrameBufferResized(true); }
+        void WaitIdle() { m_vkhManager.waitIdle(); }
+        void Terminate() { m_vkhManager.cleanup(); }
+
 
     private:
+
+        vkhManager m_vkhManager;
+
     };
 }
