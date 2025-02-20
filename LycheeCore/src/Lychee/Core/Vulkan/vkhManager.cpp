@@ -162,7 +162,7 @@ namespace Lychee {
     // Private
 
     void vkhManager::createInstance() {
-        LY_CORE_VK_INFO(" Creating instance");
+        LY_CORE_VK_INFO("Creating instance");
         #ifdef VKH_ENABLE_VALIDATION_LAYERS
             if (!vkhCheckValidationLayerSupport()) {
                 LY_CORE_VK_ERROR("Validation layers requested, but not available!");
@@ -197,7 +197,7 @@ namespace Lychee {
     }
 
     void vkhManager::setupDebugCallback() {
-        LY_CORE_VK_INFO(" setup debug callback");
+        LY_CORE_VK_INFO("setup debug callback");
 
         #ifdef VKH_ENABLE_VALIDATION_LAYERS
             VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
@@ -213,14 +213,14 @@ namespace Lychee {
     }
 
     void vkhManager::createSurface() {
-        LY_CORE_VK_INFO(" creating surface");
+        LY_CORE_VK_INFO("creating surface");
         if (glfwCreateWindowSurface(m_Instance, m_glfwWindow, nullptr, &m_Surface) != VK_SUCCESS) {
             LY_CORE_VK_ERROR("Failed to create window surface!");
         }
     }
 
     void vkhManager::pickPhysicalDevice() {
-        LY_CORE_VK_INFO(" creating physical device");
+        LY_CORE_VK_INFO("creating physical device");
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(m_Instance, &deviceCount, nullptr);
 
@@ -243,7 +243,7 @@ namespace Lychee {
     }
 
     void vkhManager::createLogicalDevice() {
-        LY_CORE_VK_INFO(" creating logical device");
+        LY_CORE_VK_INFO("creating logical device");
         m_QueueFamilyIndices = vkhFindQueueFamilies(m_PhysicalDevice, m_Surface);
 
         std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
@@ -286,7 +286,7 @@ namespace Lychee {
     }
 
     void vkhManager::createSwapChain() {
-        LY_CORE_VK_INFO(" creating swapchain");
+        LY_CORE_VK_INFO("creating swapchain");
 
         vkhSwapChainSupportDetails swapChainSupport = vkhQuerySwapChainSupport(m_PhysicalDevice, m_Surface);
 
@@ -343,7 +343,7 @@ namespace Lychee {
     }
 
     void vkhManager::createImageViews() {
-        LY_CORE_VK_INFO(" creating image views");
+        LY_CORE_VK_INFO("creating image views");
         m_SwapChainImageViews.resize(m_SwapChainImages.size());
 
         //LY_CORE_TRACE("SwapChainImages size: {0}", m_SwapChainImages.size());
@@ -371,7 +371,7 @@ namespace Lychee {
     }
 
     void vkhManager::createRenderPass() {
-        LY_CORE_VK_INFO(" creating renderpass");
+        LY_CORE_VK_INFO("creating renderpass");
 
         // Color attachment
         VkAttachmentDescription colorAttachment{};
@@ -436,7 +436,7 @@ namespace Lychee {
     }
 
     void vkhManager::createDescriptorSetLayout() {
-        LY_CORE_VK_INFO(" creating descriptorset layout");
+        LY_CORE_VK_INFO("creating descriptorset layout");
 
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
         uboLayoutBinding.binding = 0;
@@ -456,7 +456,7 @@ namespace Lychee {
     }
 
     void vkhManager::createGraphicsPipeline() {
-        LY_CORE_VK_INFO(" creating graphics pipeline");
+        LY_CORE_VK_INFO("creating graphics pipeline");
 
         // TODO (flex): Compile shader at runtime
         auto vertShaderCode = File::readFile(std::string(LY_DEFAULT_SHADER_PATH) + std::string("default.vert.spv"));
@@ -580,7 +580,7 @@ namespace Lychee {
     }
 
     void vkhManager::createFramebuffers() {
-        LY_CORE_VK_INFO(" creating framebuffer");
+        LY_CORE_VK_INFO("creating framebuffer");
 
         m_SwapChainFramebuffers.resize(m_SwapChainImageViews.size());
         for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
@@ -604,7 +604,7 @@ namespace Lychee {
     }
 
     void vkhManager::createCommandPool() {
-        LY_CORE_VK_INFO(" creating command pool");
+        LY_CORE_VK_INFO("creating command pool");
         vkhQueueFamilyIndices queueFamilyIndices = vkhFindQueueFamilies(m_PhysicalDevice, m_Surface);
 
         VkCommandPoolCreateInfo poolInfo{};
@@ -618,7 +618,7 @@ namespace Lychee {
     }
 
     void vkhManager::createVertexBuffer() {
-        LY_CORE_VK_INFO(" creating vertexbuffer");
+        LY_CORE_VK_INFO("creating vertexbuffer");
 
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
         VkBuffer stagingBuffer;
@@ -657,7 +657,7 @@ namespace Lychee {
     }
 
     void vkhManager::createUniformBuffers() {
-        LY_CORE_VK_INFO(" creating uniform buffer");
+        LY_CORE_VK_INFO("creating uniform buffer");
 
         VkDeviceSize bufferSize = sizeof(UniformBufferObject);
 
@@ -672,7 +672,7 @@ namespace Lychee {
     }
 
     void vkhManager::createDescriptorPool() {
-        LY_CORE_VK_INFO(" creating descriptor pool");
+        LY_CORE_VK_INFO("creating descriptor pool");
 
         VkDescriptorPoolSize poolSize{};
         poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -690,7 +690,7 @@ namespace Lychee {
     }
 
     void vkhManager::createDescriptorSets() {
-        LY_CORE_VK_INFO(" creating descriptor sets");
+        LY_CORE_VK_INFO("creating descriptor sets");
 
         std::vector<VkDescriptorSetLayout> layouts(VKH_MAX_FRAMES_IN_FLIGHT, m_DescriptorSetLayout);
         VkDescriptorSetAllocateInfo allocInfo{};
@@ -724,7 +724,7 @@ namespace Lychee {
     }
 
     void vkhManager::createCommandBuffer() {
-        LY_CORE_VK_INFO(" creating command buffer");
+        LY_CORE_VK_INFO("creating command buffer");
 
         m_CommandBuffers.resize(VKH_MAX_FRAMES_IN_FLIGHT);
 
@@ -740,7 +740,7 @@ namespace Lychee {
     }
 
     void vkhManager::createSyncObjects() {
-        LY_CORE_VK_INFO(" creating sync objects");
+        LY_CORE_VK_INFO("creating sync objects");
 
         m_ImageAvailableSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
         m_RenderFinishedSemaphores.resize(VKH_MAX_FRAMES_IN_FLIGHT);
@@ -832,7 +832,6 @@ namespace Lychee {
 
     void vkhManager::recreateSwapChain() {
 
-        // TODO (flex): Should this be handled here?
         int width = 0, height = 0;
         glfwGetFramebufferSize(m_glfwWindow, &width, &height);
         while (width == 0 || height == 0) {

@@ -5,6 +5,9 @@
  * @version 0.1
  * @date 2024-05-23
  * 
+ * @link https://vulkan-tutorial.com
+ * 
+ * 
  * @copyright Copyright (c) 2024
  * 
  */
@@ -32,6 +35,12 @@ namespace Lychee {
 
     class vkhManager {
     public:
+
+        /**
+         * @brief Setup the Vulkan Manager
+         * 
+         * @param window Native GLFW window
+         */
         void setup(GLFWwindow* window);
         void cleanup();
 
