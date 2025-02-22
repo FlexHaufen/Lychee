@@ -1,87 +1,62 @@
-# Lychee  
-A **simple**, **fast** & **lightweight** voxel engine written in pure **C++**.
+<div align="center">
+  <br>
+  <img src="resource/images/Lychee.svg" height="100">
+  <h1>Lychee </h1>
+  <strong>A simple, fast & lightweight voxel engine written in C++</strong>
+  <br>
+  <img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceGPLv3/licencegplv31.svg" height="20" link="LICENCE">
+</div>
+<br>
 
-<img src="resource/images/Lychee.svg" height="100">
-
-> [!IMPORTANT]  
+> [!WARNING] 
 > Lychee is currently in the early alpha stage of development.  
 > There is no guarantee the engine will run.   
 
+<div align="center">
+<img src="https://img.shields.io/badge/VULKAN-A41E22?style=for-the-badge&logo=vulkan" alt="https://www.vulkan.org/">
+<img src="https://img.shields.io/badge/CMake-1ea4a0?style=for-the-badge&logo=cmake" alt="https://cmake.org/">
+<img src="https://img.shields.io/badge/C++-1ea4a0?style=for-the-badge&logo=cplusplus" alt="https://cmake.org/">
+</div>
 
-## Dependencies
-- [GLFW](https://github.com/glfw/glfw)
-- [Vulkan](https://www.vulkan.org/)
-- [glm](https://github.com/g-truc/glm)
-- [ImGui](https://github.com/ocornut/imgui)
-- [EnTT](https://github.com/skypjack/entt)
-- [spdlog](https://github.com/gabime/spdlog)
-- [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+<br>
+<br>
 
+<div align="center">
+    <h2> 🛠️ Setup </h2>
+</div>
 
-## Setup
-### Requirements
-- Vulkan SDK
-- Cmake Version **Version 3.28** or higher
-- **MSVC 19.39.33521.0** or higher
+### 📋 Requirements
+- [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)
+- [CMake](https://cmake.org/)
+- [MSVC](https://visualstudio.microsoft.com/de/vs/features/cplusplus/)
 
-### Setup Repo
+### ⚙️ Setup Repo
 1. Clone
     ```bash 
     git clone git@github.com:FlexHaufen/Lychee.git
     ```
 
 2. Setup submodules in ./Lychee
-    ```shell
+    ```bash
     git submodule update --init --recursive
     ```
     ImGui Has to be on docking branch
 
-4. Configure Cmake
-    - In VScode press F1 - Type Cmake Configure - Press Enter
-    - Select "Visual Studio Compiler 2022 Release - amd64" - Press Enter
-
-### Build
-- To Build Press F7 - **NOTE:** By default it will build a Debug-Build
-
-### Run
-To Run the .exe file via F5 you first need to configure a ```launch.json``` in your ```.vscode``` folder. Like the example below
-
-- To Run Press F5 - **NOTE:** By default it will run a Release-Build
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Release",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/bin/release/LycheeApp.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "internalConsole"
-        },
-        {
-            "name": "Debug",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/bin/debug/LycheeApp.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "internalConsole"
-        }
-    ]
-}
-```
+### 🏗️ Build
+Using Visual Studio Code:
+1. `F1` ➡️ `CMake: Configure`
+2. `F1` ➡️ `CMake: Select Variant` ➡️ `Release`
+3. `F1` ➡️ `CMake: Build`
 
 
+### 🚀 Run
+Run `LycheeApp.exe` in `/build/bin/release/`
 
-## Acknowledgements
+<div align="center">
+    <h2> 🫡 Acknowledgements </h2>
+</div>
+
  - [Hazel Engine](https://github.com/TheCherno/Hazel)
  - [Vulkan Tutorial by @GetIntoGameDev](https://www.youtube.com/@GetIntoGameDev)
- - [Game Engine Series](https://www.youtube.com/watch?v=JxIZbV_XjAs&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
+ - [Game Engine Series by @TheCherno](https://www.youtube.com/watch?v=JxIZbV_XjAs&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT)
  - [ImGui Theme by @Trippasch](https://github.com/Trippasch)
