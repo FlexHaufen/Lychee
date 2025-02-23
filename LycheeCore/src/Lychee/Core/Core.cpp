@@ -57,6 +57,7 @@ namespace Lychee {
 
         LY_CORE_INFO("\\---- Allocating Renderer");
         m_Renderer = new Renderer();
+        m_Renderer->Init(m_Window->GetNativeGlfwWindow());
 
         // TODO (flex) implement imgui
         //m_ImGuiLayer = new ImGuiLayer();
@@ -64,6 +65,7 @@ namespace Lychee {
     }
 
     Core::~Core() {
+        m_Renderer->Terminate();
         delete m_Renderer;
         delete m_Window;
 
@@ -73,10 +75,8 @@ namespace Lychee {
     void Core::Run() {
         //LY_PROFILE_FUNCTION();
 
-        m_Renderer->Init(m_Window->GetNativeGlfwWindow());
         
         while (m_isRunning) {
-
             float time = (float)glfwGetTime();
             DeltaTime deltaTime = time - m_lastFrameTime;
             m_lastFrameTime = time;
@@ -98,7 +98,6 @@ namespace Lychee {
             m_Window->OnUpdate(deltaTime);
 
         }
-        m_Renderer->Terminate();
     }
 
     void Core::Close() {
