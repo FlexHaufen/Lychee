@@ -12,7 +12,7 @@
 // *** INCLUDES ***
 #include "Lychee/lypch.h"
 
-#include "Lychee/Core/Vulkan/vkhUtils.h"
+#include "Lychee/Renderer/Vulkan/vkhUtils.h"
 
 
 // *** NAMESPACE ***

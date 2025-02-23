@@ -1,6 +1,6 @@
 /**
  * @file Window.h
- * @author flaxhaufen
+ * @author flexhaufen
  * @brief Window of app
  * @version 0.1
  * @date 2022-09-24
@@ -19,7 +19,7 @@
 #include "Lychee/Events/Event.h"
 #include "Lychee/Core/Time/DeltaTime.h"
 
-// *** DEFIENS ***
+// *** DEFINES ***
 
 // *** NAMESPACE ***
 namespace Lychee {

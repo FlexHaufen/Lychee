@@ -20,11 +20,11 @@
 #include <vector>
 
 #include "Lychee/Config.h"
-#include "Lychee/Core/Vulkan/vkhUtils.h"
-#include "Lychee/Core/Vulkan/vkhBuffer.h"
+#include "Lychee/Renderer/Vulkan/vkhUtils.h"
+#include "Lychee/Renderer/Vulkan/vkhBuffer.h"
 
 
-// *** DEFIENS ***
+// *** DEFINES ***
 #define VKH_MAX_FRAMES_IN_FLIGHT 2
 
 #define VKH_CLEAR_COLOR {0.1f, 0.1f, 0.1f, 1.0f}

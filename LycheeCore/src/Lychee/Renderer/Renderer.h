@@ -11,7 +11,7 @@
 #pragma once
 
 // *** INCLUDES ***
-#include "Lychee/Core/Vulkan/vkhManager.h"
+#include "Lychee/Renderer/Vulkan/vkhManager.h"
 
 
 

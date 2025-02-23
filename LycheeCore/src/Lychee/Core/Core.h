@@ -70,13 +70,6 @@ namespace Lychee {
         void PushOverlay(Layer* layer);
 
         /**
-         * @brief Get the ImGuiLayer instance
-         * 
-         * @return ImGuiLayer* 
-         */
-        ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
-
-        /**
          * @brief Gets Core instance
          * 
          * @return Core& 
@@ -91,31 +84,11 @@ namespace Lychee {
         Window& GetWindow() { return *m_Window; }
 
     private:
-        /**
-         * @brief Window close event
-         * 
-         * @param e Event
-         * @return true if window is closed
-         */
-        bool OnWindowClose(WindowCloseEvent& e);
-
-        /**
-         * @brief Window resize event
-         * 
-         * @param e Event
-         * @return true if window is rezised 
-         */
-        bool OnWindowResize(WindowResizeEvent& e);
-
-        // TODO (flex): setup splashscreen
-        //void OnSplashScreenDisplay();
-
-    private:
         // ** Members **
         static Core* s_Instance;    // Instance of core - for external usage
         
         bool m_isRunning = true;    // True when app is running
-        bool m_isMinimized = false; // True when app is minimzed
+        bool m_isMinimized = false; // True when app is minimized
         Window* m_Window;           // Window
         
         float m_lastFrameTime;        // delta time

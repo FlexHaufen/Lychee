@@ -32,7 +32,7 @@ namespace Lychee {
         LY_CORE_INFO("\\---- Path: {0}",std::filesystem::current_path());
 
         #ifdef LY_PROFILE
-            LY_CORE_WARN("Profiler is enabled and may use unnecessary recources");
+            LY_CORE_WARN("Profiler is enabled and may use unnecessary resources");
         #endif
         LY_PROFILE_BEGIN_SESSION("Profile", "LycheeProfile.json");
 
@@ -73,7 +73,6 @@ namespace Lychee {
     void Core::Run() {
         //LY_PROFILE_FUNCTION();
 
-        // TODO (flex) implement renderer initialization
         m_Renderer->Init(m_Window->GetNativeGlfwWindow());
         
         while (m_isRunning) {
