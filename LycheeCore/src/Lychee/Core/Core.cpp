@@ -122,35 +122,33 @@ namespace Lychee {
         //LY_PROFILE_FUNCTION();
 
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(LY_BIND_EVENT_FN(Core::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(LY_BIND_EVENT_FN(Core::OnWindowResize));
+
+        dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& e) {
+            m_isRunning = false;
+            return true;
+        });
+        
+        dispatcher.Dispatch<WindowResizeEvent>([this](WindowResizeEvent& e) {
+            if (m_Renderer != nullptr) {
+                m_Renderer->OnResize();
+            }
+            
+            if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+                m_isMinimized = true;
+                return true;
+            }
+            m_isMinimized = false;
+            return false;
+        });
 
         for (auto i = m_LayerStack.rbegin(); i != m_LayerStack.rend(); ++i) {
 			if (e.m_isHandled) 
 				break;
 			(*i)->OnEvent(e);
 		}
+        
         #ifdef LY_LOG_EVENTS
             LY_CORE_TRACE(e);
         #endif
     }
-
-    bool Core::OnWindowClose(WindowCloseEvent& e) {
-        m_isRunning = false;
-        return true;
-    }
-
-	bool Core::OnWindowResize(WindowResizeEvent& e) {
-        
-        if (m_Renderer != nullptr) {
-            m_Renderer->OnResize();
-        }
-        
-        if (e.GetWidth() == 0 || e.GetHeight() == 0) {
-			m_isMinimized = true;
-			return true;
-		}
-		m_isMinimized = false;
-		return false;
-	}
 }

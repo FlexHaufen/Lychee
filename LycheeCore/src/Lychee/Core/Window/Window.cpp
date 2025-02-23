@@ -17,7 +17,7 @@
 
 #include "Lychee/Events/KeyEvent.h"
 #include "Lychee/Events/MouseEvent.h"
-#include "Lychee/Events/ApplicationEvent.h"
+#include "Lychee/Events/WindowEvent.h"
 
 // *** DEFINES ***
 

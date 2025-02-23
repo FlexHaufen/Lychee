@@ -2,16 +2,12 @@
 build/
 .vscode/
 
-# Doc
-doc/
-
 # Log files
 *.log
 *.ini
 
 # Profiling
 LycheeProfile.json
-
 
 # Assets
 assets/

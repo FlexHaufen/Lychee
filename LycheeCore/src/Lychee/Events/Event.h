@@ -25,7 +25,6 @@ namespace Lychee {
 	enum class eEventType {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowFocusLost, WindowMoved,   // Window events
-		AppTick, AppUpdate, AppRender,                                          // App events
 		KeyPressed, KeyReleased, KeyTyped,                                      // Key events
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled      // Mouse events
 	};
@@ -36,7 +35,7 @@ namespace Lychee {
     // mulltiple categories at once
 	enum eEventCategory {
 		None = 0,
-		EventCategoryApplication    = (1 << 0),
+		EventCategoryWindow    		= (1 << 0),
 		EventCategoryInput          = (1 << 1),
 		EventCategoryKeyboard       = (1 << 2),
 		EventCategoryMouse          = (1 << 3),

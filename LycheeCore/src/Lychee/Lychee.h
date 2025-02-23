@@ -24,7 +24,7 @@
 #include "Lychee/Helper/Types.h"
 
 #include "Lychee/Events/Event.h"
-#include "Lychee/Events/ApplicationEvent.h"
+#include "Lychee/Events/WindowEvent.h"
 #include "Lychee/Events/KeyEvent.h"
 #include "Lychee/Events/MouseEvent.h"
 

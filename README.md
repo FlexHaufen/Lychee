@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img src="resource/images/Lychee.svg" height="100">
+  <img src="doc/resource/images/Lychee.svg" height="100">
   <h1>Lychee </h1>
   <strong>A simple, fast & lightweight voxel engine written in C++</strong>
   <br>
@@ -51,6 +51,13 @@ Using Visual Studio Code:
 
 ### 🚀 Run
 Run `LycheeApp.exe` in `/build/bin/release/`
+
+<div align="center">
+    <h2> 📒 Documentation </h2>
+</div>
+
+See [Lychee Documentation](doc/00_Documentation.md)
+
 
 <div align="center">
     <h2> 🫡 Acknowledgements </h2>

@@ -1,7 +1,7 @@
 /**
- * @file ApplicationEvent.h
+ * @file WindowEvent.h
  * @author flexhaufen
- * @brief Handels App events
+ * @brief Handels Window events
  * @version 0.1
  * @date 2022-09-25
  * 
@@ -35,7 +35,7 @@ namespace Lychee {
 		}
 
 		EVENT_CLASS_TYPE(WindowResize)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_CATEGORY(EventCategoryWindow)
 	private:
 		uint32_t m_Width, m_Height;
 	};
@@ -45,30 +45,6 @@ namespace Lychee {
 		WindowCloseEvent() = default;
 
 		EVENT_CLASS_TYPE(WindowClose)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};
-
-	class AppTickEvent : public Event {
-	public:
-		AppTickEvent() = default;
-
-		EVENT_CLASS_TYPE(AppTick)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};
-
-	class AppUpdateEvent : public Event {
-	public:
-		AppUpdateEvent() = default;
-
-		EVENT_CLASS_TYPE(AppUpdate)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
-	};
-
-	class AppRenderEvent : public Event {
-	public:
-		AppRenderEvent() = default;
-
-		EVENT_CLASS_TYPE(AppRender)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_CATEGORY(EventCategoryWindow)
 	};
 }

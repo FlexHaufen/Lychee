@@ -18,7 +18,7 @@
 #include "Lychee/Renderer/Renderer.h"
 
 #include "Lychee/Events/Event.h"
-#include "Lychee/Events/ApplicationEvent.h"
+#include "Lychee/Events/WindowEvent.h"
 
 #include "Lychee/ImGui/ImGuiLayer.h"
 // *** DEFINES ***
