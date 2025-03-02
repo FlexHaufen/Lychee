@@ -44,9 +44,8 @@ namespace Lychee {
         void setup(GLFWwindow* window);
         void cleanup();
 
-        void drawFrame();
-
-        void waitIdle() { vkDeviceWaitIdle(m_Device); }
+        void beginFrame();
+        void endFrame();
 
         void setCurrentFrame(uint32_t currentFrame) { m_CurrentFrame = currentFrame; }
         void setFrameBufferResized(bool b) { m_isFramebufferResized = b; }
@@ -116,6 +115,7 @@ namespace Lychee {
         VkDescriptorPool m_DescriptorPool;
         std::vector<VkDescriptorSet> m_DescriptorSets;
 
+        uint32_t m_ImageIndex;
         std::vector<VkSemaphore> m_ImageAvailableSemaphores;
         std::vector<VkSemaphore> m_RenderFinishedSemaphores;
         std::vector<VkFence> m_InFlightFences;

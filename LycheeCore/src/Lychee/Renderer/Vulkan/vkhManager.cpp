@@ -93,11 +93,14 @@ namespace Lychee {
     }
 
     
-    void vkhManager::drawFrame() {
+    void vkhManager::beginFrame() {
+
+        // wait for GPU to finish work
         vkWaitForFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
-        uint32_t imageIndex;
-        VkResult result = vkAcquireNextImageKHR(m_Device, m_SwapChain, std::numeric_limits<uint64_t>::max(), m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
+        // request new swapchain image
+        // resize if necessary
+        VkResult result = vkAcquireNextImageKHR(m_Device, m_SwapChain, std::numeric_limits<uint64_t>::max(), m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &m_ImageIndex);
 
         if (result == VK_ERROR_OUT_OF_DATE_KHR) {
             m_isFramebufferResized = false;
@@ -107,13 +110,20 @@ namespace Lychee {
             LY_CORE_VK_ERROR("failed to acquire swap chain image!");
         }
 
-        updateUniformBuffer(m_CurrentFrame);
-
+        // reset fences
         vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
 
-        vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
-        recordCommandBuffer(m_CommandBuffers[m_CurrentFrame], imageIndex);
+        // update
+        updateUniformBuffer(m_CurrentFrame);
 
+        // reset command buffer
+        vkResetCommandBuffer(m_CommandBuffers[m_CurrentFrame], 0);
+        // begin new command buffer
+        recordCommandBuffer(m_CommandBuffers[m_CurrentFrame], m_ImageIndex);
+    }
+
+    void vkhManager::endFrame() {
+        // submit commandbuffer to queue
         VkSubmitInfo submitInfo = {};
         submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -130,12 +140,11 @@ namespace Lychee {
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = signalSemaphores;
 
-        vkResetFences(m_Device, 1, &m_InFlightFences[m_CurrentFrame]);
-
         if (vkQueueSubmit(m_GraphicsQueue, 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS) {
             LY_CORE_VK_ERROR("failed to submit draw command buffer!");
         }
 
+        // present to swapchain
         VkPresentInfoKHR presentInfo = {};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
         presentInfo.waitSemaphoreCount = 1;
@@ -144,10 +153,9 @@ namespace Lychee {
         VkSwapchainKHR swapChains[] = { m_SwapChain };
         presentInfo.swapchainCount = 1;
         presentInfo.pSwapchains = swapChains;
-        presentInfo.pImageIndices = &imageIndex;
+        presentInfo.pImageIndices = &m_ImageIndex;
 
-        result = vkQueuePresentKHR(m_PresentQueue, &presentInfo);
-
+        VkResult result = vkQueuePresentKHR(m_PresentQueue, &presentInfo);
         if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR) {
             recreateSwapChain();
         } else if (result != VK_SUCCESS) {
@@ -155,9 +163,9 @@ namespace Lychee {
         }
 
         m_CurrentFrame = (m_CurrentFrame + 1) % VKH_MAX_FRAMES_IN_FLIGHT;
-
+    
+        vkDeviceWaitIdle(m_Device);
     }
-
 
     // Private
 
@@ -762,7 +770,7 @@ namespace Lychee {
         }
     }
 
-    void vkhManager::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+    void vkhManager::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t m_ImageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
         beginInfo.flags = 0; // Optional
@@ -775,7 +783,7 @@ namespace Lychee {
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
         renderPassInfo.renderPass = m_RenderPass;
-        renderPassInfo.framebuffer = m_SwapChainFramebuffers[imageIndex];
+        renderPassInfo.framebuffer = m_SwapChainFramebuffers[m_ImageIndex];
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = m_SwapChainExtent;
 

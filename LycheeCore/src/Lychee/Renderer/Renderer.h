@@ -18,38 +18,32 @@
 // *** NAMESPACE ***
 namespace Lychee {
 
+
     class Renderer {
     public:
-        Renderer() {}
-        ~Renderer() {}
 
         /**
          * @brief Initialize the renderer
          * 
          * @param window  The window to render to
          */
-        void Init(GLFWwindow* window);
-        void Render();
-
-
-        void OnResize() { m_vkhManager.setFrameBufferResized(true); }
-
-        /**
-         * @brief Wait for the renderer to finish
-         * 
-         */
-        void WaitIdle() { m_vkhManager.waitIdle(); }
-
+        static void Init(GLFWwindow* window);
+        
         /**
          * @brief Terminate the renderer
          * 
          */
-        void Terminate() { m_vkhManager.cleanup(); }
+        static void Terminate();
 
+        // static void OnWindowResize();
+
+        static void BeginScene();
+        static void EndScene();
 
     private:
 
-        vkhManager m_vkhManager;
+        static bool s_Initialized;
+        static Scope<vkhManager> s_vkhManager;
 
     };
 }

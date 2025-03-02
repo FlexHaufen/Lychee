@@ -41,10 +41,6 @@ namespace Lychee {
 	}
 
 	void EditorLayer::OnUpdate(DeltaTime dt) {
-		// TODO (flex): in case of scene camera, resize here
-		//m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-
-
 
 		switch (m_SceneState) {
 

@@ -96,6 +96,5 @@ namespace Lychee {
         // * Random ass layers *
         ImGuiLayer* m_ImGuiLayer;   // Imgui
         LayerStack m_LayerStack;    // Layerstack
-        Renderer* m_Renderer;       // Renderer
     };
 }
