@@ -30,6 +30,8 @@
 ### 📋 Requirements
 #### 🪟 Windows
 
+**Windows 11**
+
 Install the required dependencies
 - [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)
 - [CMake](https://cmake.org/)
@@ -37,9 +39,11 @@ Install the required dependencies
 
 #### 🐧 Linux
 
+**Debian 13 - Cinammon 6.4.10**
+
 Install the required dependencies
 ```bash
-sudo apt install libwayland-dev libxkbcommon-dev xorg-dev vulkan-tools libvulkan-dev cmake
+sudo apt install cmake libwayland-dev libxkbcommon-dev xorg-dev vulkan-tools libvulkan-dev vulkan-validationlayers spirv-tools
 ```
 
 ### ⚙️ Setup Repo

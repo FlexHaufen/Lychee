@@ -84,12 +84,14 @@ namespace Lychee {
 #ifdef LY_LOGGER_ENABLE
     // Core log macros
     #define LY_CORE_TRACE(...)        ::Lychee::Log::GetCoreLogger()->trace(__VA_ARGS__)
+    #define LY_CORE_DEBUG(...)        ::Lychee::Log::GetCoreLogger()->debug(__VA_ARGS__)
     #define LY_CORE_INFO(...)         ::Lychee::Log::GetCoreLogger()->info(__VA_ARGS__)
     #define LY_CORE_WARN(...)         ::Lychee::Log::GetCoreLogger()->warn(__VA_ARGS__)
     #define LY_CORE_ERROR(...)        ::Lychee::Log::GetCoreLogger()->error(__VA_ARGS__)
     #define LY_CORE_CRITICAL(...)     ::Lychee::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
     #define LY_CORE_VK_TRACE(...)    ::Lychee::Log::GetCoreVkLogger()->trace(__VA_ARGS__)
+    #define LY_CORE_VK_DEBUG(...)    ::Lychee::Log::GetCoreVkLogger()->debug(__VA_ARGS__)
     #define LY_CORE_VK_INFO(...)     ::Lychee::Log::GetCoreVkLogger()->info(__VA_ARGS__)
     #define LY_CORE_VK_WARN(...)     ::Lychee::Log::GetCoreVkLogger()->warn(__VA_ARGS__)
     #define LY_CORE_VK_ERROR(...)    ::Lychee::Log::GetCoreVkLogger()->error(__VA_ARGS__)
@@ -97,6 +99,7 @@ namespace Lychee {
 
     // Client log macros
     #define LY_TRACE(...)         ::Lychee::Log::GetClientLogger()->trace(__VA_ARGS__)
+    #define LY_DEBUG(...)         ::Lychee::Log::GetClientLogger()->debug(__VA_ARGS__)
     #define LY_INFO(...)          ::Lychee::Log::GetClientLogger()->info(__VA_ARGS__)
     #define LY_WARN(...)          ::Lychee::Log::GetClientLogger()->warn(__VA_ARGS__)
     #define LY_ERROR(...)         ::Lychee::Log::GetClientLogger()->error(__VA_ARGS__)

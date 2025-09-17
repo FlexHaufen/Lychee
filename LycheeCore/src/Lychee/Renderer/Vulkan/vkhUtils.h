@@ -57,7 +57,24 @@ namespace Lychee {
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData) {
 
-        LY_CORE_VK_ERROR("API ERROR: {0}", pCallbackData->pMessage);
+        switch (messageSeverity) {
+            case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+                LY_CORE_VK_DEBUG("API: {0}", pCallbackData->pMessage);
+                break;
+            case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+                LY_CORE_VK_INFO("API: {0}", pCallbackData->pMessage);
+                break;
+            case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+                LY_CORE_VK_WARN("API: {0}", pCallbackData->pMessage);
+                break;
+            case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+                LY_CORE_VK_ERROR("API: {0}", pCallbackData->pMessage);
+                break;
+            default:
+                LY_CORE_VK_WARN("Unhandled API message received: {0}, {1}", messageSeverity, pCallbackData->pMessage);
+                break;
+        }
+
         return VK_FALSE;
     }
 
