@@ -31,8 +31,18 @@
 #include <utility>
 #include <vector>
 
-#define NOMINMAX        // Else std::min / max do not work
-#include <Windows.h>
+#if defined(__linux__) // any linux distribution
+    #define PLATFORM "linux"
+
+#elif defined(_WIN32) // any windows system
+    #define PLATFORM "windows"
+
+    #define NOMINMAX        // Else std::min / max do not work
+    #include <Windows.h>
+#else
+    #error "Your current platform is not supported
+#endif
+
 
 
 // GLFW
@@ -59,9 +69,6 @@
 
 // EnTT
 #include "entt.hpp"
-
-// Stb image
-#include <stb_image.h>
 
 // * yaml-cpp *
 #include <yaml-cpp/yaml.h>

@@ -102,7 +102,7 @@ namespace Lychee {
             auto &uuid = entity.GetComponent<Component::Tag>().uuid;         
 
             char buffer[256];
-            strcpy_s(buffer, tag.c_str());
+            strcpy(buffer, tag.c_str());
 
             // InputText for renaming
             ImGui::Text("Tag:");

@@ -71,10 +71,11 @@ namespace Lychee {
 		glfwSetWindowUserPointer(m_glfwWindow, &m_WindowData);
 
 		// TODO (flex): Implement window icon
+		// FIXME (flex): This results in an error on linux - gcc bug
 		// Set window ico
-		GLFWimage glfwWindowIco[1];
-		glfwWindowIco[0].pixels = stbi_load(LY_ICON_PNG, &glfwWindowIco[0].width, &glfwWindowIco[0].height, nullptr, 4);
-		glfwSetWindowIcon(m_glfwWindow, 1, glfwWindowIco) ;
+		//GLFWimage glfwWindowIco[1];
+		//glfwWindowIco[0].pixels = stbi_load(LY_ICON_PNG, &glfwWindowIco[0].width, &glfwWindowIco[0].height, nullptr, 4);
+		//glfwSetWindowIcon(m_glfwWindow, 1, glfwWindowIco) ;
 
         //LY_CORE_INFO("Window: \\---- Setting vsync to {0}", LY_VSYNC_DEFAULT);
 		//SetVSync(LY_VSYNC_DEFAULT);

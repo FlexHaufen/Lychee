@@ -8,7 +8,6 @@
  * @copyright Copyright (c) 2022
  * 
  */
-#pragma once
 
 //*** INCLUDES ***
 #include "Lychee/lypch.h"

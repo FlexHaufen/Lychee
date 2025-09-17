@@ -10,9 +10,6 @@
  */
 #pragma once
 
-// *** INCLUDES ***
-#include <xhash>
-
 // *** NAMESPACE ***
 namespace Lychee {
 

@@ -28,7 +28,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 #set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORE)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/glfw)
 
 #--------Vulkan--------
 find_package(Vulkan REQUIRED)
@@ -42,16 +42,6 @@ set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/yaml-cpp/)
-
-#------STBIMAGE-------
-set(STBIMAGE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/stb_image)
-add_library(stb_image STATIC
-				${STBIMAGE_PATH}/stb_image.h
-				${STBIMAGE_PATH}/stb_image.cpp
-)
-target_include_directories(stb_image PRIVATE
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/stb_image
-)
 
 #--------IMGUI---------
 set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/imgui)
@@ -83,11 +73,12 @@ target_link_libraries(imgui glfw)
 #----------------------------------------------------
 target_include_directories(${PROJECT_NAME} PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/src/
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/GLFW/include
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/glfw/include
 	${Vulkan_INCLUDE_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/vk-bootstrap/src
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/glm
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/entt
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/stb_image
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/VulkanMemoryAllocator/include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/vendor/spdlog/include
 
@@ -101,6 +92,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 #----------------------------------------------------
 
 # Libs
-target_link_libraries(${PROJECT_NAME} PRIVATE 	glfw Vulkan::Vulkan yaml-cpp imgui stb_image)
+target_link_libraries(${PROJECT_NAME} PRIVATE 	glfw Vulkan::Vulkan yaml-cpp imgui)
 # pch
 target_precompile_headers(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/Lychee/lypch.h)

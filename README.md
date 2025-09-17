@@ -21,14 +21,26 @@
 <br>
 <br>
 
+---
+
 <div align="center">
     <h2> 🛠️ Setup </h2>
 </div>
 
 ### 📋 Requirements
+#### 🪟 Windows
+
+Install the required dependencies
 - [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/)
 - [CMake](https://cmake.org/)
 - [MSVC](https://visualstudio.microsoft.com/de/vs/features/cplusplus/)
+
+#### 🐧 Linux
+
+Install the required dependencies
+```bash
+sudo apt install libwayland-dev libxkbcommon-dev xorg-dev vulkan-tools libvulkan-dev cmake
+```
 
 ### ⚙️ Setup Repo
 1. Clone
@@ -48,9 +60,10 @@ Using Visual Studio Code:
 2. `F1` ➡️ `CMake: Select Variant` ➡️ `Release`
 3. `F1` ➡️ `CMake: Build`
 
-
 ### 🚀 Run
 Run `LycheeApp.exe` in `/build/bin/release/`
+
+---
 
 <div align="center">
     <h2> 📒 Documentation </h2>
@@ -58,6 +71,7 @@ Run `LycheeApp.exe` in `/build/bin/release/`
 
 See [Lychee Documentation](doc/00_Documentation.md)
 
+---
 
 <div align="center">
     <h2> 🫡 Acknowledgements </h2>
